@@ -61,7 +61,7 @@ export default function LegalView({ initialTab = 'privacy' }) {
           <section className="space-y-2">
             <h3 className="font-bold text-[#30452F] text-sm">4. Data Security</h3>
             <p>
-              We enforce industry-standard security measures to protect your contact records against unauthorized access. If you wish to delete your records from our guest CRM, contact us at concierge@zayrosalon.com.
+              We enforce industry-standard security measures to protect your contact records against unauthorized access. If you wish to delete your records from our guest CRM, contact us at partner@zayroclub.com.
             </p>
           </section>
         </div>

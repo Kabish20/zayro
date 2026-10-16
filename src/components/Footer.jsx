@@ -236,8 +236,8 @@ export default function Footer({ setCurrentView, openBooking }) {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#E6B25C] shrink-0" />
-                <a href="mailto:concierge@zayrosalon.com" className="hover:text-white transition-colors">
-                  concierge@zayrosalon.com
+                <a href="mailto:partner@zayroclub.com" className="hover:text-white transition-colors">
+                  partner@zayroclub.com
                 </a>
               </div>
               <div className="flex items-start gap-2 pt-1">

@@ -4,7 +4,7 @@ export const headOffice = {
   address: "5, Crescent Park Apartment, Hazrath Sulaiman Street, Kaja Nagar, Trichy – 620020",
   phone: "+91 91500 22115",
   whatsapp: "919150022115",
-  email: "concierge@zayrosalon.com"
+  email: "partner@zayroclub.com"
 };
 
 export const salonLocations = [

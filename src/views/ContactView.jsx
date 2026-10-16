@@ -92,8 +92,8 @@ export default function ContactView() {
                 <Mail className="w-4 h-4 text-[#30452F] shrink-0" />
                 <div>
                   <span className="font-bold text-[#30452F] block">Email Inquiries:</span>
-                  <a href="mailto:concierge@zayrosalon.com" className="hover:text-[#30452F] transition-colors">
-                    concierge@zayrosalon.com
+                  <a href="mailto:partner@zayroclub.com" className="hover:text-[#30452F] transition-colors">
+                    partner@zayroclub.com
                   </a>
                 </div>
               </div>
