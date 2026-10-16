@@ -183,7 +183,7 @@ export const services = [
     tagline: 'Clinical hair root fortification and micro-circulation',
     price: '₹600',
     duration: '50 mins',
-    image: '/images/gallery/ayurveda_head.jpg',
+    image: '/images/services/anti_hairfall.jpg',
     description: 'Targeted trichological treatment combining high-frequency ozone therapy, biotin-peptide micro-infusion, and herbal follicle stimulant massage to combat male pattern thinning.',
     highlights: ['High-frequency ozone stimulation', 'Biotin-caffeine peptide infusion', 'Root-anchoring herbal serum'],
     benefits: [
