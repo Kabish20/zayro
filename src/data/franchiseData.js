@@ -57,7 +57,7 @@ export const franchiseModels = [
     features: [
       'Includes private VIP suites, Japanese head spa zone & Royal Groom wedding lounge',
       'Premium high-street mall or luxury residential avenue locations',
-      'Highest average ticket value (₹3,500 - ₹5,000 per client bill)',
+      'High footfall retention with healthy average ticket (₹500 - ₹1,200 per client)',
       'Dedicated senior regional brand manager assigned full-time',
       'Celebrity stylist guest appearances & media launch campaigns',
       'Priority supply of international luxury hair & skincare lines'

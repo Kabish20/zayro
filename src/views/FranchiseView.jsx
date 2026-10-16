@@ -7,8 +7,8 @@ import { franchiseStats, franchiseModels, franchiseSupportPillars } from '../dat
 export default function FranchiseView({ openFranchiseModal }) {
   // Interactive ROI Calculator State
   const [salonFormat, setSalonFormat] = useState('flagship'); // 'studio', 'flagship', 'luxe'
-  const [dailyClients, setDailyClients] = useState(24);
-  const [avgTicket, setAvgTicket] = useState(1400);
+  const [dailyClients, setDailyClients] = useState(30);
+  const [avgTicket, setAvgTicket] = useState(600);
 
   const calculateROI = () => {
     const monthlyClients = dailyClients * 30;
@@ -334,17 +334,17 @@ export default function FranchiseView({ openFranchiseModal }) {
                 </div>
                 <input
                   type="range"
-                  min="800"
-                  max="3500"
-                  step="100"
+                  min="200"
+                  max="1500"
+                  step="50"
                   value={avgTicket}
                   onChange={(e) => setAvgTicket(Number(e.target.value))}
                   className="w-full accent-[#30452F] cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] text-gray-400 mt-1">
-                  <span>₹800 (Quick Grooming)</span>
-                  <span>₹1,500 (Couture Cut + Cleanse)</span>
-                  <span>₹3,500 (Royal Groom Suite / Spa)</span>
+                  <span>₹200 (Beard Trim)</span>
+                  <span>₹500 (Haircut / Fade)</span>
+                  <span>₹1,500 (VIP Package)</span>
                 </div>
               </div>
             </div>
