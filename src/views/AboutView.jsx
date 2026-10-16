@@ -7,7 +7,7 @@ export default function AboutView({ openBooking, openFranchiseModal }) {
       
       {/* Header Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#30452F] rounded-3xl p-8 sm:p-14 text-white border border-[#E6B25C]/30 relative overflow-hidden">
+        <div className="bg-[#30452F] rounded-2xl sm:rounded-3xl p-6 sm:p-14 text-white border border-[#E6B25C]/30 relative overflow-hidden">
           <div className="max-w-2xl relative z-10 space-y-4">
             <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#E6B25C] block">
               Our Philosophy & Heritage

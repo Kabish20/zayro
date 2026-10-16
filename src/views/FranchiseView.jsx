@@ -65,10 +65,10 @@ export default function FranchiseView({ openFranchiseModal }) {
                 Enter the booming ₹35,000+ Crore men's grooming and wellness industry. Partner with ZAYRO to launch a turnkey luxury men's grooming lounge backed by 100% corporate operational management, certified barber academy, and proven 38% annual ROI.
               </p>
 
-              <div className="pt-2 flex flex-wrap gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
                 <button
                   onClick={openFranchiseModal}
-                  className="bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#30452F] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
+                  className="w-full sm:w-auto bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#30452F] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   <Briefcase className="w-4 h-4" />
                   <span>Submit Franchise Expression of Interest</span>
@@ -77,7 +77,7 @@ export default function FranchiseView({ openFranchiseModal }) {
                   href="https://wa.me/919150022115?text=Hello%20ZAYRO%20Team%2C%20I%20am%20interested%20in%20a%20ZAYRO%20Salon%20Franchise%20Opportunity."
                   target="_blank"
                   rel="noreferrer"
-                  className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md flex items-center gap-2 transition-transform hover:scale-105"
+                  className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Chat with Franchise Director</span>

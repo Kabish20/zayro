@@ -82,38 +82,38 @@ _Sent via ZAYRO Online Concierge Portal_`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
       <div 
-        className="bg-[#F5ECDE] w-full max-w-2xl rounded-2xl shadow-2xl border border-[#E6B25C]/30 overflow-hidden flex flex-col max-h-[90vh]"
+        className="bg-[#F5ECDE] w-full max-w-2xl rounded-2xl shadow-2xl border border-[#E6B25C]/30 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-[#30452F] text-white p-6 relative flex items-center justify-between border-b border-[#E6B25C]/30">
+        <div className="bg-[#30452F] text-white p-4 sm:p-6 relative flex items-center justify-between border-b border-[#E6B25C]/30">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <img src="/images/logo/Transparent Logo.png" alt="ZAYRO Men's Grooming" className="h-12 sm:h-14 w-auto object-contain drop-shadow" />
+              <img src="/images/logo/Transparent Logo.png" alt="ZAYRO Men's Grooming" className="h-10 sm:h-14 w-auto object-contain drop-shadow" />
               <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#E6B25C] bg-[#1A2719] px-2.5 py-0.5 rounded-full border border-[#476346]">
                 Private Concierge
               </span>
             </div>
-            <h3 className="font-serif text-2xl font-bold text-white flex items-center gap-2">
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
               <span>Book Your ZAYRO Experience</span>
             </h3>
-            <p className="text-xs text-[#9BB899] mt-1">
+            <p className="text-[11px] sm:text-xs text-[#9BB899] mt-0.5 sm:mt-1">
               Complimentary hair texture diagnosis & botanical cleanse with every appointment.
             </p>
           </div>
           <button 
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-[#1A2719] hover:bg-[#E6B25C] text-[#F5ECDE] hover:text-[#30452F] flex items-center justify-center transition-colors border border-[#476346]"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#1A2719] hover:bg-[#E6B25C] text-[#F5ECDE] hover:text-[#30452F] flex items-center justify-center transition-colors border border-[#476346] shrink-0"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-6">
           {isSubmitted ? (
             <div className="py-8 text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-[#30452F]/20 text-[#30452F] mx-auto flex items-center justify-center border-2 border-[#30452F]">

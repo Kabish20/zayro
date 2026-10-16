@@ -13,7 +13,7 @@ export default function GalleryView({ openLightbox, openBooking }) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       
       {/* Header */}
-      <div className="bg-[#30452F] rounded-3xl p-8 sm:p-12 text-white border border-[#E6B25C]/30 relative overflow-hidden">
+      <div className="bg-[#30452F] rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-white border border-[#E6B25C]/30 relative overflow-hidden">
         <div className="max-w-2xl relative z-10 space-y-4">
           <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#E6B25C] block">
             Editorial Portfolio
@@ -45,7 +45,7 @@ export default function GalleryView({ openLightbox, openBooking }) {
       </div>
 
       {/* Gallery Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {filteredItems.map((item, idx) => (
           <div
             key={item.id}

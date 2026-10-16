@@ -37,15 +37,15 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
   return (
     <header className="sticky top-0 z-50 transition-all duration-300">
       {/* Top Announcement Bar */}
-      <div className="bg-[#1A2719] text-[#F5ECDE] text-xs py-2 px-4 border-b border-[#30452F]">
-        <div className="w-full px-4 sm:px-8 lg:px-14 xl:px-18 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#E6B25C] animate-pulse"></span>
+      <div className="bg-[#1A2719] text-[#F5ECDE] text-[10px] sm:text-xs py-1.5 sm:py-2 px-3 sm:px-4 border-b border-[#30452F]">
+        <div className="w-full px-1 sm:px-8 lg:px-14 xl:px-18 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-[#E6B25C] animate-pulse shrink-0"></span>
             <span className="font-medium tracking-wide">
-              ZAYRO Signature Experience • Complimentary Scalp & Hair Architecture Consultation with Every Service
+              ZAYRO Signature Experience • Complimentary Scalp & Hair Architecture Consultation
             </span>
           </div>
-          <div className="flex items-center gap-4 text-xs font-semibold">
+          <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-semibold">
             <button 
               onClick={() => handleNavClick('franchise')}
               className="text-[#E6B25C] hover:text-white transition-colors flex items-center gap-1"
@@ -71,18 +71,18 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
           ? 'bg-[#1A2719]/95 backdrop-blur-md shadow-luxury py-2.5 border-b border-[#E6B25C]/35' 
           : 'bg-[#30452F] py-3.5 border-b border-[#476346] shadow-md'
       }`}>
-        <div className="w-full px-6 sm:px-10 lg:px-16 xl:px-20 flex items-center justify-between">
+        <div className="w-full px-4 sm:px-8 lg:px-16 xl:px-20 flex items-center justify-between">
           
           {/* Brand Logo */}
           <button 
             id="nav-logo"
             onClick={() => handleNavClick('home')}
-            className="flex items-center gap-3 text-left group focus:outline-none py-1 shrink-0 mr-8 xl:mr-12"
+            className="flex items-center gap-2 sm:gap-3 text-left group focus:outline-none py-1 shrink-0 mr-2 sm:mr-8 xl:mr-12"
           >
             <img 
               src="/images/logo/Transparent Logo.png" 
               alt="ZAYRO Men's Grooming" 
-              className="h-13 sm:h-15 lg:h-16 w-auto max-w-[220px] sm:max-w-[260px] lg:max-w-[280px] object-contain transition-transform duration-300 group-hover:scale-[1.02] drop-shadow-md"
+              className="h-11 sm:h-15 lg:h-16 w-auto max-w-[160px] sm:max-w-[260px] lg:max-w-[280px] object-contain transition-transform duration-300 group-hover:scale-[1.02] drop-shadow-md"
             />
           </button>
 

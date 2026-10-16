@@ -93,10 +93,10 @@ export default function LocationsView({ openBooking }) {
             </div>
 
             {/* Actions */}
-            <div className="pt-6 border-t border-gray-100 flex flex-wrap items-center gap-3">
+            <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
               <button
                 onClick={() => openBooking(flagship.name)}
-                className="bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md transition-all flex items-center gap-2"
+                className="w-full sm:w-auto bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Book Appointment Online</span>
@@ -106,7 +106,7 @@ export default function LocationsView({ openBooking }) {
                 href={flagship.mapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-white hover:bg-[#F5ECDE] text-[#30452F] border border-[#30452F]/40 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition-all flex items-center gap-2"
+                className="w-full sm:w-auto bg-white hover:bg-[#F5ECDE] text-[#30452F] border border-[#30452F]/40 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <Navigation className="w-4 h-4 text-[#E6B25C]" />
                 <span>Open Google Maps Directions</span>
@@ -114,10 +114,10 @@ export default function LocationsView({ openBooking }) {
 
               <a
                 href={`tel:${flagship.whatsapp}`}
-                className="bg-white hover:bg-[#F5ECDE] text-stone-700 border border-gray-300 font-semibold text-xs px-4 py-3.5 rounded-xl transition-all flex items-center gap-1.5"
+                className="w-full sm:w-auto bg-white hover:bg-[#F5ECDE] text-stone-700 border border-gray-300 font-semibold text-xs px-4 py-3.5 rounded-xl transition-all flex items-center justify-center gap-1.5"
               >
                 <Phone className="w-3.5 h-3.5 text-[#30452F]" />
-                <span>Call Concierge</span>
+                <span>Call Salon Desk</span>
               </a>
             </div>
           </div>

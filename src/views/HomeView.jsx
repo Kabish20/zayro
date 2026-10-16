@@ -56,11 +56,11 @@ export default function HomeView({
             </p>
 
             {/* CTA Group */}
-            <div className="pt-2 flex flex-wrap items-center gap-4">
+            <div className="pt-2 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
               <button
                 id="hero-btn-book"
                 onClick={() => openBooking()}
-                className="bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#30452F] font-bold text-xs uppercase tracking-wider px-7 py-3.5 rounded-xl shadow-lg hover:shadow-gold-glow transition-all duration-300 flex items-center gap-2 hover:scale-[1.02]"
+                className="w-full sm:w-auto bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#30452F] font-bold text-xs uppercase tracking-wider px-7 py-3.5 rounded-xl shadow-lg hover:shadow-gold-glow transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.02]"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Book Appointment</span>
@@ -72,7 +72,7 @@ export default function HomeView({
                   setCurrentView('services');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="bg-[#30452F]/80 hover:bg-[#476346] text-white border border-[#476346] hover:border-[#E6B25C] font-semibold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl backdrop-blur-md transition-all flex items-center gap-2"
+                className="w-full sm:w-auto bg-[#30452F]/80 hover:bg-[#476346] text-white border border-[#476346] hover:border-[#E6B25C] font-semibold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl backdrop-blur-md transition-all flex items-center justify-center gap-2"
               >
                 <span>Explore Services</span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#E6B25C]" />
@@ -81,7 +81,7 @@ export default function HomeView({
               <button
                 id="hero-btn-franchise"
                 onClick={() => openFranchiseModal()}
-                className="text-xs text-[#E6B25C] hover:text-white underline underline-offset-4 font-semibold tracking-wide flex items-center gap-1.5 transition-colors pl-1"
+                className="w-full sm:w-auto text-xs text-[#E6B25C] hover:text-white underline underline-offset-4 font-semibold tracking-wide flex items-center justify-center sm:justify-start gap-1.5 transition-colors py-1"
               >
                 <Briefcase className="w-3.5 h-3.5" />
                 <span>Partner with ZAYRO (Franchise)</span>
@@ -89,18 +89,18 @@ export default function HomeView({
             </div>
 
             {/* Hero Trust Badges */}
-            <div className="pt-8 border-t border-[#476346]/60 grid grid-cols-3 gap-6 text-white">
+            <div className="pt-8 border-t border-[#476346]/60 grid grid-cols-3 gap-3 sm:gap-6 text-white text-left">
               <div>
-                <p className="font-serif text-2xl sm:text-3xl font-bold text-[#E6B25C] tracking-tight">45+</p>
-                <p className="text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Flagship Lounges</p>
+                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">45+</p>
+                <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Flagship Lounges</p>
               </div>
               <div>
-                <p className="font-serif text-2xl sm:text-3xl font-bold text-[#E6B25C] tracking-tight">250k+</p>
-                <p className="text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Gentlemen Styled</p>
+                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">250k+</p>
+                <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Gentlemen Styled</p>
               </div>
               <div>
-                <p className="font-serif text-2xl sm:text-3xl font-bold text-[#E6B25C] tracking-tight">38%</p>
-                <p className="text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Franchise Annual ROI</p>
+                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">38%</p>
+                <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Franchise ROI</p>
               </div>
             </div>
 
@@ -707,10 +707,10 @@ export default function HomeView({
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-gray-100 flex flex-wrap items-center gap-3">
+              <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
                 <button
                   onClick={() => openBooking("ZAYRO Men's Grooming Lounge — Flagship")}
-                  className="bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md transition-all flex items-center gap-2"
+                  className="w-full sm:w-auto bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
                   <span>Book Appointment Slot</span>
@@ -720,7 +720,7 @@ export default function HomeView({
                   href="https://maps.google.com/?q=Door+No+115+Rajaram+Rd+KK+Nagar+Tiruchirappalli+Tamil+Nadu+620021"
                   target="_blank"
                   rel="noreferrer"
-                  className="bg-white hover:bg-[#F5ECDE] text-[#30452F] border border-[#30452F]/40 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition-all flex items-center gap-2"
+                  className="w-full sm:w-auto bg-white hover:bg-[#F5ECDE] text-[#30452F] border border-[#30452F]/40 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
                 >
                   <Navigation className="w-4 h-4 text-[#E6B25C]" />
                   <span>Open Google Maps</span>
@@ -728,7 +728,7 @@ export default function HomeView({
 
                 <a
                   href="tel:+919150022115"
-                  className="bg-white hover:bg-[#F5ECDE] text-stone-700 border border-gray-300 font-semibold text-xs px-4 py-3.5 rounded-xl transition-all flex items-center gap-1.5"
+                  className="w-full sm:w-auto bg-white hover:bg-[#F5ECDE] text-stone-700 border border-gray-300 font-semibold text-xs px-4 py-3.5 rounded-xl transition-all flex items-center justify-center gap-1.5"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#30452F]" />
                   <span>Call Salon</span>

@@ -7,7 +7,7 @@ export default function OffersView({ openBooking }) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       
       {/* Header */}
-      <div className="bg-[#30452F] rounded-3xl p-8 sm:p-12 text-white border border-[#E6B25C]/30 relative overflow-hidden">
+      <div className="bg-[#30452F] rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-white border border-[#E6B25C]/30 relative overflow-hidden">
         <div className="max-w-2xl relative z-10 space-y-4">
           <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E6B25C] block">
             Curated Experiences
@@ -22,11 +22,11 @@ export default function OffersView({ openBooking }) {
       </div>
 
       {/* Packages Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
         {packagesData.map((pkg) => (
           <div
             key={pkg.id}
-            className="bg-white rounded-3xl p-8 border border-[#E8DCB8] hover:border-[#E6B25C] shadow-sm hover:shadow-luxury transition-all duration-300 flex flex-col justify-between space-y-6"
+            className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-[#E8DCB8] hover:border-[#E6B25C] shadow-sm hover:shadow-luxury transition-all duration-300 flex flex-col justify-between space-y-6"
           >
             <div className="space-y-4">
               <div className="flex items-center justify-between">

@@ -6,15 +6,15 @@ export default function ServiceDetailModal({ service, isOpen, onClose, openBooki
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/75 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
     >
       <div 
-        className="relative bg-[#F5ECDE] w-full max-w-3xl rounded-2xl shadow-2xl border border-[#E6B25C]/30 overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative bg-[#F5ECDE] w-full max-w-3xl rounded-2xl shadow-2xl border border-[#E6B25C]/30 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Hero Area */}
-        <div className="relative h-60 sm:h-72 w-full overflow-hidden shrink-0">
+        <div className="relative h-48 sm:h-72 w-full overflow-hidden shrink-0">
           <img 
             src={service.image} 
             alt={service.name}
@@ -24,13 +24,13 @@ export default function ServiceDetailModal({ service, isOpen, onClose, openBooki
           
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-[#E6B25C] text-white hover:text-[#30452F] flex items-center justify-center transition-colors border border-white/20"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/60 hover:bg-[#E6B25C] text-white hover:text-[#30452F] flex items-center justify-center transition-colors border border-white/20"
             aria-label="Close"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          <div className="absolute bottom-5 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 text-white">
+          <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-6 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-3 text-white">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#E6B25C] block mb-1">
                 ZAYRO Signature Protocol

@@ -38,7 +38,7 @@ export default function ContactView() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       
       {/* Header */}
-      <div className="bg-[#30452F] rounded-3xl p-8 sm:p-12 text-white border border-[#E6B25C]/30 relative overflow-hidden">
+      <div className="bg-[#30452F] rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-white border border-[#E6B25C]/30 relative overflow-hidden">
         <div className="max-w-2xl relative z-10 space-y-4">
           <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#E6B25C] block">
             We Are Here For You
@@ -52,11 +52,11 @@ export default function ContactView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
         
         {/* Left: Contact Info & Branches */}
-        <div className="lg:col-span-5 space-y-8">
-          <div className="bg-white p-8 rounded-3xl border border-[#E8DCB8] shadow-sm space-y-6">
+        <div className="lg:col-span-5 space-y-6 sm:space-y-8">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#E8DCB8] shadow-sm space-y-6">
             <h3 className="font-serif text-2xl font-bold text-[#30452F]">
               Corporate & Concierge Desk
             </h3>
@@ -121,7 +121,7 @@ export default function ContactView() {
           </div>
 
           {/* Quick Branch Directory */}
-          <div className="bg-[#F5ECDE] p-6 rounded-3xl border border-[#E6B25C]/30 space-y-3">
+          <div className="bg-[#F5ECDE] p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-[#E6B25C]/30 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#30452F]">
               Trichy Headquarters & Flagship 🇮🇳
             </h4>
@@ -149,7 +149,7 @@ export default function ContactView() {
         </div>
 
         {/* Right: Message Form */}
-        <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-[#E8DCB8] shadow-luxury">
+        <div className="lg:col-span-7 bg-white p-6 sm:p-10 rounded-2xl sm:rounded-3xl border border-[#E8DCB8] shadow-luxury">
           {submitted ? (
             <div className="py-12 text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-[#E8EFE8] text-[#30452F] mx-auto flex items-center justify-center border-2 border-[#30452F]">

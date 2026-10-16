@@ -170,17 +170,17 @@ export default function App() {
       />
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2.5 sm:gap-3">
         {/* Floating WhatsApp Quick Concierge */}
         <a
           href="https://wa.me/919150022115?text=Hello%20ZAYRO%20Salon%20Concierge%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment%20or%20franchise."
           target="_blank"
           rel="noreferrer"
-          className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 p-3 group border-2 border-white/50"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 p-2.5 sm:p-3 group border-2 border-white/50"
           title="Chat with ZAYRO Concierge on WhatsApp"
           aria-label="WhatsApp Concierge"
         >
-          <MessageSquare className="w-7 h-7" />
+          <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7" />
           <span className="sr-only">WhatsApp Concierge</span>
         </a>
 
@@ -188,7 +188,7 @@ export default function App() {
         {showScrollTop && (
           <button
             onClick={scrollToTop}
-            className="w-10 h-10 rounded-full bg-[#30452F] text-[#E6B25C] hover:bg-[#476346] hover:text-white flex items-center justify-center shadow-lg transition-all duration-300 border border-[#E6B25C]/30"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#30452F] text-[#E6B25C] hover:bg-[#476346] hover:text-white flex items-center justify-center shadow-lg transition-all duration-300 border border-[#E6B25C]/30"
             title="Scroll to Top"
             aria-label="Scroll to top"
           >
