@@ -123,11 +123,10 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
               target="_blank"
               rel="noreferrer"
               className="text-xs font-semibold text-[#F5ECDE] hover:text-[#E6B25C] px-3.5 py-2.5 rounded-xl border border-[#476346] hover:border-[#E6B25C] bg-[#1A2719]/50 transition-all flex items-center gap-2 shadow-sm"
-              title="Chat with Salon Concierge"
+              title="Chat on WhatsApp"
             >
               <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse"></span>
-              <span className="hidden xl:inline">WhatsApp Concierge</span>
-              <span className="xl:hidden">Concierge</span>
+              <span>WhatsApp</span>
             </a>
 
             <button

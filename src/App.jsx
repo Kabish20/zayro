@@ -177,11 +177,11 @@ export default function App() {
           target="_blank"
           rel="noreferrer"
           className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 p-2.5 sm:p-3 group border-2 border-white/50"
-          title="Chat with ZAYRO Concierge on WhatsApp"
-          aria-label="WhatsApp Concierge"
+          title="Chat on WhatsApp"
+          aria-label="WhatsApp"
         >
           <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7" />
-          <span className="sr-only">WhatsApp Concierge</span>
+          <span className="sr-only">WhatsApp</span>
         </a>
 
         {/* Back to top */}
