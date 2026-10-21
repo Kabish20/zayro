@@ -224,7 +224,7 @@ export default function Footer({ setCurrentView, openBooking }) {
                 <MapPin className="w-4 h-4 text-[#E6B25C] shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold text-white block">Flagship Salon:</span>
-                  <span>Door No. 115, Rajaram Rd, opp. KK Nagar bus terminus, Trichy – 620021</span>
+                  <span>Door No. 115, Rajaram Rd, KK Nagar, Trichy – 620021</span>
                 </div>
               </div>
 

@@ -74,7 +74,7 @@ export default function ContactView() {
                 <MapPin className="w-4 h-4 text-[#30452F] shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-[#30452F] block">Flagship Salon & Lounge:</span>
-                  <span>Door No, 115, Rajaram Rd, opp. to KK Nagar bus terminus, K K Nagar, Tiruchirappalli, Tamil Nadu 620021</span>
+                  <span>Door No. 115, Rajaram Rd, K K Nagar, Tiruchirappalli, Tamil Nadu 620021</span>
                 </div>
               </div>
 
@@ -132,7 +132,7 @@ export default function ContactView() {
               </div>
               <div className="py-1.5 border-b border-gray-200/60">
                 <span className="font-bold text-[#30452F] block">Flagship Lounge:</span>
-                <span className="text-gray-600">Door No. 115, Rajaram Rd, opp. KK Nagar Bus Terminus, Trichy – 620021</span>
+                <span className="text-gray-600">Door No. 115, Rajaram Rd, KK Nagar, Trichy – 620021</span>
               </div>
               <div className="flex justify-between items-center py-1">
                 <span className="font-medium text-gray-700">Valet & Parking</span>

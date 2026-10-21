@@ -12,7 +12,7 @@ export const salonLocations = [
     id: 'trichy-kk-nagar',
     city: 'Tiruchirappalli',
     name: "ZAYRO Men's Grooming Lounge — Flagship",
-    address: 'Door No. 115, Rajaram Rd, opp. to KK Nagar bus terminus, K K Nagar, Tiruchirappalli, Tamil Nadu 620021',
+    address: 'Door No. 115, Rajaram Rd, K K Nagar, Tiruchirappalli, Tamil Nadu 620021',
     landmark: 'Directly Opposite KK Nagar Bus Terminus',
     phone: '+91 91500 22115',
     whatsapp: '919150022115',

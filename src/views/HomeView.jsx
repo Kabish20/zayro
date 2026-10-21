@@ -660,7 +660,7 @@ export default function HomeView({
                         Salon Address
                       </span>
                       <p className="font-serif text-base sm:text-lg font-bold text-[#30452F] leading-snug">
-                        Door No, 115, Rajaram Rd, opp. to KK Nagar bus terminus, K K Nagar, Tiruchirappalli, Tamil Nadu 620021
+                        Door No. 115, Rajaram Rd, K K Nagar, Tiruchirappalli, Tamil Nadu 620021
                       </p>
                     </div>
                   </div>
