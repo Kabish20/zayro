@@ -176,7 +176,7 @@ _Sent via ZAYRO Online Concierge Portal_`;
                     <User className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
                     <input
                       type="text"
-                      placeholder="e.g. Rajesh Kumar / Aditya Singhania"
+                      placeholder="e.g. Karthikeyan Sundaram / Rajesh Kumar"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className={`w-full pl-9 pr-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${
