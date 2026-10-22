@@ -68,26 +68,26 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
       {/* Main Navbar */}
       <nav className={`transition-all duration-300 ${
         isScrolled 
-          ? 'bg-[#1A2719]/95 backdrop-blur-md shadow-luxury py-2.5 border-b border-[#E6B25C]/35' 
-          : 'bg-[#30452F] py-3.5 border-b border-[#476346] shadow-md'
+          ? 'bg-[#1A2719]/95 backdrop-blur-md shadow-luxury py-1.5 sm:py-2 border-b border-[#E6B25C]/35' 
+          : 'bg-[#30452F] py-2 sm:py-2.5 border-b border-[#476346] shadow-md'
       }`}>
-        <div className="w-full px-4 sm:px-8 lg:px-16 xl:px-20 flex items-center justify-between">
+        <div className="w-full px-4 sm:px-8 lg:px-14 xl:px-16 flex items-center justify-between">
           
           {/* Brand Logo */}
           <button 
             id="nav-logo"
             onClick={() => handleNavClick('home')}
-            className="flex items-center gap-2 sm:gap-3 text-left group focus:outline-none py-1 shrink-0 mr-2 sm:mr-8 xl:mr-12"
+            className="flex items-center gap-2 text-left group focus:outline-none py-0.5 shrink-0 mr-2 sm:mr-6 xl:mr-10"
           >
             <img 
               src="/images/logo/Transparent Logo.png" 
               alt="ZAYRO Men's Grooming" 
-              className="h-11 sm:h-15 lg:h-16 w-auto max-w-[160px] sm:max-w-[260px] lg:max-w-[280px] object-contain transition-transform duration-300 group-hover:scale-[1.02] drop-shadow-md"
+              className="h-8 sm:h-10 lg:h-11 w-auto max-w-[130px] sm:max-w-[200px] lg:max-w-[220px] object-contain transition-transform duration-300 group-hover:scale-[1.02] drop-shadow-md"
             />
           </button>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-6 xl:gap-7">
+          <div className="hidden lg:flex items-center gap-5 xl:gap-6">
             {navItems.map((item) => {
               const active = isItemActive(item.id);
               return (
@@ -95,7 +95,7 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
                   key={item.id}
                   id={`nav-${item.id}`}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative text-[13px] font-semibold tracking-wide transition-colors py-1.5 ${
+                  className={`relative text-xs font-semibold tracking-wide transition-colors py-1 ${
                     active 
                       ? 'text-[#E6B25C] font-bold' 
                       : 'text-[#F5ECDE]/90 hover:text-[#E6B25C]'
@@ -103,7 +103,7 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
                 >
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="absolute -top-2 -right-4.5 bg-[#E6B25C] text-[#1F2E1E] text-[9px] font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-tight shadow-sm">
+                    <span className="absolute -top-2 -right-4.5 bg-[#E6B25C] text-[#1F2E1E] text-[8.5px] font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-tight shadow-sm">
                       {item.badge}
                     </span>
                   )}
@@ -116,25 +116,25 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
           </div>
 
           {/* Action CTAs */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2.5">
             <a
               id="nav-btn-concierge"
               href="https://wa.me/919150022115?text=Hi%20ZAYRO%20Concierge%2C%20I%20would%20like%20to%20inquire%20about%20a%20service."
               target="_blank"
               rel="noreferrer"
-              className="text-xs font-semibold text-[#F5ECDE] hover:text-[#E6B25C] px-3.5 py-2.5 rounded-xl border border-[#476346] hover:border-[#E6B25C] bg-[#1A2719]/50 transition-all flex items-center gap-2 shadow-sm"
+              className="text-[11px] font-semibold text-[#F5ECDE] hover:text-[#E6B25C] px-3 py-1.5 rounded-lg border border-[#476346] hover:border-[#E6B25C] bg-[#1A2719]/50 transition-all flex items-center gap-1.5 shadow-sm"
               title="Chat on WhatsApp"
             >
-              <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse"></span>
               <span>WhatsApp</span>
             </a>
 
             <button
               id="nav-btn-book"
               onClick={() => openBooking()}
-              className="bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#1F2E1E] text-xs font-bold uppercase tracking-wider px-4.5 py-2.5 rounded-xl shadow-md hover:shadow-gold-glow transition-all duration-300 flex items-center gap-2 hover:scale-[1.02]"
+              className="bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#1F2E1E] text-[11px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-lg shadow-md hover:shadow-gold-glow transition-all duration-300 flex items-center gap-1.5 hover:scale-[1.02]"
             >
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-3 h-3" />
               <span>Book Appointment</span>
             </button>
           </div>

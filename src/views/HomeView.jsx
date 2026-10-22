@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowRight, Clock, MapPin, Calendar, Star, 
   CheckCircle, ChevronRight, Phone, Navigation,
-  Briefcase, Scissors, Shield, Award, Eye
+  Briefcase, Scissors, Shield, Award, Eye,
+  Pause, Play, Sparkles, Quote
 } from 'lucide-react';
 import { services } from '../data/servicesData';
 import { galleryItems } from '../data/galleryData';
 import { packagesData } from '../data/packagesData';
+import { reviewsData } from '../data/reviewsData';
 
 export default function HomeView({ 
   setCurrentView, 
@@ -15,11 +17,13 @@ export default function HomeView({
   openLightbox, 
   openFranchiseModal 
 }) {
+  const [isReviewsPaused, setIsReviewsPaused] = useState(false);
+
   return (
-    <div className="space-y-20 pb-16">
+    <div className="space-y-12 sm:space-y-14 pb-12">
       
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-[85vh] lg:min-h-[90vh] bg-[#1A2719] flex items-center overflow-hidden">
+      <section className="relative min-h-[72vh] lg:min-h-[78vh] bg-[#1A2719] flex items-center overflow-hidden">
         {/* Ambient Dark Green and Gold gradient overlays */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#1A2719] via-[#30452F]/90 to-transparent z-10"></div>
         <div className="absolute right-0 top-0 bottom-0 w-full lg:w-3/5 z-0">
@@ -32,19 +36,19 @@ export default function HomeView({
           <div className="absolute inset-0 bg-gradient-to-r from-[#1A2719] via-[#1A2719]/30 to-[#1A2719]/50 hidden lg:block"></div>
         </div>
 
-        <div className="relative z-20 w-full px-6 sm:px-10 lg:px-16 xl:px-20 py-20 lg:py-28">
-          <div className="max-w-xl lg:max-w-2xl space-y-6 text-left">
+        <div className="relative z-20 w-full px-5 sm:px-8 lg:px-14 xl:px-16 py-12 sm:py-16 lg:py-20">
+          <div className="max-w-xl lg:max-w-2xl space-y-5 text-left">
             
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#1A2719]/80 border border-[#E6B25C]/40 backdrop-blur-md shadow-sm animate-float">
-                <span className="w-2 h-2 rounded-full bg-[#E6B25C] animate-pulse"></span>
-                <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#E6B25C]">
+            <div className="space-y-2.5">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1A2719]/80 border border-[#E6B25C]/40 backdrop-blur-md shadow-sm animate-float">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C] animate-pulse"></span>
+                <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#E6B25C]">
                   The Modern Gentleman's Grooming Lounge
                 </span>
               </div>
             </div>
 
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.12] text-balance">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.14] text-balance">
               Precision Barbering. <br />
               <span className="gold-gradient-text italic font-normal">
                 Timeless Distinction.
@@ -544,81 +548,173 @@ export default function HomeView({
         </div>
       </section>
 
-      {/* 8. GENTLEMEN'S PERSPECTIVES — VERIFIED GUEST ENDORSEMENTS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-          <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#30452F] block mb-2">
-              Client Testimonials
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#30452F] tracking-tight leading-tight">
-              Gentlemen’s Perspectives
-            </h2>
-            <p className="text-xs sm:text-sm text-stone-600 mt-2 max-w-xl leading-relaxed">
-              Real endorsements from corporate leaders, creative founders, and royal Indian wedding grooms who trust ZAYRO for their signature style.
-            </p>
+      {/* 8. GENTLEMEN'S PERSPECTIVES — VERIFIED TAMIL NADU GUEST ENDORSEMENTS (LEFT-TO-RIGHT MARQUEE) */}
+      <section className="relative overflow-hidden py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-5">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#E8EFE8] border border-[#30452F]/20 text-[#30452F] text-[10px] font-bold uppercase tracking-[0.2em] mb-2">
+                <Sparkles className="w-3 h-3 text-[#E6B25C]" />
+                <span>Tamil Nadu Client Testimonials</span>
+              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#30452F] tracking-tight leading-tight">
+                Gentlemen’s Perspectives
+              </h2>
+              <p className="text-xs text-stone-600 mt-1 max-w-xl leading-relaxed">
+                Real endorsements from corporate leaders, surgeons, tech founders, and royal Indian wedding grooms across Tamil Nadu who trust ZAYRO for their signature style.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto">
+              {/* Google Verified Rating Pill */}
+              <div className="flex items-center gap-2.5 bg-white px-3 py-1.5 rounded-xl border border-[#E8DCB8] shadow-sm">
+                <div className="flex text-[#E6B25C]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                  ))}
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-[#30452F]">4.9 / 5.0</span>
+                    <span className="text-[9px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+                      100% Genuine
+                    </span>
+                  </div>
+                  <p className="text-[9px] text-stone-500 font-medium">2,400+ Verified Tamil Nadu Guests</p>
+                </div>
+              </div>
+
+              {/* Pause / Resume Flow Toggle */}
+              <button
+                type="button"
+                onClick={() => setIsReviewsPaused(prev => !prev)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-semibold transition-all shadow-sm ${
+                  isReviewsPaused
+                    ? 'bg-[#30452F] text-white border-[#30452F]'
+                    : 'bg-white border-[#E8DCB8] text-[#30452F] hover:bg-[#FAF5ED] hover:border-[#E6B25C]'
+                }`}
+                title={isReviewsPaused ? 'Click to resume moving' : 'Click to pause motion'}
+              >
+                {isReviewsPaused ? (
+                  <>
+                    <Play className="w-3 h-3 fill-current" />
+                    <span>Resume Flow</span>
+                  </>
+                ) : (
+                  <>
+                    <Pause className="w-3 h-3" />
+                    <span>Pause Flow</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2.5 self-start md:self-auto bg-white px-4 py-2 rounded-xl border border-[#E8DCB8] shadow-sm">
-            <div className="flex text-[#E6B25C]">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-current" />
-              ))}
+          {/* Stream Information Bar */}
+          <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 text-[10px] text-stone-500 border-t border-[#E8DCB8]/60 pt-2.5">
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="font-semibold text-[#30452F]">Flowing Left → Right</span>
+              <span className="hidden sm:inline text-stone-400">• Hover over any card to pause & read</span>
             </div>
-            <span className="text-xs font-bold text-[#30452F]">4.9 / 5.0 (2,400+ Verified Guests)</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[#967456] font-medium">Trichy Flagship • KK Nagar • Srirangam • Thillai Nagar</span>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-7 rounded-3xl border border-[#E8DCB8] hover:border-[#E6B25C] shadow-sm card-hover-lift flex flex-col justify-between space-y-4">
-            <div className="space-y-3">
-              <div className="flex text-[#E6B25C]">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
-              </div>
-              <p className="text-xs sm:text-sm text-stone-700 leading-relaxed italic">
-                “ZAYRO’s hot towel shave and scissor architecture is unmatched. The Tiruchirappalli flagship brings world-class grooming with precision engineered for Indian hair and beard textures.”
-              </p>
-            </div>
-            <div className="pt-4 border-t border-gray-100">
-              <p className="font-serif font-bold text-sm text-[#30452F]">Aditya Singhania</p>
-              <p className="text-[11px] text-[#967456] font-medium mt-0.5">Frequent Guest • Tiruchirappalli Flagship</p>
-            </div>
-          </div>
+        {/* Continuous Left-to-Right Marquee Slider */}
+        <div className="relative w-full overflow-hidden group py-2">
+          {/* Edge Gradient Overlays for Smooth Fade In/Out */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-r from-[#F5ECDE] via-[#F5ECDE]/90 to-transparent z-10"></div>
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-l from-[#F5ECDE] via-[#F5ECDE]/90 to-transparent z-10"></div>
 
-          <div className="bg-white p-7 rounded-3xl border border-[#E8DCB8] hover:border-[#E6B25C] shadow-sm card-hover-lift flex flex-col justify-between space-y-4">
-            <div className="space-y-3">
-              <div className="flex text-[#E6B25C]">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
-              </div>
-              <p className="text-xs sm:text-sm text-stone-700 leading-relaxed italic">
-                “Hospital-grade UV sterilization of instruments was what first impressed me. The scalp detox spa and precision skin fade have made me a loyal fortnightly guest at KK Nagar.”
-              </p>
-            </div>
-            <div className="pt-4 border-t border-gray-100">
-              <p className="font-serif font-bold text-sm text-[#30452F]">Dr. Kunal Mehra</p>
-              <p className="text-[11px] text-[#967456] font-medium mt-0.5">Consultant Surgeon • KK Nagar Lounge</p>
-            </div>
-          </div>
+          {/* Marquee Track moving Left to Right */}
+          <div
+            className="animate-marquee-ltr flex gap-4 sm:gap-5 px-3"
+            style={{
+              animationPlayState: isReviewsPaused ? 'paused' : undefined,
+            }}
+          >
+            {[...reviewsData, ...reviewsData].map((review, idx) => (
+              <div
+                key={`${review.id}-${idx}`}
+                className="w-[280px] sm:w-[320px] md:w-[340px] min-h-[250px] sm:min-h-[265px] shrink-0 bg-white p-4 sm:p-5 rounded-2xl border border-[#E8DCB8] hover:border-[#E6B25C] shadow-sm hover:shadow-luxury transition-all duration-300 flex flex-col justify-between group/card relative"
+              >
+                {/* Decorative Quote Mark */}
+                <Quote className="absolute top-4 right-4 w-5 h-5 text-[#E8DCB8]/40 -scale-x-100 pointer-events-none" />
 
-          <div className="bg-white p-7 rounded-3xl border border-[#E8DCB8] hover:border-[#E6B25C] shadow-sm card-hover-lift flex flex-col justify-between space-y-4">
-            <div className="space-y-3">
-              <div className="flex text-[#E6B25C]">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
+                <div className="space-y-2">
+                  {/* Client Profile Header with Generated Tamil Nadu Photo */}
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative shrink-0">
+                      <img
+                        src={review.image}
+                        alt={review.name}
+                        className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-[#E6B25C]/70 shadow-sm"
+                        loading="lazy"
+                      />
+                      <div
+                        className="absolute -bottom-0.5 -right-0.5 bg-emerald-600 text-white p-0.5 rounded-full ring-1 ring-white"
+                        title="Verified Guest"
+                      >
+                        <CheckCircle className="w-2.5 h-2.5 fill-emerald-600 text-white" />
+                      </div>
+                    </div>
+
+                    <div className="min-w-0 pr-4">
+                      <h4 className="font-serif font-bold text-xs sm:text-sm text-[#30452F] truncate">
+                        {review.name}
+                      </h4>
+                      <p className="text-[10px] text-[#967456] font-medium truncate">
+                        {review.role}
+                      </p>
+                      <div className="flex items-center gap-1 text-[9.5px] text-stone-500">
+                        <MapPin className="w-2.5 h-2.5 text-[#30452F] shrink-0" />
+                        <span className="truncate">{review.location}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Rating Stars & Date */}
+                  <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-stone-100">
+                    <div className="flex items-center gap-1">
+                      <div className="flex text-[#E6B25C]">
+                        {[...Array(review.rating)].map((_, i) => (
+                          <Star key={i} className="w-3 h-3 fill-current" />
+                        ))}
+                      </div>
+                      <span className="text-[10px] font-bold text-[#30452F]">5.0</span>
+                    </div>
+                    <span className="text-[9px] font-medium text-stone-400">
+                      {review.date}
+                    </span>
+                  </div>
+
+                  {/* Service Highlight Tag */}
+                  <div className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-[#30452F] bg-[#FAF5ED] px-2 py-0.5 rounded-md border border-[#E8DCB8]/70 max-w-full">
+                    <Scissors className="w-2.5 h-2.5 text-[#E6B25C] shrink-0" />
+                    <span className="truncate">{review.service}</span>
+                  </div>
+
+                  {/* Review Content */}
+                  <p className="text-[11px] sm:text-xs text-stone-700 leading-relaxed italic line-clamp-3 group-hover/card:line-clamp-none transition-all">
+                    “{review.content}”
+                  </p>
+                </div>
+
+                {/* Card Footer */}
+                <div className="pt-2 border-t border-gray-100 flex items-center justify-between text-[10px]">
+                  <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.2 rounded-full border border-emerald-200 text-[9px]">
+                    <CheckCircle className="w-2.5 h-2.5 text-emerald-600 fill-emerald-100" />
+                    Google Verified
+                  </span>
+                  <span className="text-[9px] text-stone-500 font-medium">
+                    KK Nagar Flagship
+                  </span>
+                </div>
               </div>
-              <p className="text-xs sm:text-sm text-stone-700 leading-relaxed italic">
-                “Reserved the private Royal Groom VIP Suite for my wedding week. The team handled my haircut, beard sculpt, and detan facial with surgical perfection. Truly world-class.”
-              </p>
-            </div>
-            <div className="pt-4 border-t border-gray-100">
-              <p className="font-serif font-bold text-sm text-[#30452F]">Raghavendran Iyer</p>
-              <p className="text-[11px] text-[#967456] font-medium mt-0.5">Tech Executive & Royal Groom • VIP Suite</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>

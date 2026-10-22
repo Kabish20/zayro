@@ -9,6 +9,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    font-size: 14.5px;
   }
   
   body {
@@ -174,5 +175,33 @@
 .card-hover-lift:hover {
   transform: translateY(-6px);
   box-shadow: 0 22px 40px -12px rgba(48, 69, 47, 0.2), 0 0 20px rgba(230, 178, 92, 0.15);
+}
+
+/* Infinite Marquee - Left to Right */
+@keyframes marqueeLeftToRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-ltr {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marqueeLeftToRight 50s linear infinite;
+}
+
+.animate-marquee-ltr:hover,
+.group:hover .animate-marquee-ltr {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-ltr {
+    animation-play-state: paused;
+  }
 }
 
