@@ -3,6 +3,7 @@ import {
   Briefcase, CheckCircle2, Calculator, MessageSquare, Phone 
 } from 'lucide-react';
 import { franchiseStats, franchiseModels, franchiseSupportPillars } from '../data/franchiseData';
+import AnimatedCounter from '../components/AnimatedCounter';
 
 export default function FranchiseView({ openFranchiseModal }) {
   // Interactive ROI Calculator State
@@ -117,7 +118,7 @@ export default function FranchiseView({ openFranchiseModal }) {
               className="bg-white p-6 rounded-2xl border border-[#E8DCB8] shadow-sm hover:border-[#E6B25C] transition-all text-center space-y-1"
             >
               <p className="font-serif text-3xl sm:text-4xl font-bold text-[#30452F]">
-                {stat.value}
+                <AnimatedCounter value={stat.value} duration={1800 + idx * 150} />
               </p>
               <p className="text-xs font-bold uppercase tracking-wider text-[#30452F]">
                 {stat.label}

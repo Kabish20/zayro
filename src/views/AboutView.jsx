@@ -1,5 +1,6 @@
 import React from 'react';
 import { Scissors, ShieldCheck, Award, Heart, Sparkles, Check, Briefcase, Calendar } from 'lucide-react';
+import AnimatedCounter from '../components/AnimatedCounter';
 
 export default function AboutView({ openBooking, openFranchiseModal }) {
   return (
@@ -42,11 +43,15 @@ export default function AboutView({ openBooking, openFranchiseModal }) {
 
             <div className="pt-2 grid grid-cols-2 gap-4">
               <div className="p-4 bg-white rounded-xl border border-[#E8DCB8]">
-                <span className="font-serif text-2xl font-bold text-[#30452F]">100%</span>
+                <span className="font-serif text-2xl font-bold text-[#30452F]">
+                  <AnimatedCounter value="100%" duration={1600} />
+                </span>
                 <p className="text-[11px] text-gray-500 mt-1">Sulfate-Free & Ammonia-Free Grooming</p>
               </div>
               <div className="p-4 bg-white rounded-xl border border-[#E8DCB8]">
-                <span className="font-serif text-2xl font-bold text-[#30452F]">250+</span>
+                <span className="font-serif text-2xl font-bold text-[#30452F]">
+                  <AnimatedCounter value="250+" duration={1800} />
+                </span>
                 <p className="text-[11px] text-gray-500 mt-1">Barber Academy Masterclass Hours</p>
               </div>
             </div>

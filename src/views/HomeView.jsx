@@ -10,6 +10,7 @@ import { galleryItems } from '../data/galleryData';
 import { packagesData, rateCardServices } from '../data/packagesData';
 import { reviewsData } from '../data/reviewsData';
 import MembershipPlans from '../components/MembershipPlans';
+import AnimatedCounter from '../components/AnimatedCounter';
 
 export default function HomeView({ 
   setCurrentView, 
@@ -105,15 +106,21 @@ export default function HomeView({
             {/* Hero Trust Badges */}
             <div className="pt-8 border-t border-[#476346]/60 grid grid-cols-3 gap-3 sm:gap-6 text-white text-left">
               <div>
-                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">45+</p>
+                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
+                  <AnimatedCounter value="45+" duration={1800} />
+                </p>
                 <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Flagship Lounges</p>
               </div>
               <div>
-                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">250k+</p>
+                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
+                  <AnimatedCounter value="250k+" duration={2000} />
+                </p>
                 <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Gentlemen Styled</p>
               </div>
               <div>
-                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">38%</p>
+                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
+                  <AnimatedCounter value="38%" duration={1600} />
+                </p>
                 <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Franchise ROI</p>
               </div>
             </div>
@@ -348,11 +355,15 @@ export default function HomeView({
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
                 <div className="bg-[#1A2719]/60 p-3 rounded-xl border border-[#476346]">
                   <span className="text-[10px] uppercase text-[#E6B25C] block font-semibold">Average ROI</span>
-                  <span className="font-serif text-xl font-bold text-white">38% Per Annum</span>
+                  <span className="font-serif text-xl font-bold text-white">
+                    <AnimatedCounter value="38%" duration={1600} /> Per Annum
+                  </span>
                 </div>
                 <div className="bg-[#1A2719]/60 p-3 rounded-xl border border-[#476346]">
                   <span className="text-[10px] uppercase text-[#E6B25C] block font-semibold">Payback Period</span>
-                  <span className="font-serif text-xl font-bold text-white">18 – 22 Months</span>
+                  <span className="font-serif text-xl font-bold text-white">
+                    <AnimatedCounter value="18-22" duration={1800} /> Months
+                  </span>
                 </div>
                 <div className="bg-[#1A2719]/60 p-3 rounded-xl border border-[#476346] col-span-2 sm:col-span-1">
                   <span className="text-[10px] uppercase text-[#E6B25C] block font-semibold">Turnkey Model</span>
