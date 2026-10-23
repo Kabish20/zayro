@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, Calendar, ChevronRight, Briefcase } from 'lucide-react';
+import { Menu, X, Phone, Calendar, ChevronRight, Briefcase, Sparkles } from 'lucide-react';
 
-export default function Header({ currentView, setCurrentView, openBooking }) {
+export default function Header({ currentView, setCurrentView, openBooking, openRateCard }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -16,8 +16,8 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'services', label: 'Services' },
+    { id: 'packages', label: 'Offers & Combos', badge: '10' },
     { id: 'gallery', label: 'Gallery' },
-    { id: 'packages', label: 'Packages' },
     { id: 'franchise', label: 'Franchise', badge: 'Hot' },
     { id: 'locations', label: 'Salons' },
     { id: 'about', label: 'About' },
@@ -42,16 +42,24 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
           <div className="flex items-center gap-1.5 sm:gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-[#E6B25C] animate-pulse shrink-0"></span>
             <span className="font-medium tracking-wide">
-              ZAYRO Signature Experience • Complimentary Scalp & Hair Architecture Consultation
+              <strong className="text-[#E6B25C]">LUXURY MADE AFFORDABLE:</strong> Haircuts ₹99 • Combos from ₹299 • Memberships from ₹259
             </span>
           </div>
           <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-semibold">
+            <button 
+              onClick={() => openRateCard && openRateCard()}
+              className="text-[#E6B25C] hover:text-white transition-colors flex items-center gap-1"
+            >
+              <Sparkles className="w-3 h-3" />
+              <span>Official Rate Card (PDF)</span>
+            </button>
+            <span className="text-[#476346] hidden md:inline">|</span>
             <button 
               onClick={() => handleNavClick('franchise')}
               className="text-[#E6B25C] hover:text-white transition-colors flex items-center gap-1"
             >
               <Briefcase className="w-3.5 h-3.5" />
-              <span>Own a ZAYRO Franchise (ROI 38%)</span>
+              <span>Franchise (ROI 38%)</span>
             </button>
             <span className="text-[#476346] hidden md:inline">|</span>
             <a 
@@ -59,7 +67,7 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
               className="hover:text-[#E6B25C] transition-colors hidden md:flex items-center gap-1"
             >
               <Phone className="w-3 h-3 text-[#E6B25C]" />
-              <span>Contact Number: +91 91500 22115</span>
+              <span>+91 91500 22115</span>
             </a>
           </div>
         </div>
@@ -68,26 +76,26 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
       {/* Main Navbar */}
       <nav className={`transition-all duration-300 ${
         isScrolled 
-          ? 'bg-[#1A2719]/95 backdrop-blur-md shadow-luxury py-1.5 sm:py-2 border-b border-[#E6B25C]/35' 
-          : 'bg-[#30452F] py-2 sm:py-2.5 border-b border-[#476346] shadow-md'
+          ? 'bg-[#1A2719]/95 backdrop-blur-md shadow-luxury py-2 sm:py-2.5 border-b border-[#E6B25C]/35' 
+          : 'bg-[#30452F] py-2.5 sm:py-3.5 border-b border-[#476346] shadow-md'
       }`}>
         <div className="w-full px-4 sm:px-8 lg:px-14 xl:px-16 flex items-center justify-between">
           
-          {/* Brand Logo */}
+          {/* Brand Logo - Enlarged for Premium Clarity */}
           <button 
             id="nav-logo"
             onClick={() => handleNavClick('home')}
-            className="flex items-center gap-2 text-left group focus:outline-none py-0.5 shrink-0 mr-2 sm:mr-6 xl:mr-10"
+            className="flex items-center gap-2 text-left group focus:outline-none py-1 shrink-0 mr-2 sm:mr-6 xl:mr-8"
           >
             <img 
               src="/images/logo/Transparent Logo.png" 
               alt="ZAYRO Men's Grooming" 
-              className="h-8 sm:h-10 lg:h-11 w-auto max-w-[130px] sm:max-w-[200px] lg:max-w-[220px] object-contain transition-transform duration-300 group-hover:scale-[1.02] drop-shadow-md"
+              className="h-10 sm:h-12 lg:h-14 xl:h-16 w-auto max-w-[160px] sm:max-w-[220px] lg:max-w-[260px] xl:max-w-[300px] object-contain transition-transform duration-300 group-hover:scale-[1.02] drop-shadow-md"
             />
           </button>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-5 xl:gap-6">
+          {/* Desktop Navigation Links - Inline badges that never overlap */}
+          <div className="hidden lg:flex items-center gap-4 xl:gap-6">
             {navItems.map((item) => {
               const active = isItemActive(item.id);
               return (
@@ -95,7 +103,7 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
                   key={item.id}
                   id={`nav-${item.id}`}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative text-xs font-semibold tracking-wide transition-colors py-1 ${
+                  className={`relative flex items-center gap-1.5 text-xs font-semibold tracking-wide transition-colors py-1.5 ${
                     active 
                       ? 'text-[#E6B25C] font-bold' 
                       : 'text-[#F5ECDE]/90 hover:text-[#E6B25C]'
@@ -103,7 +111,7 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
                 >
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="absolute -top-2 -right-4.5 bg-[#E6B25C] text-[#1F2E1E] text-[8.5px] font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-tight shadow-sm">
+                    <span className="bg-[#E6B25C] text-[#1F2E1E] text-[9px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-tight shadow-sm leading-none shrink-0">
                       {item.badge}
                     </span>
                   )}
@@ -117,6 +125,15 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
 
           {/* Action CTAs */}
           <div className="hidden sm:flex items-center gap-2.5">
+            <button
+              onClick={() => openRateCard && openRateCard()}
+              className="text-[11px] font-bold text-[#E6B25C] hover:text-white px-3 py-1.5 rounded-lg border border-[#E6B25C]/40 bg-[#1A2719]/50 hover:bg-[#E6B25C]/20 transition-all flex items-center gap-1.5 shadow-sm"
+              title="View Official Rate Card & Offers"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#E6B25C]" />
+              <span>Rate Card</span>
+            </button>
+
             <a
               id="nav-btn-concierge"
               href="https://wa.me/919150022115?text=Hi%20ZAYRO%20Concierge%2C%20I%20would%20like%20to%20inquire%20about%20a%20service."
@@ -185,6 +202,16 @@ export default function Header({ currentView, setCurrentView, openBooking }) {
             ))}
 
             <div className="pt-3 border-t border-[#30452F] flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openRateCard && openRateCard();
+                }}
+                className="w-full bg-[#30452F] border border-[#E6B25C]/50 text-[#E6B25C] hover:text-white text-center font-bold text-xs py-2.5 rounded-lg shadow-sm flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>View Official Rate Card & 10 Combos</span>
+              </button>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);

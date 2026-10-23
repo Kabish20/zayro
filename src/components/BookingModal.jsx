@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Calendar, Clock, MapPin, User, Phone, Mail, Scissors, MessageSquare, CheckCircle } from 'lucide-react';
 import { salonLocations } from '../data/locationsData';
 import { services } from '../data/servicesData';
+import { comboOffers, membershipPlans } from '../data/packagesData';
 
 export default function BookingModal({ isOpen, onClose, preselectedService = null }) {
   const [formData, setFormData] = useState({
@@ -50,7 +51,16 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
   };
 
   const selectedLocationObj = salonLocations.find(l => l.id === formData.location) || salonLocations[0];
-  const selectedServiceObj = services.find(s => s.id === formData.service) || services[0];
+  
+  // Find selected service from services list, comboOffers list, or membershipPlans list
+  const matchedService = services.find(s => s.id === formData.service || s.name === formData.service);
+  const matchedCombo = comboOffers.find(c => c.id === formData.service || c.shortTitle === formData.service || c.title === formData.service || formData.service?.startsWith?.(c.shortTitle));
+  const matchedMembership = membershipPlans.find(m => m.id === formData.service || m.name === formData.service || formData.service?.startsWith?.(m.name));
+  
+  const selectedServiceObj = matchedService || 
+    (matchedCombo ? { name: `${matchedCombo.shortTitle} (${matchedCombo.price})`, price: matchedCombo.price } : null) ||
+    (matchedMembership ? { name: `${matchedMembership.name} (${matchedMembership.price})`, price: matchedMembership.price } : null) ||
+    { name: formData.service || 'ZAYRO Grooming Service', price: '' };
 
   const buildWhatsAppMessage = () => {
     const text = `*New ZAYRO Salon Appointment Request* 🌿✨
@@ -262,11 +272,47 @@ _Sent via ZAYRO Online Concierge Portal_`;
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C]"
                     >
-                      {services.map((svc) => (
-                        <option key={svc.id} value={svc.id}>
-                          {svc.name} ({svc.price})
-                        </option>
-                      ))}
+                      {/* If custom preselected string is not in standard list, display it at top */}
+                      {formData.service && 
+                        !services.some(s => s.id === formData.service) && 
+                        !comboOffers.some(c => c.id === formData.service) && 
+                        !membershipPlans.some(m => m.id === formData.service) && (
+                          <option value={formData.service}>
+                            {formData.service}
+                          </option>
+                      )}
+
+                      <optgroup label="ZAYRO Salon — Membership Plans (4 Tiers)">
+                        {membershipPlans.map((plan) => (
+                          <option key={plan.id} value={plan.id}>
+                            {plan.name} ({plan.price} — {plan.duration})
+                          </option>
+                        ))}
+                      </optgroup>
+
+                      <optgroup label="Official 10 Combo Offers (From ₹299)">
+                        {comboOffers.map((combo) => (
+                          <option key={combo.id} value={combo.id}>
+                            {combo.shortTitle}: {combo.tagline} ({combo.price})
+                          </option>
+                        ))}
+                      </optgroup>
+
+                      <optgroup label="Official Rate Card (Brochure Page 1)">
+                        {services.filter(s => s.isRateCard).map((svc) => (
+                          <option key={svc.id} value={svc.id}>
+                            {svc.name} ({svc.price})
+                          </option>
+                        ))}
+                      </optgroup>
+
+                      <optgroup label="Signature & VIP Grooming Lounge">
+                        {services.filter(s => !s.isRateCard).map((svc) => (
+                          <option key={svc.id} value={svc.id}>
+                            {svc.name} ({svc.price})
+                          </option>
+                        ))}
+                      </optgroup>
                     </select>
                   </div>
                 </div>

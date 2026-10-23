@@ -1,13 +1,166 @@
 export const categories = [
   { id: 'all', name: 'All Services' },
-  { id: 'haircut', name: 'Haircuts & Tapers' },
+  { id: 'ratecard', name: 'Official Rate Card (From ₹50)' },
+  { id: 'haircut', name: 'Haircuts & Styling' },
   { id: 'grooming', name: 'Beard & Shaving' },
   { id: 'scalp', name: 'Scalp & Hair Therapy' },
-  { id: 'skincare', name: 'Facial & De-Tan' },
+  { id: 'skincare', name: 'Facial, Cleanup & De-Tan' },
   { id: 'wedding', name: "Royal Groom's Lounge" },
 ];
 
 export const services = [
+  // Official Rate Card Services from PDF Page 1
+  {
+    id: 'rate-haircut',
+    category: 'haircut',
+    isRateCard: true,
+    name: 'Precision Haircut',
+    tagline: 'Precision scissor & clipper cut — Luxury Made Affordable',
+    price: '₹99',
+    duration: '30 mins',
+    image: '/images/services/haircut.jpg',
+    description: 'Clean, architectural haircut tailored to individual South Asian hair textures, crown swirls, and facial profiles. Finished with sharp neck taper and natural matte clay styling.',
+    highlights: ['Head profile & crown diagnosis', 'Precision scissor & clipper blending', 'Clean neck taper & styling finish'],
+    benefits: [
+      'Crisp, symmetrical silhouette designed for South Asian hair density',
+      'Effortless daily styling retention lasting 3 to 4 weeks',
+      'Hospital-grade sterilized scissors and clipper guards for ultimate hygiene'
+    ],
+    steps: [
+      'Style consultation & hair texture analysis',
+      'Botanical clarifying wash & tension release',
+      'Precision sectioning and scissor/clipper cutting',
+      'Surgical neck lineup and straight-edge touchup',
+      'Matte styling clay or tonic application'
+    ],
+    recommendedFor: 'Gentlemen seeking a sharp, stylish haircut at an unbeatable luxury-value price point.'
+  },
+  {
+    id: 'rate-shave',
+    category: 'grooming',
+    isRateCard: true,
+    name: 'Traditional Barber Shave / Beard Trim',
+    tagline: 'Warm foam razor shave & zero-gap beard lineup',
+    price: '₹50',
+    duration: '20 mins',
+    image: '/images/services/beard_shave.jpg',
+    description: 'Classic barber craftsmanship featuring warm rich lather, sterilized fresh razor blade, steamed towel wrap, and soothing antiseptic aftershave splash.',
+    highlights: ['Single-use surgical blade', 'Hot steam towel wrap', 'Antiseptic cooling aftershave balm'],
+    benefits: [
+      'Baby-smooth clean shave without irritation or razor burn',
+      'Crisp zero-gap cheek and neckline definition',
+      'Leaves facial skin calmed, refreshed, and invigorated'
+    ],
+    steps: [
+      'Pre-shave essential oil application',
+      'Warm foam lather application',
+      'Precision single-stroke razor shave or zero trim',
+      'Cool mint towel compress to close pores',
+      'Soothing sandalwood aftershave balm massage'
+    ],
+    recommendedFor: 'Men wanting a clean, razor-sharp shave or weekly beard zero maintenance.'
+  },
+  {
+    id: 'rate-kids-cut',
+    category: 'haircut',
+    isRateCard: true,
+    name: 'Kids & Junior Haircut',
+    tagline: 'Patient, gentle styling for junior gentlemen',
+    price: '₹75',
+    duration: '25 mins',
+    image: '/images/gallery/indian_haircut.jpg',
+    description: 'A friendly, calm salon experience designed specially for young boys. Our master barbers ensure a relaxed atmosphere and a sharp, trendy haircut.',
+    highlights: ['Child-friendly gentle technique', 'Whisper-quiet clippers', 'Complimentary styling finish'],
+    benefits: [
+      'Stress-free, comfortable haircut experience for kids',
+      'Modern, neat school and holiday-ready hairstyles',
+      'Tear-free gentle hair rinse and comb-out'
+    ],
+    steps: [
+      'Warm welcome and style choice with parents',
+      'Gentle clipper tapering and scissor shaping',
+      'Soft neck brush and clean-up with gentle baby powder',
+      'Light water spray or styling gel finish'
+    ],
+    recommendedFor: 'Junior gentlemen (ages 2 to 14) needing a neat school cut or festive styling.'
+  },
+  {
+    id: 'rate-oil-massage',
+    category: 'scalp',
+    isRateCard: true,
+    name: 'Herbal Oil Massage & Hair Wash',
+    tagline: '15 mins invigorating scalp acupressure & clarifying wash',
+    price: '₹199',
+    duration: '15 mins',
+    image: '/images/services/ayurveda_head.jpg',
+    description: 'A 15-minute tension-relieving therapy featuring warm Ayurvedic botanical oil massaged deeply into the scalp, temples, and neck, followed by a clarifying hair wash.',
+    highlights: ['Warm Ayurvedic herbal oil', 'Acupressure temple & crown massage', 'Clarifying hair wash & blow-dry'],
+    benefits: [
+      'Relieves screen strain, migraines, and chronic work fatigue',
+      'Stimulates micro-capillary blood circulation to hair roots',
+      'Deeply conditions the scalp to prevent dryness and flakes'
+    ],
+    steps: [
+      'Aromatherapy scalp diagnosis',
+      'Warm herb-infused oil application',
+      '15-minute rhythmic acupressure and cervical massage',
+      'Botanical shampoo cleanse to wash away impurities',
+      'Towel dry and refreshing cooling mist'
+    ],
+    recommendedFor: 'Gentlemen seeking rapid stress relief and deeper sleep after a demanding week.'
+  },
+  {
+    id: 'rate-face-cleanup',
+    category: 'skincare',
+    isRateCard: true,
+    name: 'Deep Pore Face Cleanup',
+    tagline: 'Herbal deep pore cleansing, steam & instant radiance',
+    price: '₹299',
+    duration: '35 mins',
+    image: '/images/services/facial.jpg',
+    description: 'Multi-stage facial cleansing designed for men exposed to urban dust, pollution, and sun damage. Gently unclogs pores and revitalizes the skin barrier.',
+    highlights: ['Herbal face scrub', 'Warm facial steam & blackhead extraction', 'Cooling fruit/clay glow mask'],
+    benefits: [
+      'Extracts embedded dirt and excess sebum from facial pores',
+      'Brightens tanned, dull skin for an instant refreshed glow',
+      'Balances skin oiliness without stripping essential moisture'
+    ],
+    steps: [
+      'Foaming botanical face wash',
+      'Walnut or enzymatic gentle scrub exfoliation',
+      'Herbal steam to soften pores and extract comedones',
+      'Pore-tightening cooling toner spray',
+      'Nourishing face glow pack and moisturizer'
+    ],
+    recommendedFor: 'Men wanting clean, glowing, pollution-free skin before meetings or events.'
+  },
+  {
+    id: 'rate-hair-colour',
+    category: 'haircut',
+    isRateCard: true,
+    name: 'Global Hair Colour',
+    tagline: 'Ammonia-free natural black/brown coverage & grey blending',
+    price: '₹349',
+    duration: '45 mins',
+    image: '/images/services/haircut.jpg',
+    description: 'Premium ammonia-free formulation delivering natural, lustrous black or rich brown tones. Seamlessly blends stubborn greys while conditioning the hair fiber.',
+    highlights: ['Ammonia-free gentle formula', '100% natural grey coverage', 'Scalp protective barrier'],
+    benefits: [
+      'Natural-looking color with zero harsh chemical odor',
+      'Leaves hair soft, shiny, and conditioned without dryness',
+      'Long-lasting color retention up to 4 to 6 weeks'
+    ],
+    steps: [
+      'Color shade selection and hair porosity check',
+      'Application of scalp protective barrier cream',
+      'Even brush application of ammonia-free color cream',
+      '25-minute development time under comfort temperature',
+      'Color-lock botanical shampoo, conditioning rinse & style'
+    ],
+    recommendedFor: 'Men seeking discreet, youthful grey coverage with dermatologically safe ingredients.'
+  },
+
+  // Premium & Signature Lounge Services
   {
     id: 'asian-couture-cut',
     category: 'haircut',
@@ -152,29 +305,6 @@ export const services = [
       'Complimentary gourmet coffee or herbal refreshment in VIP suite'
     ],
     recommendedFor: 'Grooms and groomsmen seeking head-to-toe regal wedding day perfection.'
-  },
-  {
-    id: 'executive-beard-taper',
-    category: 'grooming',
-    name: 'Executive Beard Trim & Cuticle Conditioning',
-    tagline: 'Precision clipper contouring with organic beard butter',
-    price: '₹200',
-    duration: '25 mins',
-    image: '/images/gallery/beard_groom.jpg',
-    description: 'Fast, meticulous beard shapeup with clipper fade blending into sideburns, crisp razor cheek lines, and nourishing organic cedarwood beard butter massage.',
-    highlights: ['Seamless sideburn blend', 'Razor cheekbone line', 'Organic cedarwood butter'],
-    benefits: [
-      'Maintains neat professional beard geometry between big services',
-      'Softens stiff beard prickles and eliminates itchiness',
-      'Quick 25-minute executive lunch-break service'
-    ],
-    steps: [
-      'Length adjustment and density graduation',
-      'Precision razor cheek lineup',
-      'Neck taper and clipper cleanup',
-      'Warm towel press and beard balm application'
-    ],
-    recommendedFor: 'Busy professionals needing a fast, sharp weekly beard maintenance routine.'
   },
   {
     id: 'intensive-anti-hairfall',

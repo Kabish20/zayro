@@ -7,15 +7,17 @@ import {
 } from 'lucide-react';
 import { services } from '../data/servicesData';
 import { galleryItems } from '../data/galleryData';
-import { packagesData } from '../data/packagesData';
+import { packagesData, rateCardServices } from '../data/packagesData';
 import { reviewsData } from '../data/reviewsData';
+import MembershipPlans from '../components/MembershipPlans';
 
 export default function HomeView({ 
   setCurrentView, 
   openBooking, 
   openServiceDetail, 
   openLightbox, 
-  openFranchiseModal 
+  openFranchiseModal,
+  openRateCard
 }) {
   const [isReviewsPaused, setIsReviewsPaused] = useState(false);
 
@@ -43,7 +45,7 @@ export default function HomeView({
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1A2719]/80 border border-[#E6B25C]/40 backdrop-blur-md shadow-sm animate-float">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C] animate-pulse"></span>
                 <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#E6B25C]">
-                  The Modern Gentleman's Grooming Lounge
+                  LUXURY MADE AFFORDABLE • HAIRCUT ₹99 • SHAVE ₹50 • COMBOS FROM ₹299
                 </span>
               </div>
             </div>
@@ -71,6 +73,14 @@ export default function HomeView({
               </button>
 
               <button
+                onClick={() => openRateCard && openRateCard()}
+                className="w-full sm:w-auto bg-[#E6B25C]/20 hover:bg-[#E6B25C] text-[#E6B25C] hover:text-[#1A2719] border border-[#E6B25C]/60 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl backdrop-blur-md transition-all flex items-center justify-center gap-2 shadow-sm"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>View Rate Card (PDF)</span>
+              </button>
+
+              <button
                 id="hero-btn-explore"
                 onClick={() => {
                   setCurrentView('services');
@@ -78,7 +88,7 @@ export default function HomeView({
                 }}
                 className="w-full sm:w-auto bg-[#30452F]/80 hover:bg-[#476346] text-white border border-[#476346] hover:border-[#E6B25C] font-semibold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl backdrop-blur-md transition-all flex items-center justify-center gap-2"
               >
-                <span>Explore Services</span>
+                <span>Services</span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#E6B25C]" />
               </button>
 
@@ -462,34 +472,82 @@ export default function HomeView({
         </div>
       </section>
 
-      {/* 7. SPECIAL OFFERS & PACKAGES PREVIEW */}
-      <section className="bg-[#F5ECDE] py-16 border-y border-[#E8DCB8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+      {/* 7. OFFICIAL RATE CARD & 10 COMBO OFFERS */}
+      <section className="bg-[#F5ECDE] py-16 border-y border-[#E8DCB8] space-y-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          {/* Section Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#30452F] block mb-1">
-                Curated Value
-              </span>
-              <h2 className="font-serif text-3xl font-bold text-[#30452F]">
-                Featured Packages & Rituals
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#30452F]/10 border border-[#30452F]/20 text-[#30452F] text-[10px] font-bold uppercase tracking-wider mb-2">
+                <Sparkles className="w-3 h-3 text-[#E6B25C]" />
+                <span>Official Brochure Price Menu</span>
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#30452F]">
+                Standard Services & 10 Combo Offers
               </h2>
-              <p className="text-xs text-gray-600 mt-1">
-                All-inclusive salon packages offering up to 30% savings on signature services.
+              <p className="font-serif italic text-sm text-[#967456] mt-0.5">
+                "Luxury Made Affordable"
+              </p>
+              <p className="text-xs text-stone-600 mt-1 max-w-xl">
+                Experience high-end barbering and clinical scalp hygiene at everyday prices. Walk in for ₹50 shaves and ₹99 haircuts, or save up to 43% with our all-inclusive combos.
               </p>
             </div>
 
-            <button
-              onClick={() => {
-                setCurrentView('offers');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="text-xs font-bold uppercase tracking-wider text-[#30452F] hover:text-[#30452F] flex items-center gap-1.5 transition-colors"
-            >
-              <span>View All 5 Packages</span>
-              <ArrowRight className="w-4 h-4 text-[#E6B25C]" />
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => openRateCard && openRateCard()}
+                className="bg-[#30452F] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl border border-[#E6B25C]/40 transition-all flex items-center gap-1.5 shadow-sm"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Open Rate Card PDF</span>
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentView('offers');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="bg-[#E6B25C] hover:bg-[#1A2719] text-[#1A2719] hover:text-[#E6B25C] text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-sm"
+              >
+                <span>View All 10 Combos</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
+          {/* Standard Rate Card Horizontal Strip (Brochure Page 1) */}
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E8DCB8] shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E8DCB8]/60 pb-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#30452F] flex items-center gap-1.5">
+                <Scissors className="w-3.5 h-3.5 text-[#E6B25C]" />
+                <span>Single Services Rate Card (Page 1)</span>
+              </span>
+              <span className="text-[11px] text-stone-500 font-medium hidden sm:inline">
+                Honored across all ZAYRO Flagships
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              {rateCardServices.map((svc) => (
+                <div
+                  key={svc.id}
+                  onClick={() => openBooking(svc.name + ` (${svc.price})`)}
+                  className="p-3.5 rounded-2xl bg-[#F5ECDE]/40 hover:bg-[#F5ECDE] border border-[#E8DCB8] hover:border-[#E6B25C] transition-all cursor-pointer flex flex-col justify-between space-y-2 group"
+                >
+                  <div>
+                    <span className="text-[9.5px] uppercase font-bold text-stone-500 block">{svc.duration}</span>
+                    <h4 className="font-serif font-bold text-sm text-[#30452F] group-hover:text-[#1A2719]">{svc.name}</h4>
+                  </div>
+                  <div className="flex items-baseline justify-between pt-1 border-t border-stone-200/50">
+                    <span className="font-serif text-lg font-bold text-[#30452F]">{svc.price}</span>
+                    <span className="text-[10px] font-bold text-[#30452F] underline group-hover:text-[#E6B25C]">Book</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Featured Combos Grid (Brochure Page 2) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {packagesData.slice(0, 3).map((pkg) => (
               <div 
@@ -499,7 +557,7 @@ export default function HomeView({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#30452F] bg-[#E8EFE8] px-2.5 py-0.5 rounded-full">
-                      {pkg.category}
+                      {pkg.shortTitle}
                     </span>
                     <span className="text-[10px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-full">
                       {pkg.saveText}
@@ -537,15 +595,21 @@ export default function HomeView({
                 </div>
 
                 <button
-                  onClick={() => openBooking(pkg.title)}
-                  className="w-full bg-[#30452F] hover:bg-[#30452F] text-[#E6B25C] hover:text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-xl transition-colors text-center"
+                  onClick={() => openBooking(`${pkg.shortTitle}: ${pkg.tagline} (${pkg.price})`)}
+                  className="w-full bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-xl transition-colors text-center shadow-sm"
                 >
-                  Book Package
+                  Book Combo Slot
                 </button>
               </div>
             ))}
           </div>
+
         </div>
+      </section>
+
+      {/* 8. OFFICIAL MEMBERSHIP PLANS (FROM ASSETS) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <MembershipPlans openBooking={openBooking} />
       </section>
 
       {/* 8. GENTLEMEN'S PERSPECTIVES — VERIFIED TAMIL NADU GUEST ENDORSEMENTS (LEFT-TO-RIGHT MARQUEE) */}

@@ -5,6 +5,7 @@ import BookingModal from './components/BookingModal';
 import ServiceDetailModal from './components/ServiceDetailModal';
 import LightboxModal from './components/LightboxModal';
 import FranchiseInquiryModal from './components/FranchiseInquiryModal';
+import RateCardModal from './components/RateCardModal';
 
 import HomeView from './views/HomeView';
 import ServicesView from './views/ServicesView';
@@ -35,6 +36,7 @@ export default function App() {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const [franchiseModalOpen, setFranchiseModalOpen] = useState(false);
+  const [rateCardOpen, setRateCardOpen] = useState(false);
 
   // Scroll to top button visibility
   useEffect(() => {
@@ -70,6 +72,10 @@ export default function App() {
     setFranchiseModalOpen(true);
   };
 
+  const handleOpenRateCard = () => {
+    setRateCardOpen(true);
+  };
+
   // View Router
   const renderView = () => {
     switch (currentView) {
@@ -81,13 +87,16 @@ export default function App() {
             openServiceDetail={handleOpenServiceDetail}
             openLightbox={handleOpenLightbox}
             openFranchiseModal={handleOpenFranchise}
+            openRateCard={handleOpenRateCard}
           />
         );
       case 'services':
         return (
           <ServicesView
+            setCurrentView={setCurrentView}
             openBooking={handleOpenBooking}
             openServiceDetail={handleOpenServiceDetail}
+            openRateCard={handleOpenRateCard}
           />
         );
       case 'gallery':
@@ -107,6 +116,7 @@ export default function App() {
         return (
           <OffersView
             openBooking={handleOpenBooking}
+            openRateCard={handleOpenRateCard}
           />
         );
       case 'locations':
@@ -143,6 +153,7 @@ export default function App() {
             openServiceDetail={handleOpenServiceDetail}
             openLightbox={handleOpenLightbox}
             openFranchiseModal={handleOpenFranchise}
+            openRateCard={handleOpenRateCard}
           />
         );
     }
@@ -156,6 +167,7 @@ export default function App() {
         currentView={currentView}
         setCurrentView={setCurrentView}
         openBooking={handleOpenBooking}
+        openRateCard={handleOpenRateCard}
       />
 
       {/* Main View Area */}
@@ -167,6 +179,7 @@ export default function App() {
       <Footer
         setCurrentView={setCurrentView}
         openBooking={handleOpenBooking}
+        openRateCard={handleOpenRateCard}
       />
 
       {/* Floating Action Buttons */}
@@ -198,6 +211,12 @@ export default function App() {
       </div>
 
       {/* Interactive Modals */}
+      <RateCardModal
+        isOpen={rateCardOpen}
+        onClose={() => setRateCardOpen(false)}
+        openBooking={handleOpenBooking}
+      />
+
       <BookingModal
         isOpen={bookingOpen}
         onClose={() => setBookingOpen(false)}

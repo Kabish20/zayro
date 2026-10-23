@@ -340,7 +340,7 @@ export default function LegalView({ initialTab = 'privacy' }) {
               <span>Affordable Pricing, Invoicing & Payment Methods</span>
             </h3>
             <p>
-              All prices displayed across our catalogues (e.g. ₹200 for Beard Trim, ₹400 for Signature Couture Cut, ₹500 for Skin Fade) are in Indian Rupees (INR) and represent our commitment to <em>"Luxury Made Affordable"</em>.
+              All prices displayed across our catalogues (e.g. ₹99 for Precision Haircut, ₹50 for Shave, ₹199 for Oil Massage, and ₹299 for Combo 1) are in Indian Rupees (INR) and represent our core brand guarantee of <em>"Luxury Made Affordable"</em>.
             </p>
             <ul className="space-y-1.5 list-disc list-inside text-stone-600">
               <li>Prices are inclusive/exclusive of Goods and Services Tax (GST) as explicitly itemized on your final tax invoice.</li>
