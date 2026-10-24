@@ -111,7 +111,14 @@ export default function RateCardBrochure({ openBooking }) {
               {/* Page 1 Footer */}
               <div className="pt-4 border-t border-[#E6B25C]/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-[#C1D6BF]">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#E6B25C]">📸 @ zayro.saloon</span>
+                  <a 
+                    href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="text-[#E6B25C] hover:underline"
+                  >
+                    📸 @zayro.coming_soon
+                  </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#E6B25C] font-medium">🌐 www.zayrosalon.com</span>
@@ -193,7 +200,14 @@ export default function RateCardBrochure({ openBooking }) {
               {/* Page 2 Footer */}
               <div className="pt-4 border-t border-[#E6B25C]/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-[#C1D6BF]">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#E6B25C]">📸 @ zayro.saloon</span>
+                  <a 
+                    href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="text-[#E6B25C] hover:underline"
+                  >
+                    📸 @zayro.coming_soon
+                  </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#E6B25C] font-medium">🌐 www.zayrosalon.com</span>

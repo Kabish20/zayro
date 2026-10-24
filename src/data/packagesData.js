@@ -1,6 +1,6 @@
 // ZAYRO Men's Grooming - Official Rate Card & Combo Offers Data
 // Extracted from official brand brochure: "LUXURY MADE AFFORDABLE"
-// Website: www.zayrosalon.com | Social: @zayro.saloon
+// Website: www.zayrosalon.com | Social: @zayro.coming_soon
 
 export const rateCardServices = [
   {

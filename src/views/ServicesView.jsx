@@ -109,7 +109,17 @@ export default function ServicesView({ openBooking, openServiceDetail }) {
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#9BB899] border-t border-[#E6B25C]/20">
             <span>✨ Walk-ins welcome daily • Sanitized tools & single-use biodegradable towels</span>
-            <span className="text-[#E6B25C] font-medium">📸 @zayro.saloon • 🌐 www.zayrosalon.com</span>
+            <span className="text-[#E6B25C] font-medium">
+              <a 
+                href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
+                target="_blank" 
+                rel="noreferrer"
+                className="hover:underline hover:text-white transition-colors"
+              >
+                📸 @zayro.coming_soon
+              </a>
+              {' '}• 🌐 www.zayrosalon.com
+            </span>
           </div>
         </div>
       </section>
