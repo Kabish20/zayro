@@ -4,6 +4,26 @@ import { salonLocations } from '../data/locationsData';
 import { services } from '../data/servicesData';
 import { comboOffers, membershipPlans } from '../data/packagesData';
 
+const comboOptionLabels = {
+  'combo-1': 'Combo 1: Haircut, Beard & Oil Massage (₹299)',
+  'combo-2': 'Combo 2: Haircut, Beard, De-Tan & Oil Massage (₹399)',
+  'combo-3': 'Combo 3: Haircut, Beard Trim & Any Cleanup (₹499)',
+  'combo-4': 'Combo 4: Haircut, Beard, Color & De-Tan (₹599)',
+  'combo-5': 'Combo 5: Haircut, Beard & Gold/Diamond Facial (₹699)',
+  'combo-6': 'Combo 6: Haircut, Beard, Scalp Therapy & De-Tan (₹799)',
+  'combo-7': 'Combo 7: Haircut, Beard, Protein Treatment & De-Tan (₹899)',
+  'combo-8': 'Combo 8: Haircut, Beard, Glo Vite Facial & Massage (₹999)',
+  'combo-9': 'Combo 9: Haircut, Beard, De-Tan & Detox Spa (₹1,199)',
+  'combo-10': 'Combo 10: Haircut, Beard, Hair Spa & Oxy Facial (₹1,499)',
+};
+
+const membershipOptionLabels = {
+  'membership-silver': 'ZAYRO Silver (₹259 — 2 Months)',
+  'membership-gold': 'ZAYRO Gold (₹549 — 5 Months)',
+  'membership-platinum': 'ZAYRO Platinum (₹1,099 — 11 Months)',
+  'membership-diamond': 'ZAYRO Diamond (₹1,999 — 12 Months)',
+};
+
 export default function BookingModal({ isOpen, onClose, preselectedService = null }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -11,7 +31,6 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
     email: '',
     location: 'trichy-kk-nagar',
     service: '',
-    stylistTier: 'master',
     date: '',
     time: '11:00 AM',
     notes: ''
@@ -58,8 +77,14 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
   const matchedMembership = membershipPlans.find(m => m.id === formData.service || m.name === formData.service || formData.service?.startsWith?.(m.name));
   
   const selectedServiceObj = matchedService || 
-    (matchedCombo ? { name: `${matchedCombo.shortTitle} (${matchedCombo.price})`, price: matchedCombo.price } : null) ||
-    (matchedMembership ? { name: `${matchedMembership.name} (${matchedMembership.price})`, price: matchedMembership.price } : null) ||
+    (matchedCombo ? { 
+      name: comboOptionLabels[matchedCombo.id] || `${matchedCombo.shortTitle} (${matchedCombo.price})`, 
+      price: matchedCombo.price 
+    } : null) ||
+    (matchedMembership ? { 
+      name: membershipOptionLabels[matchedMembership.id] || `${matchedMembership.name} (${matchedMembership.price})`, 
+      price: matchedMembership.price 
+    } : null) ||
     { name: formData.service || 'ZAYRO Grooming Service', price: '' };
 
   const buildWhatsAppMessage = () => {
@@ -69,7 +94,6 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
 📱 *Phone:* ${formData.phone || 'Not provided'}
 📍 *Salon Branch:* ${selectedLocationObj.name}
 ✂️ *Service:* ${selectedServiceObj?.name || formData.service || 'Consultation'}
-💈 *Stylist Tier:* ${formData.stylistTier === 'master' ? 'Master Creative Director' : formData.stylistTier === 'senior' ? 'Senior Stylist' : 'First Available'}
 📅 *Preferred Date:* ${formData.date || 'Earliest available'}
 ⏰ *Preferred Time:* ${formData.time}
 📝 *Notes:* ${formData.notes || 'None'}
@@ -140,10 +164,6 @@ _Sent via ZAYRO Online Concierge Portal_`;
                 <div className="flex justify-between">
                   <span className="text-gray-500">Date & Time:</span>
                   <span className="font-semibold text-[#30452F]">{formData.date} at {formData.time}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Stylist Tier:</span>
-                  <span className="font-semibold text-[#30452F]">{formData.stylistTier === 'master' ? 'Master Creative Director' : 'Senior Stylist'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Mobile:</span>
@@ -259,78 +279,92 @@ _Sent via ZAYRO Online Concierge Portal_`;
                 </div>
               </div>
 
-              {/* Service & Stylist Tier */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
-                    Select Service *
-                  </label>
-                  <div className="relative">
-                    <Scissors className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
-                    <select
-                      value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C]"
-                    >
-                      {/* If custom preselected string is not in standard list, display it at top */}
-                      {formData.service && 
-                        !services.some(s => s.id === formData.service) && 
-                        !comboOffers.some(c => c.id === formData.service) && 
-                        !membershipPlans.some(m => m.id === formData.service) && (
-                          <option value={formData.service}>
-                            {formData.service}
-                          </option>
-                      )}
-
-                      <optgroup label="ZAYRO Salon — Membership Plans (4 Tiers)">
-                        {membershipPlans.map((plan) => (
-                          <option key={plan.id} value={plan.id}>
-                            {plan.name} ({plan.price} — {plan.duration})
-                          </option>
-                        ))}
-                      </optgroup>
-
-                      <optgroup label="Official 10 Combo Offers (From ₹299)">
-                        {comboOffers.map((combo) => (
-                          <option key={combo.id} value={combo.id}>
-                            {combo.shortTitle}: {combo.tagline} ({combo.price})
-                          </option>
-                        ))}
-                      </optgroup>
-
-                      <optgroup label="Official Rate Card (Brochure Page 1)">
-                        {services.filter(s => s.isRateCard).map((svc) => (
-                          <option key={svc.id} value={svc.id}>
-                            {svc.name} ({svc.price})
-                          </option>
-                        ))}
-                      </optgroup>
-
-                      <optgroup label="Signature & VIP Grooming Lounge">
-                        {services.filter(s => !s.isRateCard).map((svc) => (
-                          <option key={svc.id} value={svc.id}>
-                            {svc.name} ({svc.price})
-                          </option>
-                        ))}
-                      </optgroup>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
-                    Stylist Preference
-                  </label>
+              {/* Service */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
+                  Select Service *
+                </label>
+                <div className="relative">
+                  <Scissors className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
                   <select
-                    value={formData.stylistTier}
-                    onChange={(e) => setFormData({ ...formData, stylistTier: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C]"
+                    value={formData.service}
+                    onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                    className="w-full pl-9 pr-8 py-2.5 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] truncate cursor-pointer shadow-xs"
                   >
-                    <option value="master">Master Creative Director (Senior Asian Hair Artistry)</option>
-                    <option value="senior">Senior Stylist (Toni&Guy / L’Oréal Certified)</option>
-                    <option value="any">First Available Expert Stylist</option>
+                    {/* If custom preselected string is not in standard list, display it at top */}
+                    {formData.service && 
+                      !services.some(s => s.id === formData.service) && 
+                      !comboOffers.some(c => c.id === formData.service) && 
+                      !membershipPlans.some(m => m.id === formData.service) && (
+                        <option value={formData.service}>
+                          {formData.service}
+                        </option>
+                    )}
+
+                    <optgroup label="Official 10 Combo Offers (From ₹299)">
+                      {comboOffers.map((combo) => (
+                        <option key={combo.id} value={combo.id}>
+                          {comboOptionLabels[combo.id] || `${combo.shortTitle} (${combo.price})`}
+                        </option>
+                      ))}
+                    </optgroup>
+
+                    <optgroup label="ZAYRO Membership Plans (4 Tiers)">
+                      {membershipPlans.map((plan) => (
+                        <option key={plan.id} value={plan.id}>
+                          {membershipOptionLabels[plan.id] || `${plan.name} (${plan.price})`}
+                        </option>
+                      ))}
+                    </optgroup>
+
+                    <optgroup label="Official Rate Card (Brochure Page 1)">
+                      {services.filter(s => s.isRateCard).map((svc) => (
+                        <option key={svc.id} value={svc.id}>
+                          {svc.name} ({svc.price})
+                        </option>
+                      ))}
+                    </optgroup>
+
+                    <optgroup label="Signature & VIP Grooming Lounge">
+                      {services.filter(s => !s.isRateCard).map((svc) => (
+                        <option key={svc.id} value={svc.id}>
+                          {svc.name} ({svc.price})
+                        </option>
+                      ))}
+                    </optgroup>
                   </select>
                 </div>
+
+                {/* Selected Service Detail Info */}
+                {selectedServiceObj && selectedServiceObj.name && (
+                  <div className="mt-2 p-2.5 bg-[#E8EFE8] rounded-lg border border-[#30452F]/20 flex items-start justify-between gap-2 text-xs">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-[#30452F] truncate">
+                        {selectedServiceObj.name}
+                      </div>
+                      {matchedCombo && (
+                        <p className="text-[11px] text-gray-600 mt-0.5 line-clamp-1">
+                          <span className="font-medium text-[#30452F]">Includes:</span> {matchedCombo.tagline}
+                        </p>
+                      )}
+                      {matchedMembership && (
+                        <p className="text-[11px] text-gray-600 mt-0.5">
+                          <span className="font-medium text-[#30452F]">Includes:</span> {matchedMembership.includes?.join(' + ')}
+                        </p>
+                      )}
+                      {matchedService?.tagline && (
+                        <p className="text-[11px] text-gray-600 mt-0.5 line-clamp-1">
+                          {matchedService.tagline}
+                        </p>
+                      )}
+                    </div>
+                    {selectedServiceObj.price && (
+                      <span className="font-bold text-[#30452F] bg-[#E6B25C]/40 px-2 py-0.5 rounded text-[11px] whitespace-nowrap shrink-0">
+                        {selectedServiceObj.price}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Date & Time */}
