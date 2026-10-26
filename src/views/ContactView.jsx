@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Sparkles } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Sparkles, Loader2 } from 'lucide-react';
 import { salonLocations } from '../data/locationsData';
+import { submitToGoogleSheets } from '../services/googleSheetsService';
 
 export default function ContactView() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function ContactView() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -27,10 +29,26 @@ export default function ContactView() {
     return Object.keys(err).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
+    if (!validate()) return;
+    
+    setIsSubmitting(true);
+    try {
+      await submitToGoogleSheets({
+        formType: 'Contact',
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      });
       setSubmitted(true);
+    } catch (err) {
+      console.error('Error submitting contact form:', err);
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -256,10 +274,20 @@ export default function ContactView() {
 
               <button
                 type="submit"
-                className="w-full bg-[#30452F] hover:bg-[#30452F] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+                className="w-full bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed border border-[#E6B25C]/20"
               >
-                <Send className="w-4 h-4" />
-                <span>Send Message</span>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-[#E6B25C]" />
+                    <span>Sending Message...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Send Message</span>
+                  </>
+                )}
               </button>
             </form>
           )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, Briefcase, Building, CheckCircle, MessageSquare, Download, MapPin, DollarSign } from 'lucide-react';
+import { X, Briefcase, Building, CheckCircle, MessageSquare, Download, MapPin, DollarSign, Loader2 } from 'lucide-react';
 import { franchiseModels } from '../data/franchiseData';
+import { submitToGoogleSheets } from '../services/googleSheetsService';
 
 export default function FranchiseInquiryModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ export default function FranchiseInquiryModal({ isOpen, onClose }) {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
   if (!isOpen) return null;
@@ -51,10 +53,30 @@ _Request for ZAYRO Franchise Information Memorandum_`;
     return `https://wa.me/919150022115?text=${encodeURIComponent(text)}`;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
+    if (!validate()) return;
+    
+    setIsSubmitting(true);
+    try {
+      await submitToGoogleSheets({
+        formType: 'Franchise',
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        city: formData.city,
+        space: formData.space,
+        budget: formData.budget,
+        model: formData.model,
+        experience: formData.experience,
+        notes: formData.notes
+      });
       setSubmitted(true);
+    } catch (err) {
+      console.error('Error submitting franchise inquiry:', err);
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -265,10 +287,20 @@ _Request for ZAYRO Franchise Information Memorandum_`;
               <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-[#30452F] to-[#1A2719] hover:from-[#476346] hover:to-[#30452F] text-[#E6B25C] hover:text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all border border-[#E6B25C]/30 shadow-md flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gradient-to-r from-[#30452F] to-[#1A2719] hover:from-[#476346] hover:to-[#30452F] text-[#E6B25C] hover:text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all border border-[#E6B25C]/30 shadow-md flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                  <Briefcase className="w-4 h-4" />
-                  <span>Submit Partnership Proposal</span>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-[#E6B25C]" />
+                      <span>Submitting Proposal...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Briefcase className="w-4 h-4" />
+                      <span>Submit Partnership Proposal</span>
+                    </>
+                  )}
                 </button>
 
                 <a

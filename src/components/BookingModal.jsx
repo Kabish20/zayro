@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Clock, MapPin, User, Phone, Mail, Scissors, MessageSquare, CheckCircle } from 'lucide-react';
+import { 
+  X, Calendar, Clock, MapPin, User, Phone, Mail, Scissors, MessageSquare, 
+  CheckCircle, Loader2, Download, Printer, Copy, Check, Sparkles, ShieldCheck 
+} from 'lucide-react';
 import { salonLocations } from '../data/locationsData';
 import { services } from '../data/servicesData';
 import { comboOffers, membershipPlans } from '../data/packagesData';
+import { submitToGoogleSheets } from '../services/googleSheetsService';
+import { downloadBookingPassImage, printBookingPass } from '../utils/bookingPassGenerator';
 
 const comboOptionLabels = {
   'combo-1': 'Combo 1: Haircut, Beard & Oil Massage (₹299)',
@@ -37,7 +42,11 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [bookingRef, setBookingRef] = useState('');
+  const [copiedRef, setCopiedRef] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     if (preselectedService) {
@@ -103,10 +112,78 @@ _Sent via ZAYRO Online Concierge Portal_`;
     return `https://wa.me/${selectedLocationObj.whatsapp || '919150022115'}?text=${encodeURIComponent(text)}`;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
+    if (!validate()) return;
+    
+    const generatedRef = 'ZYR-' + Math.floor(100000 + Math.random() * 900000);
+    setBookingRef(generatedRef);
+    setIsSubmitting(true);
+    
+    try {
+      await submitToGoogleSheets({
+        formType: 'Bookings',
+        bookingRef: generatedRef,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        location: selectedLocationObj.name,
+        service: selectedServiceObj?.name || formData.service,
+        date: formData.date,
+        time: formData.time,
+        notes: formData.notes
+      });
       setIsSubmitted(true);
+    } catch (err) {
+      console.error('Error submitting booking:', err);
+      setIsSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDownloadPass = async () => {
+    setIsDownloading(true);
+    try {
+      await downloadBookingPassImage({
+        bookingRef: bookingRef || 'ZYR-849201',
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        service: selectedServiceObj?.name || formData.service || 'ZAYRO Grooming Experience',
+        location: selectedLocationObj.name,
+        address: selectedLocationObj.address,
+        date: formData.date,
+        time: formData.time,
+        notes: formData.notes
+      });
+    } catch (e) {
+      console.error('Failed to download pass:', e);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handlePrintPass = () => {
+    printBookingPass({
+      bookingRef: bookingRef || 'ZYR-849201',
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      service: selectedServiceObj?.name || formData.service || 'ZAYRO Grooming Experience',
+      location: selectedLocationObj.name,
+      address: selectedLocationObj.address,
+      date: formData.date,
+      time: formData.time,
+      notes: formData.notes
+    });
+  };
+
+  const handleCopyRef = () => {
+    if (bookingRef) {
+      navigator.clipboard.writeText(bookingRef);
+      setCopiedRef(true);
+      setTimeout(() => setCopiedRef(false), 2000);
     }
   };
 
@@ -149,49 +226,235 @@ _Sent via ZAYRO Online Concierge Portal_`;
         {/* Modal Body */}
         <div className="p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-6">
           {isSubmitted ? (
-            <div className="py-8 text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-[#30452F]/20 text-[#30452F] mx-auto flex items-center justify-center border-2 border-[#30452F]">
-                <CheckCircle className="w-10 h-10 text-[#30452F]" />
-              </div>
-              <h4 className="font-serif text-2xl font-bold text-[#30452F]">
-                Appointment Enquiry Received!
-              </h4>
-              <p className="text-sm text-gray-600 max-w-md mx-auto leading-relaxed">
-                Thank you, <span className="font-semibold text-[#30452F]">{formData.name}</span>. Your request for <span className="font-semibold text-[#30452F]">{selectedServiceObj?.name}</span> at <span className="font-semibold text-[#30452F]">{selectedLocationObj.name}</span> has been logged.
-              </p>
+            <div className="py-2 sm:py-3 space-y-5 animate-fadeIn">
               
-              <div className="bg-[#E8EFE8] p-4 rounded-xl border border-[#30452F]/30 max-w-md mx-auto text-left text-xs space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Date & Time:</span>
-                  <span className="font-semibold text-[#30452F]">{formData.date} at {formData.time}</span>
+              {/* Status Header */}
+              <div className="text-center space-y-1.5">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#30452F]/15 border border-[#30452F]/30 text-[#30452F] text-[11px] font-bold uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5 text-[#C9943B]" />
+                  <span>Appointment Confirmed & Logged</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Mobile:</span>
-                  <span className="font-semibold text-[#30452F]">{formData.phone}</span>
-                </div>
+                <h4 className="font-serif text-2xl sm:text-3xl font-bold text-[#30452F]">
+                  Your VIP Booking Pass
+                </h4>
+                <p className="text-xs sm:text-sm text-stone-600 max-w-md mx-auto">
+                  Thank you, <span className="font-bold text-[#30452F]">{formData.name}</span>. Your reservation request has been saved in our central system.
+                </p>
               </div>
 
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a
-                  href={buildWhatsAppMessage()}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd5b] text-white text-sm font-bold px-6 py-3 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>Send Request to WhatsApp Now</span>
-                </a>
-                <button
-                  onClick={handleReset}
-                  className="w-full sm:w-auto bg-[#30452F] text-[#E6B25C] text-sm font-bold px-6 py-3 rounded-xl border border-[#E6B25C]/30 hover:bg-[#1A2719] transition-colors"
-                >
-                  Done
-                </button>
+              {/* Luxury Pass Card */}
+              <div className="relative rounded-2xl bg-gradient-to-br from-[#162719] via-[#203723] to-[#122014] p-5 sm:p-6 text-[#F5ECDE] border-2 border-[#E6B25C]/70 shadow-2xl overflow-hidden">
+                
+                {/* Decorative Accent Glow */}
+                <div className="absolute top-0 right-0 w-44 h-44 bg-[#E6B25C]/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-[#E6B25C] to-transparent"></div>
+
+                {/* Card Top: Branding & Pass ID */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E6B25C]/25">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#30452F] border border-[#E6B25C]/50 flex items-center justify-center text-[#E6B25C] shadow-inner">
+                      <ShieldCheck className="w-5 h-5 text-[#E6B25C]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-serif font-bold text-lg text-white tracking-widest">Z A Y R O</span>
+                        <span className="text-[9px] uppercase tracking-[0.2em] bg-[#E6B25C]/20 text-[#E6B25C] px-2 py-0.5 rounded border border-[#E6B25C]/40 font-bold">
+                          VIP PASS
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#9BB899]">Private Concierge Appointment</p>
+                    </div>
+                  </div>
+
+                  {/* Pass ID Pill */}
+                  <div className="flex items-center gap-2 self-start sm:self-auto bg-black/40 px-3 py-1.5 rounded-xl border border-[#E6B25C]/35">
+                    <div className="text-left">
+                      <span className="text-[8px] uppercase tracking-wider text-[#9BB899] block font-semibold">Pass Reference</span>
+                      <span className="font-mono text-xs sm:text-sm font-bold text-[#E6B25C]">#{bookingRef}</span>
+                    </div>
+                    <button
+                      onClick={handleCopyRef}
+                      type="button"
+                      title="Copy Pass Reference"
+                      className="p-1.5 rounded-lg bg-[#30452F] hover:bg-[#476346] text-[#E6B25C] transition-colors"
+                    >
+                      {copiedRef ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Card Grid Details */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4 border-b border-[#E6B25C]/20">
+                  
+                  {/* Service */}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#E6B25C] font-semibold">
+                      <Scissors className="w-3.5 h-3.5 text-[#E6B25C]" />
+                      <span>Reserved Treatment</span>
+                    </div>
+                    <p className="font-serif text-sm sm:text-base font-bold text-white">
+                      {selectedServiceObj?.name || formData.service || 'Grooming Experience'}
+                    </p>
+                    {selectedServiceObj?.price && (
+                      <span className="inline-block text-[11px] font-bold text-[#E6B25C] bg-[#162316] px-2 py-0.5 rounded border border-[#E6B25C]/30">
+                        {selectedServiceObj.price}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Schedule */}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#E6B25C] font-semibold">
+                      <Clock className="w-3.5 h-3.5 text-[#E6B25C]" />
+                      <span>Date & Preferred Time</span>
+                    </div>
+                    <p className="font-serif text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                      <span>{formData.date}</span>
+                      <span className="text-xs font-normal text-[#9BB899] font-sans">at</span>
+                      <span className="text-[#E6B25C]">{formData.time}</span>
+                    </p>
+                    <span className="text-[11px] text-[#9BB899] block">
+                      Priority Concierge Seating
+                    </span>
+                  </div>
+
+                  {/* Guest */}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#E6B25C] font-semibold">
+                      <User className="w-3.5 h-3.5 text-[#E6B25C]" />
+                      <span>Guest Name & Mobile</span>
+                    </div>
+                    <p className="text-sm font-bold text-white">
+                      {formData.name}
+                    </p>
+                    <p className="text-xs text-[#9BB899] font-mono">
+                      +91 {formData.phone}
+                    </p>
+                  </div>
+
+                  {/* Branch */}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#E6B25C] font-semibold">
+                      <MapPin className="w-3.5 h-3.5 text-[#E6B25C]" />
+                      <span>Salon Branch</span>
+                    </div>
+                    <p className="text-sm font-bold text-white">
+                      {selectedLocationObj.name}
+                    </p>
+                    <p className="text-[11px] text-[#9BB899] line-clamp-1">
+                      {selectedLocationObj.address || 'Trichy, Tamil Nadu'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Complimentary Concierge Privileges */}
+                <div className="pt-3 pb-1">
+                  <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#E6B25C] block mb-2">
+                    Included Concierge Privileges:
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-[#E8DCB8]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C]"></span>
+                      <span>1-on-1 Hair Texture Diagnosis</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C]"></span>
+                      <span>Botanical Cleanse & Warm Towel</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C]"></span>
+                      <span>Artisan Espresso / Herbal Refreshment</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C]"></span>
+                      <span>Zero Waiting Chair Allocation</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Perforated Ticket Line */}
+                <div className="relative my-3.5 flex items-center justify-between">
+                  <div className="w-3 h-5 bg-[#F5ECDE] rounded-r-full -ml-5 sm:-ml-6"></div>
+                  <div className="flex-1 border-t border-dashed border-[#E6B25C]/40 mx-2"></div>
+                  <div className="w-3 h-5 bg-[#F5ECDE] rounded-l-full -mr-5 sm:-mr-6"></div>
+                </div>
+
+                {/* Barcode & Salon Note */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+                  <p className="text-[11px] text-[#9BB899]">
+                    Present this pass or Pass ID at salon desk upon arrival.
+                  </p>
+                  <div className="font-mono text-[10px] text-[#E6B25C] tracking-widest bg-black/40 px-3 py-1 rounded border border-[#E6B25C]/20">
+                    |||| || |||||| || ||| #{bookingRef}
+                  </div>
+                </div>
+
               </div>
 
-              <p className="text-[11px] text-gray-400 italic">
-                Note: As this is a static website, appointments are finalized once verified by our branch manager over call or WhatsApp.
+              {/* Action Buttons */}
+              <div className="space-y-2.5 pt-1">
+                
+                {/* Primary Download & Print Buttons */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  
+                  {/* Download Booking Copy (High Res VIP Image Pass) */}
+                  <button
+                    onClick={handleDownloadPass}
+                    disabled={isDownloading}
+                    type="button"
+                    className="bg-gradient-to-r from-[#C9943B] via-[#E6B25C] to-[#C9943B] hover:brightness-110 text-[#142314] font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center justify-center gap-2 font-serif hover:scale-[1.01] active:scale-[0.99]"
+                  >
+                    {isDownloading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-[#142314]" />
+                        <span>Generating High-Res Pass...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4 text-[#142314]" />
+                        <span>Download Booking Copy</span>
+                      </>
+                    )}
+                  </button>
+
+                  {/* Print / Save as PDF */}
+                  <button
+                    onClick={handlePrintPass}
+                    type="button"
+                    className="bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm transition-all border border-[#E6B25C]/40 shadow-md flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                  >
+                    <Printer className="w-4 h-4" />
+                    <span>Print / Save as PDF</span>
+                  </button>
+                </div>
+
+                {/* WhatsApp & Done Buttons */}
+                <div className="flex flex-col sm:flex-row gap-2.5">
+                  <a
+                    href={buildWhatsAppMessage()}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition-all shadow-md flex items-center justify-center gap-2 hover:scale-[1.01]"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Send Request to WhatsApp Concierge</span>
+                  </a>
+
+                  <button
+                    onClick={handleReset}
+                    type="button"
+                    className="sm:w-28 bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition-colors border border-stone-300"
+                  >
+                    Done
+                  </button>
+                </div>
+
+              </div>
+
+              <p className="text-[11px] text-gray-500 text-center">
+                Your appointment request is saved in our system. Our branch manager will reach out over call or WhatsApp to confirm your slot.
               </p>
+
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -430,10 +693,20 @@ _Sent via ZAYRO Online Concierge Portal_`;
               <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-[#30452F] to-[#1A2719] hover:from-[#476346] hover:to-[#30452F] text-[#E6B25C] hover:text-white font-bold py-3 px-4 rounded-xl text-sm transition-all border border-[#E6B25C]/30 shadow-md flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gradient-to-r from-[#30452F] to-[#1A2719] hover:from-[#476346] hover:to-[#30452F] text-[#E6B25C] hover:text-white font-bold py-3 px-4 rounded-xl text-sm transition-all border border-[#E6B25C]/30 shadow-md flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                  <Calendar className="w-4 h-4" />
-                  <span>Submit Appointment Enquiry</span>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-[#E6B25C]" />
+                      <span>Recording Appointment...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Calendar className="w-4 h-4" />
+                      <span>Submit Appointment Enquiry</span>
+                    </>
+                  )}
                 </button>
 
                 <a
