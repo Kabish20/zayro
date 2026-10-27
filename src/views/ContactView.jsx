@@ -102,104 +102,110 @@ export default function ContactView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
         
         {/* Left: Contact Info & Branches */}
-        <div className="lg:col-span-5 space-y-6 sm:space-y-8">
-          <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#E8DCB8] shadow-sm space-y-6">
-            <h3 className="font-serif text-2xl font-bold text-[#30452F]">
-              Corporate & Concierge Desk
-            </h3>
+        <div className="lg:col-span-5 space-y-6">
+          
+          {/* Card 1: Concierge Desk Info */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#E8DCB8] shadow-sm space-y-5">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9943B] block mb-1">
+                Central Concierge
+              </span>
+              <h3 className="font-serif text-2xl font-bold text-[#30452F]">
+                Concierge & Inquiries Desk
+              </h3>
+            </div>
 
             <div className="space-y-4 text-xs text-gray-700">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-[#30452F] shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-[#30452F] block">Head Office (Trichy, India 🇮🇳):</span>
-                  <span>5, Crescent Park Apartment, Hazrath Sulaiman Street, Kaja Nagar, Trichy – 620020</span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 pt-2 border-t border-gray-100">
-                <MapPin className="w-4 h-4 text-[#30452F] shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-[#30452F] block">Flagship Salon & Lounge:</span>
-                  <span>Door No. 115, Rajaram Rd, K K Nagar, Tiruchirappalli, Tamil Nadu 620021</span>
-                </div>
-              </div>
-
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-[#30452F] shrink-0" />
+                <div className="w-8 h-8 rounded-xl bg-[#30452F]/10 flex items-center justify-center text-[#30452F] shrink-0">
+                  <Phone className="w-4 h-4 text-[#30452F]" />
+                </div>
                 <div>
-                  <span className="font-bold text-[#30452F] block">Contact Number:</span>
-                  <a href="tel:+919150022115" className="hover:text-[#30452F] transition-colors font-medium">
+                  <span className="font-bold text-[#30452F] block">Central Hotline:</span>
+                  <a href="tel:+919150022115" className="hover:text-[#30452F] transition-colors font-semibold text-sm">
                     +91 91500 22115
                   </a>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-[#30452F] shrink-0" />
+                <div className="w-8 h-8 rounded-xl bg-[#30452F]/10 flex items-center justify-center text-[#30452F] shrink-0">
+                  <Mail className="w-4 h-4 text-[#30452F]" />
+                </div>
                 <div>
-                  <span className="font-bold text-[#30452F] block">Email Inquiries:</span>
-                  <a href="mailto:partner@zayroclub.com" className="hover:text-[#30452F] transition-colors">
+                  <span className="font-bold text-[#30452F] block">Email Desk:</span>
+                  <a href="mailto:partner@zayroclub.com" className="hover:text-[#30452F] transition-colors font-medium">
                     partner@zayroclub.com
                   </a>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <Clock className="w-4 h-4 text-[#30452F] shrink-0 mt-0.5" />
+                <div className="w-8 h-8 rounded-xl bg-[#30452F]/10 flex items-center justify-center text-[#30452F] shrink-0 mt-0.5">
+                  <Clock className="w-4 h-4 text-[#30452F]" />
+                </div>
                 <div>
                   <span className="font-bold text-[#30452F] block">Salon Hours:</span>
-                  <span>10:00 AM – 09:30 PM (Monday to Sunday)</span>
+                  <span className="text-stone-600">10:00 AM – 09:30 PM (All 7 Days)</span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 border-t border-gray-100">
               <a
                 href="https://wa.me/919150022115"
                 target="_blank"
                 rel="noreferrer"
-                className="w-full bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider py-3 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
+                className="w-full bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider py-3.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Message Our Concierge on WhatsApp</span>
+                <span>Message Concierge on WhatsApp</span>
               </a>
             </div>
           </div>
 
-          {/* Quick Branch Directory */}
-          <div className="bg-[#F5ECDE] p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-[#E6B25C]/30 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#30452F]">
-              Trichy Headquarters & Flagship 🇮🇳
-            </h4>
-            <div className="space-y-2.5 text-xs text-stone-700">
-              <div className="py-1.5 border-b border-gray-200/60">
-                <span className="font-bold text-[#30452F] block">Head Office:</span>
-                <span className="text-gray-600">5, Crescent Park Apartment, Hazrath Sulaiman St, Kaja Nagar, Trichy – 620020</span>
+          {/* Card 2: Physical Locations */}
+          <div className="bg-[#F5ECDE] p-5 sm:p-7 rounded-2xl sm:rounded-3xl border border-[#E6B25C]/35 space-y-4">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9943B] block mb-1">
+                Lounge Locations
+              </span>
+              <h4 className="font-serif text-lg font-bold text-[#30452F]">
+                Trichy Flagship & Headquarters 🇮🇳
+              </h4>
+            </div>
+
+            <div className="space-y-3 text-xs text-stone-700">
+              <div className="p-3 bg-white/70 rounded-xl border border-[#E6B25C]/20 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-[#30452F] flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#C9943B]" />
+                    Flagship Lounge:
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                    Valet Available
+                  </span>
+                </div>
+                <p className="text-gray-600 pl-5">Door No. 115, Rajaram Rd, KK Nagar, Trichy – 620021</p>
               </div>
-              <div className="py-1.5 border-b border-gray-200/60">
-                <span className="font-bold text-[#30452F] block">Flagship Lounge:</span>
-                <span className="text-gray-600">Door No. 115, Rajaram Rd, KK Nagar, Trichy – 620021</span>
-              </div>
-              <div className="flex justify-between items-center py-1">
-                <span className="font-medium text-gray-700">Valet & Parking</span>
-                <span className="text-[#30452F] font-semibold">Available at Flagship</span>
-              </div>
-              <div className="flex justify-between items-center py-1">
-                <span className="font-medium text-gray-700">Contact Number</span>
-                <a href="tel:+919150022115" className="text-[#30452F] font-semibold hover:underline">
-                  +91 91500 22115
-                </a>
+
+              <div className="p-3 bg-white/70 rounded-xl border border-[#E6B25C]/20 space-y-1">
+                <span className="font-bold text-[#30452F] flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#C9943B]" />
+                  Registered Corporate Office:
+                </span>
+                <p className="text-gray-600 pl-5">5, Crescent Park Apartment, Hazrath Sulaiman St, Kaja Nagar, Trichy – 620020</p>
               </div>
             </div>
           </div>
+
         </div>
 
         {/* Right: Message Form */}
-        <div className="lg:col-span-7 bg-white p-6 sm:p-10 rounded-2xl sm:rounded-3xl border border-[#E8DCB8] shadow-luxury">
+        <div className="lg:col-span-7 bg-white p-6 sm:p-9 rounded-2xl sm:rounded-3xl border border-[#E8DCB8] shadow-luxury">
           {submitted ? (
             <div className="py-12 text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-[#E8EFE8] text-[#30452F] mx-auto flex items-center justify-center border-2 border-[#30452F]">
@@ -211,20 +217,28 @@ export default function ContactView() {
               </p>
               <button
                 onClick={() => setSubmitted(false)}
-                className="text-xs font-bold text-[#30452F] underline mt-3"
+                className="text-xs font-bold text-[#30452F] underline mt-3 hover:text-[#E6B25C] transition-colors"
               >
                 Send another message
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <h3 className="font-serif text-2xl font-bold text-[#30452F] mb-2">
-                Send Us a Note
-              </h3>
+              <div className="space-y-1 mb-2 border-b border-stone-100 pb-3">
+                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C9943B] block">
+                  Direct Inquiries & Feedback
+                </span>
+                <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#30452F]">
+                  Send Us a Note
+                </h3>
+                <p className="text-xs text-stone-500">
+                  Have a special grooming requirement, wedding package query, or partnership inquiry? Reach out directly.
+                </p>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1.5">
                     Your Name *
                   </label>
                   <input
@@ -232,7 +246,7 @@ export default function ContactView() {
                     placeholder="Full name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className={`w-full px-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${
+                    className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-stone-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] transition-all ${
                       errors.name ? 'border-red-500' : 'border-gray-200'
                     }`}
                   />
@@ -240,7 +254,7 @@ export default function ContactView() {
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-1.5">
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F]">
                       Mobile Number *
                     </label>
@@ -255,7 +269,7 @@ export default function ContactView() {
                     </span>
                   </div>
                   <div className="relative">
-                    <span className="absolute left-3 top-2.5 text-xs font-semibold text-gray-500 select-none flex items-center gap-1.5 pointer-events-none">
+                    <span className="absolute left-3.5 top-3 text-xs font-semibold text-gray-500 select-none flex items-center gap-1.5 pointer-events-none">
                       <Phone className="w-3.5 h-3.5 text-gray-400" />
                       <span className="text-gray-500 font-bold border-r border-gray-300 pr-1.5">+91</span>
                     </span>
@@ -267,7 +281,7 @@ export default function ContactView() {
                       placeholder="98765 43210"
                       value={formData.phone}
                       onChange={handlePhoneChange}
-                      className={`w-full pl-16 pr-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${
+                      className={`w-full pl-16 pr-3.5 py-2.5 text-sm rounded-xl border bg-stone-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] transition-all ${
                         errors.phone ? 'border-red-500' : 'border-gray-200'
                       }`}
                     />
@@ -278,7 +292,7 @@ export default function ContactView() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1.5">
                     Email Address
                   </label>
                   <input
@@ -286,18 +300,18 @@ export default function ContactView() {
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C]"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 bg-stone-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1.5">
                     Topic of Inquiry
                   </label>
                   <select
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C]"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 bg-stone-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] transition-all"
                   >
                     <option value="General Salon Inquiry">General Lounge Inquiry</option>
                     <option value="Royal Groom Suite & Events">Royal Groom Suite & Wedding Bookings</option>
@@ -309,7 +323,7 @@ export default function ContactView() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1.5">
                   Your Message *
                 </label>
                 <textarea
@@ -317,7 +331,7 @@ export default function ContactView() {
                   placeholder="How can our styling concierge assist you?"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className={`w-full px-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${
+                  className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-stone-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] transition-all ${
                     errors.message ? 'border-red-500' : 'border-gray-200'
                   }`}
                 ></textarea>
@@ -327,7 +341,7 @@ export default function ContactView() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed border border-[#E6B25C]/20"
+                className="w-full bg-[#30452F] hover:bg-[#1A2719] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-75 disabled:cursor-not-allowed border border-[#E6B25C]/30 hover:shadow-lg hover:scale-[1.005] active:scale-[0.995]"
               >
                 {isSubmitting ? (
                   <>
@@ -336,11 +350,22 @@ export default function ContactView() {
                   </>
                 ) : (
                   <>
-                    <Send className="w-4 h-4" />
+                    <Send className="w-4 h-4 text-[#E6B25C]" />
                     <span>Send Message</span>
                   </>
                 )}
               </button>
+
+              {/* Reassurance Footer inside Card */}
+              <div className="pt-3 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-stone-500">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="text-stone-600 font-medium">Concierge response guaranteed within 24 hours</span>
+                </div>
+                <div className="text-stone-500">
+                  Direct: <a href="tel:+919150022115" className="font-bold text-[#30452F] hover:underline">+91 91500 22115</a>
+                </div>
+              </div>
             </form>
           )}
         </div>
