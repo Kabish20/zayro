@@ -12,7 +12,7 @@ export default {
           light: '#FAF5ED',
           DEFAULT: '#F5ECDE', // Warm Ivory
           warm: '#F5ECDE',
-          border: '#E8DCB',
+          border: '#E8DCB8',
           dark: '#E0D2C0',
         },
         sage: {

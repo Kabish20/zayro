@@ -205,7 +205,7 @@ export default function Header({ currentView, setCurrentView, openBooking, openR
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  openRateCard && openRateCard();
+                  openRateCard?.();
                 }}
                 className="w-full bg-[#30452F] border border-[#E6B25C]/50 text-[#E6B25C] hover:text-white text-center font-bold text-xs py-2.5 rounded-lg shadow-sm flex items-center justify-center gap-2"
               >

@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   X, Calendar, Clock, MapPin, User, Phone, Mail, Scissors, MessageSquare, 
-  CheckCircle, Loader2, Download, Printer, Copy, Check, Sparkles, ShieldCheck 
+  Loader2, Download, Printer, Copy, Check, Sparkles, ShieldCheck 
 } from 'lucide-react';
 import { salonLocations } from '../data/locationsData';
 import { services } from '../data/servicesData';
 import { comboOffers, membershipPlans } from '../data/packagesData';
 import { submitToGoogleSheets } from '../services/googleSheetsService';
 import { downloadBookingPassImage, printBookingPass } from '../utils/bookingPassGenerator';
+
+const TODAY_DATE = new Date().toISOString().split('T')[0];
+const generateBookingRef = () => 'ZYR-' + Math.floor(100000 + Math.random() * 900000);
 
 const comboOptionLabels = {
   'combo-1': 'Combo 1: Haircut, Beard & Oil Massage (₹299)',
@@ -35,7 +38,7 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
     phone: '',
     email: '',
     location: 'trichy-kk-nagar',
-    service: '',
+    service: preselectedService ? (preselectedService.id || preselectedService) : (services[0]?.id || ''),
     date: '',
     time: '11:00 AM',
     notes: ''
@@ -48,16 +51,15 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
   const [copiedRef, setCopiedRef] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  useEffect(() => {
+  const [prevPreselected, setPrevPreselected] = useState(preselectedService);
+
+  if (preselectedService !== prevPreselected) {
+    setPrevPreselected(preselectedService);
     if (preselectedService) {
-      setFormData(prev => ({
-        ...prev,
-        service: preselectedService.id || preselectedService
-      }));
-    } else if (services.length > 0 && !formData.service) {
-      setFormData(prev => ({ ...prev, service: services[0].id }));
+      const nextService = preselectedService.id || preselectedService;
+      setFormData((prev) => ({ ...prev, service: nextService }));
     }
-  }, [preselectedService, isOpen]);
+  }
 
   if (!isOpen) return null;
 
@@ -116,7 +118,7 @@ _Sent via ZAYRO Online Concierge Portal_`;
     e.preventDefault();
     if (!validate()) return;
     
-    const generatedRef = 'ZYR-' + Math.floor(100000 + Math.random() * 900000);
+    const generatedRef = generateBookingRef();
     setBookingRef(generatedRef);
     setIsSubmitting(true);
     
@@ -308,9 +310,9 @@ _Sent via ZAYRO Online Concierge Portal_`;
                       <Clock className="w-3.5 h-3.5 text-[#E6B25C]" />
                       <span>Date & Preferred Time</span>
                     </div>
-                    <p className="font-serif text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <p className="font-sans text-sm sm:text-base font-bold text-white flex items-center gap-2">
                       <span>{formData.date}</span>
-                      <span className="text-xs font-normal text-[#9BB899] font-sans">at</span>
+                      <span className="text-xs font-normal text-[#9BB899]">at</span>
                       <span className="text-[#E6B25C]">{formData.time}</span>
                     </p>
                     <span className="text-[11px] text-[#9BB899] block">
@@ -402,7 +404,7 @@ _Sent via ZAYRO Online Concierge Portal_`;
                     onClick={handleDownloadPass}
                     disabled={isDownloading}
                     type="button"
-                    className="bg-gradient-to-r from-[#C9943B] via-[#E6B25C] to-[#C9943B] hover:brightness-110 text-[#142314] font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center justify-center gap-2 font-serif hover:scale-[1.01] active:scale-[0.99]"
+                    className="bg-gradient-to-r from-[#C9943B] via-[#E6B25C] to-[#C9943B] hover:brightness-110 text-[#142314] font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center justify-center gap-2 font-sans hover:scale-[1.01] active:scale-[0.99]"
                   >
                     {isDownloading ? (
                       <>
@@ -640,7 +642,7 @@ _Sent via ZAYRO Online Concierge Portal_`;
                     <Calendar className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
                     <input
                       type="date"
-                      min={new Date().toISOString().split('T')[0]}
+                      min={TODAY_DATE}
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                       className={`w-full pl-9 pr-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${

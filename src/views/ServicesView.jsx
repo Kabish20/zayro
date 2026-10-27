@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Clock, Sparkles, Filter, ChevronRight, Calendar, Check, ArrowRight, ShieldCheck, Tag } from 'lucide-react';
+import { Search, Clock, Sparkles, ChevronRight, Check, ArrowRight } from 'lucide-react';
 import { categories, services } from '../data/servicesData';
 import { rateCardServices } from '../data/packagesData';
 
@@ -96,7 +96,7 @@ export default function ServicesView({ openBooking, openServiceDetail }) {
                 </div>
 
                 <div className="pt-2 border-t border-white/10 flex items-baseline justify-between">
-                  <span className="font-serif text-xl sm:text-2xl font-bold text-[#E6B25C]">
+                  <span className="font-sans text-xl sm:text-2xl font-bold text-[#E6B25C]">
                     {svc.price}
                   </span>
                   <span className="text-[10px] font-bold text-[#E6B25C] group-hover:underline">

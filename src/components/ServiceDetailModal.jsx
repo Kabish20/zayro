@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Clock, Sparkles, Check, ArrowRight, ShieldCheck, Calendar, UserCheck } from 'lucide-react';
+import { X, Clock, Sparkles, Check, Calendar, UserCheck } from 'lucide-react';
 
 export default function ServiceDetailModal({ service, isOpen, onClose, openBooking }) {
   if (!isOpen || !service) return null;

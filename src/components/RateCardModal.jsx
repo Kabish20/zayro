@@ -41,7 +41,7 @@ export default function RateCardModal({ isOpen, onClose, openBooking }) {
           <RateCardBrochure 
             openBooking={(service) => {
               onClose();
-              openBooking && openBooking(service);
+              openBooking?.(service);
             }} 
           />
         </div>

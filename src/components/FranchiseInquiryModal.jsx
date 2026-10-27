@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { X, Briefcase, Building, CheckCircle, MessageSquare, Download, MapPin, DollarSign, Loader2 } from 'lucide-react';
-import { franchiseModels } from '../data/franchiseData';
+import { X, Briefcase, CheckCircle, MessageSquare, Loader2 } from 'lucide-react';
 import { submitToGoogleSheets } from '../services/googleSheetsService';
 
 export default function FranchiseInquiryModal({ isOpen, onClose }) {

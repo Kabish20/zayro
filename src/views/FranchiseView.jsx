@@ -117,7 +117,7 @@ export default function FranchiseView({ openFranchiseModal }) {
               key={idx}
               className="bg-white p-6 rounded-2xl border border-[#E8DCB8] shadow-sm hover:border-[#E6B25C] transition-all text-center space-y-1"
             >
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-[#30452F]">
+              <p className="font-sans text-3xl sm:text-4xl font-bold text-[#30452F]">
                 <AnimatedCounter value={stat.value} duration={1800 + idx * 150} />
               </p>
               <p className="text-xs font-bold uppercase tracking-wider text-[#30452F]">
@@ -309,7 +309,7 @@ export default function FranchiseView({ openFranchiseModal }) {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold uppercase text-gray-700">Average Daily Clients</span>
-                  <span className="font-serif font-bold text-lg text-[#30452F]">{dailyClients} Guests / Day</span>
+                  <span className="font-sans font-bold text-lg text-[#30452F]">{dailyClients} Guests / Day</span>
                 </div>
                 <input
                   type="range"
@@ -331,7 +331,7 @@ export default function FranchiseView({ openFranchiseModal }) {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold uppercase text-gray-700">Average Spend Per Client</span>
-                  <span className="font-serif font-bold text-lg text-[#30452F]">₹{avgTicket.toLocaleString('en-IN')}</span>
+                  <span className="font-sans font-bold text-lg text-[#30452F]">₹{avgTicket.toLocaleString('en-IN')}</span>
                 </div>
                 <input
                   type="range"
@@ -359,27 +359,27 @@ export default function FranchiseView({ openFranchiseModal }) {
               <div className="space-y-3 border-b border-[#476346] pb-4">
                 <div className="flex justify-between text-xs">
                   <span className="text-[#9BB899]">Monthly Gross Revenue:</span>
-                  <span className="font-serif font-bold text-base text-white">₹{metrics.monthlyGrossRevenue}</span>
+                  <span className="font-sans font-bold text-base text-white">₹{metrics.monthlyGrossRevenue}</span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-[#9BB899]">Estimated Monthly EBITDA (25%):</span>
-                  <span className="font-serif font-bold text-base text-[#E6B25C]">₹{metrics.monthlyEBITDA}</span>
+                  <span className="font-sans font-bold text-base text-[#E6B25C]">₹{metrics.monthlyEBITDA}</span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-[#9BB899]">Annual Net Cashflow:</span>
-                  <span className="font-serif font-bold text-base text-white">₹{metrics.annualEBITDA}</span>
+                  <span className="font-sans font-bold text-base text-white">₹{metrics.annualEBITDA}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 pt-1">
                 <div className="bg-[#30452F] p-3 rounded-xl border border-[#476346]">
                   <span className="text-[10px] text-[#9BB899] uppercase block font-semibold">Estimated ROI</span>
-                  <span className="font-serif text-2xl font-bold text-[#E6B25C]">{metrics.roiPercentage}%</span>
+                  <span className="font-sans text-2xl font-bold text-[#E6B25C]">{metrics.roiPercentage}%</span>
                   <span className="text-[9px] text-gray-400 block mt-0.5">Annualized Return</span>
                 </div>
                 <div className="bg-[#30452F] p-3 rounded-xl border border-[#476346]">
                   <span className="text-[10px] text-[#9BB899] uppercase block font-semibold">Est. Payback</span>
-                  <span className="font-serif text-2xl font-bold text-white">{metrics.paybackMonths} Mo.</span>
+                  <span className="font-sans text-2xl font-bold text-white">{metrics.paybackMonths} Mo.</span>
                   <span className="text-[9px] text-gray-400 block mt-0.5">Capital Recovery</span>
                 </div>
               </div>
@@ -415,7 +415,7 @@ export default function FranchiseView({ openFranchiseModal }) {
               key={idx}
               className="bg-white p-6 rounded-2xl border border-[#E8DCB8] hover:border-[#E6B25C] shadow-sm hover:shadow-luxury transition-all space-y-3"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#E8EFE8] text-[#30452F] flex items-center justify-center font-serif font-bold text-base">
+              <div className="w-10 h-10 rounded-xl bg-[#E8EFE8] text-[#30452F] flex items-center justify-center font-sans font-bold text-base">
                 0{idx + 1}
               </div>
               <h3 className="font-serif text-lg font-bold text-[#30452F]">

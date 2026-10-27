@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Sparkles, CheckCircle2, Clock, Calendar, Gift, Star, 
-  ShieldCheck, ArrowRight, MessageSquare, Tag, Scissors, Layers 
-} from 'lucide-react';
+import { Sparkles, CheckCircle2, Clock, Calendar, MessageSquare, Layers } from 'lucide-react';
 import { comboOffers, rateCardServices } from '../data/packagesData';
 import RateCardBrochure from '../components/RateCardBrochure';
 import MembershipPlans from '../components/MembershipPlans';
@@ -49,19 +46,19 @@ export default function OffersView({ openBooking }) {
           <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
               <span className="block text-[10px] uppercase text-[#9BB899] font-semibold">Haircut From</span>
-              <span className="font-serif text-xl sm:text-2xl font-bold text-[#E6B25C]">₹99</span>
+              <span className="font-sans text-xl sm:text-2xl font-bold text-[#E6B25C]">₹99</span>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
               <span className="block text-[10px] uppercase text-[#9BB899] font-semibold">Shave From</span>
-              <span className="font-serif text-xl sm:text-2xl font-bold text-[#E6B25C]">₹50</span>
+              <span className="font-sans text-xl sm:text-2xl font-bold text-[#E6B25C]">₹50</span>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
               <span className="block text-[10px] uppercase text-[#9BB899] font-semibold">Combos From</span>
-              <span className="font-serif text-xl sm:text-2xl font-bold text-[#E6B25C]">₹299</span>
+              <span className="font-sans text-xl sm:text-2xl font-bold text-[#E6B25C]">₹299</span>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
               <span className="block text-[10px] uppercase text-[#9BB899] font-semibold">Combo Savings</span>
-              <span className="font-serif text-xl sm:text-2xl font-bold text-white">Up to 43%</span>
+              <span className="font-sans text-xl sm:text-2xl font-bold text-white">Up to 43%</span>
             </div>
           </div>
         </div>
@@ -100,7 +97,7 @@ export default function OffersView({ openBooking }) {
               </div>
 
               <div className="pt-2 flex items-baseline justify-between">
-                <span className="font-serif text-xl font-bold text-[#30452F]">
+                <span className="font-sans text-xl font-bold text-[#30452F]">
                   {svc.price}
                 </span>
                 <span className="text-[10px] font-bold text-[#30452F] underline group-hover:text-[#E6B25C]">
@@ -236,7 +233,7 @@ export default function OffersView({ openBooking }) {
                   <div>
                     <span className="text-[10px] uppercase text-stone-500 block font-semibold">Special Combo Price</span>
                     <div className="flex items-baseline gap-2 mt-0.5">
-                      <span className="font-serif text-3xl font-bold text-[#30452F]">{combo.price}</span>
+                      <span className="font-sans text-3xl font-bold text-[#30452F]">{combo.price}</span>
                       <span className="text-xs text-stone-400 line-through">{combo.originalPrice}</span>
                     </div>
                   </div>

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ShieldCheck, FileText, CheckCircle2, AlertCircle, Mail, Phone, MapPin, Printer } from 'lucide-react';
 
 export default function LegalView({ initialTab = 'privacy' }) {
   const [activeTab, setActiveTab] = useState(initialTab);
+  const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
 
-  useEffect(() => {
+  if (initialTab !== prevInitialTab) {
+    setPrevInitialTab(initialTab);
     setActiveTab(initialTab);
-  }, [initialTab]);
+  }
 
   const handlePrint = () => {
     window.print();

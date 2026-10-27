@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, Clock, MessageSquare, Navigation, Sparkles, Check, Calendar, ArrowRight } from 'lucide-react';
+import { MapPin, Phone, Clock, Navigation, Check, Calendar, ArrowRight } from 'lucide-react';
 import { salonLocations } from '../data/locationsData';
 
 export default function LocationsView({ openBooking }) {
@@ -58,7 +58,7 @@ export default function LocationsView({ openBooking }) {
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#967456] block">
                       Full Postal Address
                     </span>
-                    <p className="font-serif text-base sm:text-lg font-bold text-[#30452F] leading-snug">
+                    <p className="font-sans text-base sm:text-lg font-bold text-[#30452F] leading-snug">
                       {flagship.address}
                     </p>
                   </div>

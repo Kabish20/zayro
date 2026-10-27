@@ -2,6 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   NORMAL NUMBER FONT GLOBAL ENFORCEMENT:
+   Forces all digits (0-9), currency symbols (₹, $, €), and numeric/percentage
+   signs (%, +, ±) across the entire project to render using the clean, modern,
+   normal 'Plus Jakarta Sans' font, even when inside Playfair Display or serif headings.
+   ========================================================================== */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 300 400;
+  font-display: swap;
+  src: local('Plus Jakarta Sans'),
+       local('Inter'),
+       local('system-ui'),
+       local('sans-serif'),
+       url('https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_qU7NSg.ttf') format('truetype');
+  unicode-range: U+0030-0039, U+20B9, U+0025, U+002B, U+0024, U+20AC, U+00B1;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 500 600;
+  font-display: swap;
+  src: local('Plus Jakarta Sans SemiBold'),
+       local('Plus Jakarta Sans Medium'),
+       local('Plus Jakarta Sans'),
+       local('Inter'),
+       local('system-ui'),
+       local('sans-serif'),
+       url('https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_d0nNSg.ttf') format('truetype');
+  unicode-range: U+0030-0039, U+20B9, U+0025, U+002B, U+0024, U+20AC, U+00B1;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: swap;
+  src: local('Plus Jakarta Sans Bold'),
+       local('Plus Jakarta Sans ExtraBold'),
+       local('Plus Jakarta Sans'),
+       local('Inter'),
+       local('system-ui'),
+       local('sans-serif'),
+       url('https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_TknNSg.ttf') format('truetype');
+  unicode-range: U+0030-0039, U+20B9, U+0025, U+002B, U+0024, U+20AC, U+00B1;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: local('Plus Jakarta Sans'),
+       local('Inter'),
+       local('system-ui'),
+       local('sans-serif'),
+       url('https://fonts.gstatic.com/s/plusjakartasans/v12/LDIZaomQNQcsA88c7O9yZ4KMCoOg4KozySKCdSNG9OcqYQ0lCR_Q.ttf') format('truetype');
+  unicode-range: U+0030-0039, U+20B9, U+0025, U+002B, U+0024, U+20AC, U+00B1;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: local('Plus Jakarta Sans'), local('Inter'), local('system-ui'), local('sans-serif');
+  unicode-range: U+0030-0039, U+20B9, U+0025, U+002B, U+0024, U+20AC, U+00B1;
+}
+
+@font-face {
+  font-family: 'Georgia';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: local('Plus Jakarta Sans'), local('Inter'), local('sans-serif');
+  unicode-range: U+0030-0039, U+20B9, U+0025, U+002B, U+0024, U+20AC, U+00B1;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -10,17 +90,28 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-size: 14.5px;
+    font-variant-numeric: normal lining-nums tabular-nums;
   }
   
   body {
     background-color: #F5ECDE;
     color: #1F2E1E;
     overflow-x: hidden;
+    font-variant-numeric: normal lining-nums tabular-nums;
   }
 
   h1, h2, h3, h4, .font-editorial {
     font-family: 'Playfair Display', Georgia, serif;
     letter-spacing: -0.015em;
+  }
+
+  /* Keep all numbers, prices, counters, percentages and math symbols in normal font */
+  input[type="number"],
+  input[type="range"],
+  .number-normal,
+  .font-numeric {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+    font-variant-numeric: normal lining-nums tabular-nums;
   }
 }
 

@@ -1,7 +1,21 @@
-import React, { useEffect } from 'react';
-import { X, ChevronLeft, ChevronRight, Calendar, Sparkles } from 'lucide-react';
+import React, { useEffect, useCallback } from 'react';
+import { X, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
-export default function LightboxModal({ isOpen, onClose, items, currentIndex, setCurrentIndex, openBooking }) {
+export default function LightboxModal({ isOpen, onClose, items = [], currentIndex, setCurrentIndex, openBooking }) {
+  const totalItems = items?.length || 0;
+
+  const handleNext = useCallback(() => {
+    if (totalItems > 0) {
+      setCurrentIndex((prev) => (prev + 1) % totalItems);
+    }
+  }, [totalItems, setCurrentIndex]);
+
+  const handlePrev = useCallback(() => {
+    if (totalItems > 0) {
+      setCurrentIndex((prev) => (prev - 1 + totalItems) % totalItems);
+    }
+  }, [totalItems, setCurrentIndex]);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -13,19 +27,11 @@ export default function LightboxModal({ isOpen, onClose, items, currentIndex, se
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, currentIndex, items]);
+  }, [isOpen, onClose, handleNext, handlePrev]);
 
   if (!isOpen || !items || items.length === 0) return null;
 
   const currentItem = items[currentIndex];
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % items.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
-  };
 
   return (
     <div 

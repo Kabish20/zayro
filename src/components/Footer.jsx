@@ -1,6 +1,8 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Clock, ShieldCheck, Award, Sparkles, MessageSquare } from 'lucide-react';
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function Footer({ setCurrentView, openBooking, openRateCard }) {
   const handleNav = (viewId) => {
     setCurrentView(viewId);
@@ -296,7 +298,7 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
 
         {/* Bottom Bar & Disclaimer */}
         <div className="pt-8 border-t border-[#30452F] flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-[#9BB899]">
-          <p>© {new Date().getFullYear()} ZAYRO Men's Grooming Lounge Pvt Ltd. All rights reserved. Luxury Made Affordable.</p>
+          <p>© {CURRENT_YEAR} ZAYRO Men's Grooming Lounge Pvt Ltd. All rights reserved. Luxury Made Affordable.</p>
           <div className="flex items-center gap-6">
             <button onClick={() => handleNav('faq')} className="hover:text-[#E6B25C] transition-colors">
               FAQ

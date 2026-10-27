@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Sparkles, Loader2 } from 'lucide-react';
-import { salonLocations } from '../data/locationsData';
+import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Loader2 } from 'lucide-react';
 import { submitToGoogleSheets } from '../services/googleSheetsService';
 
 export default function ContactView() {

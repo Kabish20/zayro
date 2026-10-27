@@ -106,19 +106,19 @@ export default function HomeView({
             {/* Hero Trust Badges */}
             <div className="pt-8 border-t border-[#476346]/60 grid grid-cols-3 gap-3 sm:gap-6 text-white text-left">
               <div>
-                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
+                <p className="font-sans text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
                   <AnimatedCounter value="45+" duration={1800} />
                 </p>
                 <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Flagship Lounges</p>
               </div>
               <div>
-                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
+                <p className="font-sans text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
                   <AnimatedCounter value="250k+" duration={2000} />
                 </p>
                 <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Gentlemen Styled</p>
               </div>
               <div>
-                <p className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
+                <p className="font-sans text-xl sm:text-2xl lg:text-3xl font-bold text-[#E6B25C] tracking-tight">
                   <AnimatedCounter value="38%" duration={1600} />
                 </p>
                 <p className="text-[10px] sm:text-[11px] text-[#9BB899] font-semibold uppercase tracking-wider mt-1">Franchise ROI</p>
@@ -355,13 +355,13 @@ export default function HomeView({
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
                 <div className="bg-[#1A2719]/60 p-3 rounded-xl border border-[#476346]">
                   <span className="text-[10px] uppercase text-[#E6B25C] block font-semibold">Average ROI</span>
-                  <span className="font-serif text-xl font-bold text-white">
+                  <span className="font-sans text-xl font-bold text-white">
                     <AnimatedCounter value="38%" duration={1600} /> Per Annum
                   </span>
                 </div>
                 <div className="bg-[#1A2719]/60 p-3 rounded-xl border border-[#476346]">
                   <span className="text-[10px] uppercase text-[#E6B25C] block font-semibold">Payback Period</span>
-                  <span className="font-serif text-xl font-bold text-white">
+                  <span className="font-sans text-xl font-bold text-white">
                     <AnimatedCounter value="18-22" duration={1800} /> Months
                   </span>
                 </div>
@@ -550,7 +550,7 @@ export default function HomeView({
                     <h4 className="font-serif font-bold text-sm text-[#30452F] group-hover:text-[#1A2719]">{svc.name}</h4>
                   </div>
                   <div className="flex items-baseline justify-between pt-1 border-t border-stone-200/50">
-                    <span className="font-serif text-lg font-bold text-[#30452F]">{svc.price}</span>
+                    <span className="font-sans text-lg font-bold text-[#30452F]">{svc.price}</span>
                     <span className="text-[10px] font-bold text-[#30452F] underline group-hover:text-[#E6B25C]">Book</span>
                   </div>
                 </div>
@@ -580,7 +580,7 @@ export default function HomeView({
                   </h3>
 
                   <div className="flex items-baseline gap-2 pt-1">
-                    <span className="font-serif text-2xl font-bold text-[#30452F]">
+                    <span className="font-sans text-2xl font-bold text-[#30452F]">
                       {pkg.price}
                     </span>
                     <span className="text-xs text-gray-400 line-through">

@@ -13,7 +13,8 @@ export default function AnimatedCounter({
   suffix = '',
   decimals = 0 
 }) {
-  const [displayValue, setDisplayValue] = useState('0');
+  const isParsable = typeof value === 'number' || (typeof value === 'string' && /\d/.test(value));
+  const [displayValue, setDisplayValue] = useState(() => (isParsable ? '0' : String(value)));
   const [hasAnimated, setHasAnimated] = useState(false);
   const elementRef = useRef(null);
 
@@ -46,8 +47,6 @@ export default function AnimatedCounter({
           endVal = parseFloat(rawNum) || 0;
           if (!suffix && match[3]) autoSuffix = match[3];
         } else {
-          // Fallback if not parsable
-          setDisplayValue(value);
           return;
         }
       }
@@ -120,7 +119,7 @@ export default function AnimatedCounter({
   return (
     <span 
       ref={elementRef} 
-      className={`inline-block tabular-nums transition-transform duration-300 ${
+      className={`font-sans inline-block tabular-nums transition-transform duration-300 ${
         hasAnimated ? 'scale-100' : 'scale-95'
       } ${className}`}
     >

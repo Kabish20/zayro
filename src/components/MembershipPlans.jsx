@@ -114,7 +114,7 @@ export default function MembershipPlans({ openBooking }) {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      openBooking && openBooking(`${plan.name} (${plan.price})`);
+                      openBooking?.(`${plan.name} (${plan.price})`);
                     }}
                     className={`flex-1 font-bold text-xs uppercase tracking-wider py-2.5 px-3 rounded-xl transition-all shadow-sm text-center flex items-center justify-center gap-1.5 ${
                       isDark
@@ -192,7 +192,7 @@ export default function MembershipPlans({ openBooking }) {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      openBooking && openBooking(`${plan.name} (${plan.price})`);
+                      openBooking?.(`${plan.name} (${plan.price})`);
                     }}
                     className="flex-1 bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#152418] font-bold text-xs uppercase tracking-wider py-2.5 px-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
                   >

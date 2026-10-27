@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MessageSquare, Sparkles, CheckCircle2, ChevronRight, Download, Share2 } from 'lucide-react';
+import { Calendar, MessageSquare, Sparkles } from 'lucide-react';
 import { rateCardServices, comboOffers } from '../data/packagesData';
 
 export default function RateCardBrochure({ openBooking }) {
@@ -76,7 +76,7 @@ export default function RateCardBrochure({ openBooking }) {
                 {rateCardServices.map((service) => (
                   <div
                     key={service.id}
-                    onClick={() => openBooking && openBooking(service.name + ` (${service.price})`)}
+                    onClick={() => openBooking?.(service.name + ` (${service.price})`)}
                     className="group/item flex items-center justify-between gap-3 p-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all duration-200"
                     title={`Click to book ${service.name}`}
                   >
@@ -91,13 +91,13 @@ export default function RateCardBrochure({ openBooking }) {
                     <div className="flex-1 border-b border-dotted border-[#E6B25C]/40 mx-2 self-end mb-1.5"></div>
 
                     <div className="flex items-center gap-2">
-                      <span className="font-serif text-lg sm:text-xl font-bold text-[#E6B25C] tracking-tight whitespace-nowrap">
+                      <span className="font-sans text-lg sm:text-xl font-bold text-[#E6B25C] tracking-tight whitespace-nowrap">
                         {service.price}
                       </span>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          openBooking && openBooking(service.name + ` (${service.price})`);
+                          openBooking?.(service.name + ` (${service.price})`);
                         }}
                         className="opacity-0 group-hover/item:opacity-100 bg-[#E6B25C] text-[#1A2719] text-[10px] font-bold px-2 py-0.5 rounded transition-all"
                       >
@@ -161,13 +161,13 @@ export default function RateCardBrochure({ openBooking }) {
                 {comboOffers.map((combo) => (
                   <div
                     key={combo.id}
-                    onClick={() => openBooking && openBooking(`${combo.shortTitle}: ${combo.tagline} (${combo.price})`)}
+                    onClick={() => openBooking?.(`${combo.shortTitle}: ${combo.tagline} (${combo.price})`)}
                     className="group/combo p-2.5 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-[#E6B25C]/20 hover:border-[#E6B25C]/60 cursor-pointer transition-all duration-200 flex items-center justify-between gap-3"
                     title={`Click to reserve ${combo.shortTitle}`}
                   >
                     <div className="space-y-1 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-serif text-xs sm:text-sm font-bold text-[#E6B25C] uppercase tracking-wider shrink-0">
+                        <span className="font-sans text-xs sm:text-sm font-bold text-[#E6B25C] uppercase tracking-wider shrink-0">
                           {combo.shortTitle.toUpperCase()}
                         </span>
                         <span className="text-[9px] font-bold text-[#30452F] bg-[#E6B25C] px-1.5 py-0.2 rounded-full">
@@ -180,13 +180,13 @@ export default function RateCardBrochure({ openBooking }) {
                     </div>
 
                     <div className="text-right shrink-0 flex flex-col items-end justify-center pl-2">
-                      <span className="font-serif text-base sm:text-lg font-bold text-[#E6B25C] whitespace-nowrap">
+                      <span className="font-sans text-base sm:text-lg font-bold text-[#E6B25C] whitespace-nowrap">
                         {combo.price}
                       </span>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          openBooking && openBooking(`${combo.shortTitle} (${combo.price})`);
+                          openBooking?.(`${combo.shortTitle} (${combo.price})`);
                         }}
                         className="text-[10px] font-bold text-[#30452F] bg-[#E6B25C] hover:bg-white px-2.5 py-0.5 rounded-lg transition-colors mt-1"
                       >
