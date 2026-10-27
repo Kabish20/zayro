@@ -15,13 +15,46 @@ export default function ContactView() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const handlePhoneChange = (e) => {
+    let raw = e.target.value.replace(/\D/g, '');
+    if (raw.length === 12 && raw.startsWith('91')) {
+      raw = raw.slice(2);
+    }
+    if (raw.length === 11 && raw.startsWith('0')) {
+      raw = raw.slice(1);
+    }
+    const cleaned = raw.slice(0, 10);
+    setFormData((prev) => ({ ...prev, phone: cleaned }));
+
+    if (errors.phone) {
+      if (!cleaned) {
+        setErrors((prev) => ({ ...prev, phone: 'Mobile number is required' }));
+      } else if (cleaned.startsWith('0')) {
+        setErrors((prev) => ({ ...prev, phone: 'Mobile number cannot start with 0' }));
+      } else if (!/^[6-9]/.test(cleaned)) {
+        setErrors((prev) => ({ ...prev, phone: 'Must start with 6, 7, 8, or 9' }));
+      } else if (cleaned.length < 10) {
+        setErrors((prev) => ({ ...prev, phone: `10 digits required (${cleaned.length}/10 entered)` }));
+      } else {
+        setErrors((prev) => ({ ...prev, phone: undefined }));
+      }
+    }
+  };
+
   const validate = () => {
     const err = {};
     if (!formData.name.trim()) err.name = 'Full name is required';
-    if (!formData.phone.trim()) {
+    const cleanedPhone = (formData.phone || '').replace(/[\s-]/g, '');
+    if (!cleanedPhone) {
       err.phone = 'Mobile number is required';
-    } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
-      err.phone = 'Enter a valid 10-digit number';
+    } else if (cleanedPhone.startsWith('0')) {
+      err.phone = 'Mobile number cannot start with 0';
+    } else if (!/^[6-9]/.test(cleanedPhone)) {
+      err.phone = 'Mobile number must start with 6, 7, 8, or 9';
+    } else if (cleanedPhone.length !== 10) {
+      err.phone = `Must be exactly 10 digits (${cleanedPhone.length}/10 entered)`;
+    } else if (!/^[6-9][0-9]{9}$/.test(cleanedPhone)) {
+      err.phone = 'Enter a valid 10-digit mobile number';
     }
     if (!formData.message.trim()) err.message = 'Please type your message';
     setErrors(err);
@@ -207,19 +240,39 @@ export default function ContactView() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
-                    Mobile Number *
-                  </label>
-                  <input
-                    type="tel"
-                    placeholder="10-digit number"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className={`w-full px-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${
-                      errors.phone ? 'border-red-500' : 'border-gray-200'
-                    }`}
-                  />
-                  {errors.phone && <p className="text-[11px] text-red-500 mt-1">{errors.phone}</p>}
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F]">
+                      Mobile Number *
+                    </label>
+                    <span className={`text-[10px] font-mono transition-colors ${
+                      formData.phone.length === 10 && /^[6-9]/.test(formData.phone)
+                        ? 'text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.5 rounded'
+                        : formData.phone.startsWith('0')
+                        ? 'text-red-600 font-bold'
+                        : 'text-gray-400'
+                    }`}>
+                      {formData.phone.length === 10 && /^[6-9]/.test(formData.phone) ? '✓ 10/10' : `${formData.phone.length}/10 digits`}
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2.5 text-xs font-semibold text-gray-500 select-none flex items-center gap-1.5 pointer-events-none">
+                      <Phone className="w-3.5 h-3.5 text-gray-400" />
+                      <span className="text-gray-500 font-bold border-r border-gray-300 pr-1.5">+91</span>
+                    </span>
+                    <input
+                      type="tel"
+                      inputMode="numeric"
+                      pattern="[6-9][0-9]{9}"
+                      maxLength={10}
+                      placeholder="98765 43210"
+                      value={formData.phone}
+                      onChange={handlePhoneChange}
+                      className={`w-full pl-16 pr-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${
+                        errors.phone ? 'border-red-500' : 'border-gray-200'
+                      }`}
+                    />
+                  </div>
+                  {errors.phone && <p className="text-[11px] text-red-500 mt-1 font-medium">{errors.phone}</p>}
                 </div>
               </div>
 
