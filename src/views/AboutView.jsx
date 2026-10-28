@@ -1,6 +1,6 @@
 import React from 'react';
 import { Scissors, ShieldCheck, Award, Heart } from 'lucide-react';
-import AnimatedCounter from '../components/AnimatedCounter';
+import { AnimatedCounter } from '@/components';
 
 export default function AboutView({ openBooking, openFranchiseModal }) {
   return (

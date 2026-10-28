@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, MessageSquare } from 'lucide-react';
-import { faqList } from '../data/packagesData';
+import { faqList } from '@/data';
+import { getWhatsAppUrl } from '@/constants';
 
 export default function FaqView({ openBooking }) {
   const [openIdx, setOpenIdx] = useState(0);
@@ -93,7 +94,7 @@ export default function FaqView({ openBooking }) {
         </p>
         <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <a
-            href="https://wa.me/919150022115"
+            href={getWhatsAppUrl('Hi ZAYRO Concierge, I have a question regarding salon services / franchise.')}
             target="_blank"
             rel="noreferrer"
             className="bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl shadow-md flex items-center gap-2"

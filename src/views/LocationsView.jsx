@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Phone, Clock, Navigation, Check, Calendar, ArrowRight } from 'lucide-react';
-import { salonLocations } from '../data/locationsData';
+import { salonLocations } from '@/data';
+import { CONTACT } from '@/constants';
 
 export default function LocationsView({ openBooking }) {
   const flagship = salonLocations[0];
@@ -177,10 +178,10 @@ export default function LocationsView({ openBooking }) {
           </p>
         </div>
         <a
-          href="tel:+919150022115"
+          href={CONTACT.telLink}
           className="shrink-0 bg-[#30452F] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-colors shadow-sm"
         >
-          Franchise Inquiries: +91 91500 22115
+          Franchise Inquiries: {CONTACT.phoneDisplay}
         </a>
       </div>
 

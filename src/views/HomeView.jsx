@@ -5,12 +5,9 @@ import {
   Briefcase, Scissors, Shield, Award, Eye,
   Pause, Play, Sparkles, Quote
 } from 'lucide-react';
-import { services } from '../data/servicesData';
-import { galleryItems } from '../data/galleryData';
-import { packagesData, rateCardServices } from '../data/packagesData';
-import { reviewsData } from '../data/reviewsData';
-import MembershipPlans from '../components/MembershipPlans';
-import AnimatedCounter from '../components/AnimatedCounter';
+import { services, galleryItems, packagesData, rateCardServices, reviewsData } from '@/data';
+import { MembershipPlans, AnimatedCounter } from '@/components';
+import { CONTACT } from '@/constants';
 
 export default function HomeView({ 
   setCurrentView, 
@@ -898,11 +895,11 @@ export default function HomeView({
                 </a>
 
                 <a
-                  href="tel:+919150022115"
+                  href={CONTACT.telLink}
                   className="w-full sm:w-auto bg-white hover:bg-[#F5ECDE] text-stone-700 border border-gray-300 font-semibold text-xs px-4 py-3.5 rounded-xl transition-all flex items-center justify-center gap-1.5"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#30452F]" />
-                  <span>Call Salon</span>
+                  <span>Call Salon ({CONTACT.phoneDisplay})</span>
                 </a>
               </div>
             </div>

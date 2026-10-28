@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { 
   Briefcase, CheckCircle2, Calculator, MessageSquare, Phone 
 } from 'lucide-react';
-import { franchiseStats, franchiseModels, franchiseSupportPillars } from '../data/franchiseData';
-import AnimatedCounter from '../components/AnimatedCounter';
+import { franchiseStats, franchiseModels, franchiseSupportPillars } from '@/data';
+import { AnimatedCounter } from '@/components';
+import { CONTACT, getWhatsAppUrl } from '@/constants';
 
 export default function FranchiseView({ openFranchiseModal }) {
   // Interactive ROI Calculator State
@@ -75,7 +76,7 @@ export default function FranchiseView({ openFranchiseModal }) {
                   <span>Submit Franchise Expression of Interest</span>
                 </button>
                 <a
-                  href="https://wa.me/919150022115?text=Hello%20ZAYRO%20Team%2C%20I%20am%20interested%20in%20a%20ZAYRO%20Salon%20Franchise%20Opportunity."
+                  href={getWhatsAppUrl('Hello ZAYRO Team, I am interested in a ZAYRO Salon Franchise Opportunity.')}
                   target="_blank"
                   rel="noreferrer"
                   className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
@@ -449,11 +450,11 @@ export default function FranchiseView({ openFranchiseModal }) {
               Open Franchise Application Form
             </button>
             <a
-              href="tel:+919150022115"
+              href={CONTACT.telLink}
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-gray-300 text-xs font-bold text-[#30452F] hover:bg-white transition-all flex items-center justify-center gap-2"
             >
               <Phone className="w-4 h-4 text-[#30452F]" />
-              <span>Contact Number: +91 91500 22115</span>
+              <span>Contact Number: {CONTACT.phoneDisplay}</span>
             </a>
           </div>
         </div>

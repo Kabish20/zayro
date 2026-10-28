@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Sparkles, CheckCircle2, Clock, Calendar, MessageSquare, Layers } from 'lucide-react';
-import { comboOffers, rateCardServices } from '../data/packagesData';
-import RateCardBrochure from '../components/RateCardBrochure';
-import MembershipPlans from '../components/MembershipPlans';
+import { comboOffers, rateCardServices } from '@/data';
+import { RateCardBrochure, MembershipPlans } from '@/components';
+import { getWhatsAppUrl } from '@/constants';
 
 export default function OffersView({ openBooking }) {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -273,7 +273,7 @@ export default function OffersView({ openBooking }) {
                   <span>Reserve Combo</span>
                 </button>
                 <a
-                  href={`https://wa.me/919150022115?text=${encodeURIComponent(`Hi ZAYRO, I would like to book ${combo.shortTitle} (${combo.price}) - ${combo.tagline}`)}`}
+                  href={getWhatsAppUrl(`Hi ZAYRO, I would like to book ${combo.shortTitle} (${combo.price}) - ${combo.tagline}`)}
                   target="_blank"
                   rel="noreferrer"
                   className="p-3 bg-[#25D366] hover:bg-[#1ebd5b] text-white rounded-xl shadow-md transition-all flex items-center justify-center"

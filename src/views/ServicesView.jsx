@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Clock, Sparkles, ChevronRight, Check, ArrowRight } from 'lucide-react';
-import { categories, services } from '../data/servicesData';
-import { rateCardServices } from '../data/packagesData';
+import { categories, services, rateCardServices } from '@/data';
 
 export default function ServicesView({ openBooking, openServiceDetail }) {
   const [selectedCategory, setSelectedCategory] = useState('all');

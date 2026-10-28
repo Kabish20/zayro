@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Eye, Calendar } from 'lucide-react';
-import { galleryCategories, galleryItems } from '../data/galleryData';
+import { galleryCategories, galleryItems } from '@/data';
 
 export default function GalleryView({ openLightbox, openBooking }) {
   const [selectedCat, setSelectedCat] = useState('all');

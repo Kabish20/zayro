@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldCheck, FileText, CheckCircle2, AlertCircle, Mail, Phone, MapPin, Printer } from 'lucide-react';
+import { CONTACT } from '@/constants';
 
 export default function LegalView({ initialTab = 'privacy' }) {
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -240,8 +241,8 @@ export default function LegalView({ initialTab = 'privacy' }) {
               </p>
               <div className="space-y-1 pt-1 text-xs text-stone-700">
                 <p><strong>Officer:</strong> Grievance Redressal Directorate, ZAYRO Men's Grooming Lounge Pvt Ltd</p>
-                <p><strong>Email:</strong> <a href="mailto:partner@zayroclub.com" className="text-[#30452F] font-semibold underline">partner@zayroclub.com</a></p>
-                <p><strong>Contact Desk:</strong> +91 91500 22115</p>
+                <p><strong>Email:</strong> <a href={CONTACT.mailLink} className="text-[#30452F] font-semibold underline">{CONTACT.email}</a></p>
+                <p><strong>Contact Desk:</strong> {CONTACT.phoneDisplay}</p>
                 <p><strong>Address:</strong> 5, Crescent Park Apartment, Hazrath Sulaiman Street, Kaja Nagar, Trichy – 620020, Tamil Nadu, India</p>
                 <p className="text-[11px] text-stone-500 pt-1">All grievance notices are acknowledged within 48 hours and resolved within 30 days as mandated by law.</p>
               </div>
@@ -410,7 +411,7 @@ export default function LegalView({ initialTab = 'privacy' }) {
                 <Mail className="w-4 h-4 text-[#30452F] shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-[#30452F] block">Legal & Inquiries</span>
-                  <a href="mailto:partner@zayroclub.com" className="hover:underline text-stone-700">partner@zayroclub.com</a>
+                  <a href={CONTACT.mailLink} className="hover:underline text-stone-700">{CONTACT.email}</a>
                 </div>
               </div>
 
@@ -418,7 +419,7 @@ export default function LegalView({ initialTab = 'privacy' }) {
                 <Phone className="w-4 h-4 text-[#30452F] shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold text-[#30452F] block">Contact Number</span>
-                  <a href="tel:+919150022115" className="hover:underline text-stone-700">+91 91500 22115</a>
+                  <a href={CONTACT.telLink} className="hover:underline text-stone-700">{CONTACT.phoneDisplay}</a>
                 </div>
               </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Loader2 } from 'lucide-react';
-import { submitToGoogleSheets } from '../services/googleSheetsService';
+import { submitToGoogleSheets } from '@/services';
+import { CONTACT, getWhatsAppUrl } from '@/constants';
 
 export default function ContactView() {
   const [formData, setFormData] = useState({
@@ -125,8 +126,8 @@ export default function ContactView() {
                 </div>
                 <div>
                   <span className="font-bold text-[#30452F] block">Central Hotline:</span>
-                  <a href="tel:+919150022115" className="hover:text-[#30452F] transition-colors font-semibold text-sm">
-                    +91 91500 22115
+                  <a href={CONTACT.telLink} className="hover:text-[#30452F] transition-colors font-semibold text-sm">
+                    {CONTACT.phoneDisplay}
                   </a>
                 </div>
               </div>
@@ -137,8 +138,8 @@ export default function ContactView() {
                 </div>
                 <div>
                   <span className="font-bold text-[#30452F] block">Email Desk:</span>
-                  <a href="mailto:partner@zayroclub.com" className="hover:text-[#30452F] transition-colors font-medium">
-                    partner@zayroclub.com
+                  <a href={CONTACT.mailLink} className="hover:text-[#30452F] transition-colors font-medium">
+                    {CONTACT.email}
                   </a>
                 </div>
               </div>
@@ -149,14 +150,14 @@ export default function ContactView() {
                 </div>
                 <div>
                   <span className="font-bold text-[#30452F] block">Salon Hours:</span>
-                  <span className="text-stone-600">10:00 AM – 09:30 PM (All 7 Days)</span>
+                  <span className="text-stone-600">{CONTACT.hours}</span>
                 </div>
               </div>
             </div>
 
             <div className="pt-2 border-t border-gray-100">
               <a
-                href="https://wa.me/919150022115"
+                href={getWhatsAppUrl('Hi ZAYRO Concierge, I would like to inquire about your services.')}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider py-3.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
@@ -363,7 +364,7 @@ export default function ContactView() {
                   <span className="text-stone-600 font-medium">Concierge response guaranteed within 24 hours</span>
                 </div>
                 <div className="text-stone-500">
-                  Direct: <a href="tel:+919150022115" className="font-bold text-[#30452F] hover:underline">+91 91500 22115</a>
+                  Direct: <a href={CONTACT.telLink} className="font-bold text-[#30452F] hover:underline">{CONTACT.phoneDisplay}</a>
                 </div>
               </div>
             </form>
