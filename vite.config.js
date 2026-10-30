@@ -17,6 +17,12 @@ export default defineConfig({
   build: {
     sourcemap: false, // Prevent exposure of source code & internal structures in production
     chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        kknagarinvite: path.resolve(__dirname, 'kknagarinvite/index.html'),
+      },
+    },
   },
   server: {
     headers: {

@@ -28,12 +28,50 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
   const [copiedLink, setCopiedLink] = useState(false);
 
   useEffect(() => {
-    // Dynamic page title for social cards and invitees
+    // Dynamic page title and SEO meta for social cards and invitees
     const prevTitle = document.title;
-    document.title = "Grand Opening Invitation | ZAYRO Men's Grooming Lounge KK Nagar, Trichy";
+    document.title = "Grand Opening Invitation • ZAYRO Men's Grooming Lounge KK Nagar, Trichy";
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Dynamic meta tag updater
+    const setMetaTag = (selector, attribute, value) => {
+      let el = document.querySelector(selector);
+      const prevValue = el ? el.getAttribute(attribute) : null;
+      if (!el) {
+        el = document.createElement('meta');
+        if (selector.startsWith('meta[name=')) {
+          const name = selector.match(/name="([^"]+)"/)?.[1];
+          if (name) el.setAttribute('name', name);
+        } else if (selector.startsWith('meta[property=')) {
+          const prop = selector.match(/property="([^"]+)"/)?.[1];
+          if (prop) el.setAttribute('property', prop);
+        }
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attribute, value);
+      return () => {
+        if (prevValue !== null) {
+          el.setAttribute(attribute, prevValue);
+        } else if (el.parentNode) {
+          el.parentNode.removeChild(el);
+        }
+      };
+    };
+
+    const cleanupMeta = [
+      setMetaTag('meta[name="description"]', 'content', 'A new grooming experience is arriving in Trichy. Cordially inviting you to the Grand Opening of ZAYRO KK Nagar on Tuesday, 04 NOV 2025 at 6:30 PM. Tap to view invitation & GPS directions.'),
+      setMetaTag('meta[property="og:title"]', 'content', "Grand Opening Invitation • ZAYRO KK Nagar, Trichy"),
+      setMetaTag('meta[property="og:description"]', 'content', "A new grooming experience is arriving in Trichy. Tuesday, 04 NOV 2025 at 6:30 PM. Venue: No. 115, Rajaram Road, Near KK Nagar Bus Terminus, Opp. Sumaya Super Market. Tap to view invitation & GPS directions."),
+      setMetaTag('meta[property="og:image"]', 'content', "https://zayrosalon.com/images/kknagar-invite-og.jpg"),
+      setMetaTag('meta[property="og:url"]', 'content', EVENT_DETAILS.pageUrl),
+      setMetaTag('meta[name="twitter:title"]', 'content', "Grand Opening Invitation • ZAYRO KK Nagar, Trichy"),
+      setMetaTag('meta[name="twitter:description"]', 'content', "A new grooming experience is arriving in Trichy. Tuesday, 04 NOV 2025 at 6:30 PM. Venue: No. 115, Rajaram Road, Near KK Nagar Bus Terminus. Tap for directions & RSVP."),
+      setMetaTag('meta[name="twitter:image"]', 'content', "https://zayrosalon.com/images/kknagar-invite-og.jpg"),
+    ];
+
     return () => {
       document.title = prevTitle;
+      cleanupMeta.forEach((cleanup) => cleanup && cleanup());
     };
   }, []);
 
@@ -47,9 +85,9 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
 
   const handleShare = async () => {
     const shareData = {
-      title: "ZAYRO KK Nagar Grand Opening Invitation",
-      text: "You are cordially invited to the Grand Opening of ZAYRO Men's Grooming Lounge at KK Nagar, Trichy on 04 NOV 2025 at 6:30 PM.",
-      url: window.location.href || EVENT_DETAILS.pageUrl
+      title: "Grand Opening Invitation • ZAYRO KK Nagar, Trichy",
+      text: "A new grooming experience is arriving in Trichy. You are cordially invited to the Grand Opening of ZAYRO Men's Grooming Lounge at KK Nagar on Tuesday, 04 NOV 2025 at 6:30 PM. 🌿✂️",
+      url: EVENT_DETAILS.pageUrl
     };
 
     if (navigator.share) {
@@ -66,7 +104,7 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
 
   const copyPageLink = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(window.location.href || EVENT_DETAILS.pageUrl);
+      navigator.clipboard.writeText(EVENT_DETAILS.pageUrl);
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 2200);
     }
@@ -84,6 +122,14 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
 
   const whatsappRsvpUrl = `https://wa.me/${EVENT_DETAILS.whatsappRaw}?text=${encodeURIComponent(
     "Hello ZAYRO Team, I received the Grand Opening Invitation for the KK Nagar Flagship Lounge on 04 Nov at 6:30 PM. I would like to RSVP and confirm my attendance! 🌿✨"
+  )}`;
+
+  const whatsappShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+    `🌿 *Grand Opening Invitation — ZAYRO Men's Grooming Lounge, KK Nagar, Trichy* ✂️\n\n` +
+    `A new grooming experience is arriving in Trichy! You are cordially invited to our Grand Opening on *Tuesday, 04 November 2025 at 6:30 PM*.\n\n` +
+    `📍 *Venue:* ${EVENT_DETAILS.fullAddressText}\n` +
+    `🗺️ *Google Maps:* ${EVENT_DETAILS.mapsUrl}\n\n` +
+    `✨ *View Invitation Card & Preview:*\n${EVENT_DETAILS.pageUrl}`
   )}`;
 
   return (
@@ -208,16 +254,25 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
                     ))}
                   </div>
 
-                  {/* Primary Google Maps Navigation Link */}
-                  <div className="pt-1 w-full">
+                  {/* Primary Google Maps Navigation Link & WhatsApp Share with Preview */}
+                  <div className="pt-1 w-full flex flex-wrap gap-2.5">
                     <a
                       href={EVENT_DETAILS.mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-gradient-to-r from-[#E6B25C] via-[#F3CE7A] to-[#C9943B] text-[#0C160E] font-bold text-xs uppercase tracking-wider py-2.5 px-5 rounded-xl shadow-gold hover:brightness-110 active:scale-95 transition-all"
+                      className="inline-flex items-center justify-center gap-2 flex-1 sm:flex-initial bg-gradient-to-r from-[#E6B25C] via-[#F3CE7A] to-[#C9943B] text-[#0C160E] font-bold text-xs uppercase tracking-wider py-2.5 px-5 rounded-xl shadow-gold hover:brightness-110 active:scale-95 transition-all"
                     >
                       <Navigation className="w-4 h-4 fill-current" />
                       <span>Open in Google Maps</span>
+                    </a>
+                    <a
+                      href={whatsappShareUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 flex-1 sm:flex-initial bg-[#25D366] text-[#070F09] font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl shadow hover:brightness-110 active:scale-95 transition-all"
+                    >
+                      <Share2 className="w-4 h-4 text-[#070F09]" />
+                      <span>Share Preview</span>
                     </a>
                   </div>
 

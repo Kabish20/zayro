@@ -27,10 +27,12 @@ const getViewFromLocation = () => {
 
   if (
     path === 'kknagarinvite' || 
+    path === 'kknagarinvite/index.html' ||
+    path.startsWith('kknagarinvite') ||
     path === 'kknagar-invite' || 
     path === 'kknagar' ||
     hash === 'kknagarinvite' || 
-    hash === 'kknagar-invite' ||
+    hash === 'kknagar-invite' || 
     hash === 'kknagar'
   ) {
     return VIEWS.KKNAGAR_INVITE;
