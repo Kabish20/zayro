@@ -8,6 +8,13 @@ import { services } from '@/data/servicesData';
 import { comboOffers, membershipPlans } from '@/data/packagesData';
 import { submitToGoogleSheets } from '@/services/googleSheetsService';
 import { downloadBookingPassImage } from '@/utils/bookingPassGenerator';
+import { 
+  safeGetStorageJson, 
+  safeSetStorageJson, 
+  isValidEmail, 
+  isValidName, 
+  sanitizeInput 
+} from '@/utils/security';
 
 // Helper for local YYYY-MM-DD date string (robust against timezone/UTC shifts)
 const getLocalDateString = (d = new Date()) => {
@@ -40,38 +47,29 @@ const TIME_SLOTS = [
 const COMPLETED_SLOTS_KEY = 'zayro_completed_slots';
 
 const getStoredCompletedSlots = () => {
-  try {
-    const raw = typeof window !== 'undefined' ? localStorage.getItem(COMPLETED_SLOTS_KEY) : null;
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (e) {
-    console.error('Error reading completed slots:', e);
-    return [];
-  }
+  const parsed = safeGetStorageJson(COMPLETED_SLOTS_KEY, []);
+  if (!Array.isArray(parsed)) return [];
+  // Validate and sanitize records to prevent storage poisoning
+  return parsed.filter(
+    (item) => item && typeof item === 'object' && typeof item.date === 'string' && typeof item.time === 'string'
+  );
 };
 
 const storeCompletedSlot = (slotData) => {
-  try {
-    const existing = getStoredCompletedSlots();
-    const updated = [
-      ...existing,
-      {
-        date: slotData.date,
-        time: slotData.time,
-        location: slotData.location,
-        ref: slotData.bookingRef || slotData.ref || '',
-        timestamp: new Date().toISOString()
-      }
-    ];
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(COMPLETED_SLOTS_KEY, JSON.stringify(updated));
+  if (!slotData || !slotData.date || !slotData.time) return getStoredCompletedSlots();
+  const existing = getStoredCompletedSlots();
+  const updated = [
+    ...existing,
+    {
+      date: sanitizeInput(slotData.date, 30),
+      time: sanitizeInput(slotData.time, 30),
+      location: sanitizeInput(slotData.location || '', 100),
+      ref: sanitizeInput(slotData.bookingRef || slotData.ref || '', 30),
+      timestamp: new Date().toISOString()
     }
-    return updated;
-  } catch (e) {
-    console.error('Error saving completed slot:', e);
-    return [];
-  }
+  ];
+  safeSetStorageJson(COMPLETED_SLOTS_KEY, updated, 50);
+  return updated;
 };
 
 const isSlotCompleted = (slot, selectedDate, selectedLocation, completedList = []) => {
@@ -146,12 +144,20 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
   });
 
   const [errors, setErrors] = useState({});
+  const [honeypot, setHoneypot] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [bookingRef, setBookingRef] = useState('');
   const [copiedRef, setCopiedRef] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const modalBodyRef = useRef(null);
+  const formOpenedAtRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      formOpenedAtRef.current = Date.now();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isSubmitted && modalBodyRef.current) {
@@ -248,7 +254,12 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Full name is required';
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required';
+    } else if (!isValidName(formData.name)) {
+      newErrors.name = 'Please enter your name (2 to 80 characters)';
+    }
+
     const cleanedPhone = (formData.phone || '').replace(/[\s-]/g, '');
     if (!cleanedPhone) {
       newErrors.phone = 'Mobile number is required';
@@ -261,7 +272,8 @@ export default function BookingModal({ isOpen, onClose, preselectedService = nul
     } else if (!/^[6-9][0-9]{9}$/.test(cleanedPhone)) {
       newErrors.phone = 'Please enter a valid 10-digit mobile number';
     }
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+
+    if (formData.email && !isValidEmail(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
     if (!formData.date) {
@@ -319,18 +331,27 @@ _Sent via ZAYRO Online Concierge Portal_`;
     setIsSubmitting(true);
     
     try {
-      await submitToGoogleSheets({
+      const result = await submitToGoogleSheets({
         formType: 'Bookings',
         bookingRef: generatedRef,
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
+        name: sanitizeInput(formData.name, 80),
+        phone: sanitizeInput(formData.phone, 15),
+        email: sanitizeInput(formData.email, 100),
         location: selectedLocationObj.name,
         service: selectedServiceObj?.name || formData.service,
         date: formData.date,
         time: formData.time,
-        notes: formData.notes
+        notes: sanitizeInput(formData.notes, 500),
+        honeypot,
+        formOpenedAt: formOpenedAtRef.current
       });
+
+      if (!result.success) {
+        setErrors((prev) => ({ ...prev, submit: result.error || 'Submission could not be completed.' }));
+        setIsSubmitting(false);
+        return;
+      }
+
       // Store completed slot so it is immediately removed from display for this date
       const updatedList = storeCompletedSlot({
         date: formData.date,
@@ -340,16 +361,8 @@ _Sent via ZAYRO Online Concierge Portal_`;
       });
       setCompletedSlots(updatedList);
       setIsSubmitted(true);
-    } catch (err) {
-      console.error('Error submitting booking:', err);
-      const updatedList = storeCompletedSlot({
-        date: formData.date,
-        time: formData.time,
-        location: formData.location,
-        bookingRef: generatedRef
-      });
-      setCompletedSlots(updatedList);
-      setIsSubmitted(true);
+    } catch {
+      setErrors((prev) => ({ ...prev, submit: 'Network error encountered. Please try via WhatsApp.' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -644,7 +657,7 @@ _Sent via ZAYRO Online Concierge Portal_`;
                   <a
                     href={buildWhatsAppMessage()}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm transition-all shadow-md flex items-center justify-center gap-2 hover:scale-[1.01]"
                   >
                     <MessageSquare className="w-4 h-4" />
@@ -671,6 +684,24 @@ _Sent via ZAYRO Online Concierge Portal_`;
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               
+              {/* Anti-Bot Honeypot Field (Invisible to human guests) */}
+              <div 
+                className="hidden" 
+                aria-hidden="true" 
+                style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+              >
+                <label htmlFor="zyr_bk_fax">Security verification (leave blank)</label>
+                <input
+                  id="zyr_bk_fax"
+                  type="text"
+                  name="fax_field"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+              
               {/* Name & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -681,6 +712,8 @@ _Sent via ZAYRO Online Concierge Portal_`;
                     <User className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
                     <input
                       type="text"
+                      maxLength={80}
+                      autoComplete="name"
                       placeholder="e.g. Karthikeyan Sundaram / Rajesh Kumar"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -739,6 +772,8 @@ _Sent via ZAYRO Online Concierge Portal_`;
                     <Mail className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
                     <input
                       type="email"
+                      maxLength={100}
+                      autoComplete="email"
                       placeholder="alex@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -971,12 +1006,20 @@ _Sent via ZAYRO Online Concierge Portal_`;
                 </label>
                 <textarea
                   rows="2"
+                  maxLength={500}
                   placeholder="e.g. Sensitive scalp, skin-fade preference, royal groom prep..."
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C]"
                 ></textarea>
               </div>
+
+              {/* Submission Error Banner */}
+              {errors.submit && (
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+                  {errors.submit}
+                </div>
+              )}
 
               {/* Actions */}
               <div className="pt-2 flex flex-col sm:flex-row gap-3">
@@ -1001,7 +1044,7 @@ _Sent via ZAYRO Online Concierge Portal_`;
                 <a
                   href={buildWhatsAppMessage()}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   onClick={handleWhatsAppBooking}
                   className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold py-3 px-5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 hover:scale-[1.02]"
                 >

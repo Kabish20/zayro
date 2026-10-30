@@ -3,18 +3,22 @@
  * Generates ultra-luxury, high-resolution downloadable VIP passes and print-ready receipts.
  */
 
-// Preload the brand logo image
+import { escapeHtml, sanitizeInput } from './security';
+
+// Preload the brand logo image with strict path validation
 const loadLogoImage = (src = '/images/logo/Transparent Logo.png') => {
   return new Promise((resolve) => {
     if (typeof window === 'undefined') {
       resolve(null);
       return;
     }
+    // Restrict logo source to trusted internal asset paths only
+    const safeSrc = (typeof src === 'string' && src.startsWith('/images/')) ? src : '/images/logo/Transparent Logo.png';
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
     img.onerror = () => resolve(null);
-    img.src = src;
+    img.src = safeSrc;
   });
 };
 
@@ -37,6 +41,18 @@ export async function renderBookingPassCanvas({
   notes = ''
 }) {
   if (typeof document === 'undefined') return null;
+
+  // Input sanitization & length bounding to protect canvas layout & memory
+  bookingRef = sanitizeInput(bookingRef, 32);
+  name = sanitizeInput(name, 80);
+  phone = sanitizeInput(phone, 20);
+  email = sanitizeInput(email, 100);
+  service = sanitizeInput(service, 120);
+  location = sanitizeInput(location, 100);
+  address = sanitizeInput(address, 200);
+  date = sanitizeInput(date, 32);
+  time = sanitizeInput(time, 32);
+  notes = sanitizeInput(notes, 400);
 
   // Ensure fonts are loaded before rasterizing canvas
   if (document.fonts) {
@@ -493,14 +509,17 @@ export async function downloadBookingPassImage(data) {
   const canvas = await renderBookingPassCanvas(data);
   if (!canvas) return;
 
-  const bookingRef = data.bookingRef || 'ZYR-849201';
+  // Sanitize filename against path traversal (CWE-22)
+  const rawRef = data?.bookingRef || 'ZYR-849201';
+  const safeBookingRef = String(rawRef).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 32) || 'ZYR-VIP-PASS';
+  const fileName = `ZAYRO-VIP-Booking-Pass-${safeBookingRef}.png`;
 
   // Download Trigger as PNG Image
   try {
     const dataUrl = canvas.toDataURL('image/png');
     const a = document.createElement('a');
     a.href = dataUrl;
-    a.download = `ZAYRO-VIP-Booking-Pass-${bookingRef}.png`;
+    a.download = fileName;
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
@@ -514,7 +533,7 @@ export async function downloadBookingPassImage(data) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `ZAYRO-VIP-Booking-Pass-${bookingRef}.png`;
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       setTimeout(() => {
@@ -547,12 +566,38 @@ export function printBookingPass({
   const printWindow = window.open('', '_blank', 'width=800,height=950');
   if (!printWindow) return;
 
+  // Protect against reverse tabnabbing and window.opener hijacking
+  try {
+    printWindow.opener = null;
+  } catch {
+    // Graceful fallback
+  }
+
+  // Sanitize and HTML-escape all user inputs before DOM interpolation (XSS defense)
+  const safeRef = escapeHtml(sanitizeInput(bookingRef, 32));
+  const safeName = escapeHtml(sanitizeInput(name || 'Valued Guest', 80));
+  const safePhone = escapeHtml(sanitizeInput(phone, 20));
+  const safeEmail = escapeHtml(sanitizeInput(email, 100));
+  const safeService = escapeHtml(sanitizeInput(service || 'ZAYRO Signature Grooming', 120));
+  const safeLocation = escapeHtml(sanitizeInput(location || 'ZAYRO Flagship Lounge', 100));
+  const safeAddress = escapeHtml(sanitizeInput(address, 200));
+  const safeDate = escapeHtml(sanitizeInput(date, 32));
+  const safeTime = escapeHtml(sanitizeInput(time, 32));
+  const safeNotes = escapeHtml(sanitizeInput(notes, 400));
+  const safeIssuedDate = escapeHtml(new Date().toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }));
+
   const html = `
     <!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="UTF-8">
-        <title>ZAYRO VIP Booking Pass - #${bookingRef}</title>
+        <meta http-equiv="X-Content-Type-Options" content="nosniff">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'unsafe-inline';">
+        <title>ZAYRO VIP Booking Pass - #${safeRef}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -713,7 +758,7 @@ export function printBookingPass({
           <div class="ref-box">
             <div>
               <div class="ref-label">Booking Reference Number</div>
-              <div class="ref-number">#${bookingRef}</div>
+              <div class="ref-number">#${safeRef}</div>
             </div>
             <div>
               <div class="ref-label">Status</div>
@@ -725,19 +770,19 @@ export function printBookingPass({
           <div class="grid">
             <div>
               <div class="field-label">Full Name</div>
-              <div class="field-value">${name || 'Valued Guest'}</div>
+              <div class="field-value">${safeName}</div>
             </div>
             <div>
               <div class="field-label">Mobile Number</div>
-              <div class="field-value">${phone ? `+91 ${phone}` : '—'}</div>
+              <div class="field-value">${safePhone ? `+91 ${safePhone}` : '—'}</div>
             </div>
             <div>
               <div class="field-label">Email Address</div>
-              <div class="field-value">${email || 'Not Provided'}</div>
+              <div class="field-value">${safeEmail || 'Not Provided'}</div>
             </div>
             <div>
               <div class="field-label">Issued Date</div>
-              <div class="field-value">${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+              <div class="field-value">${safeIssuedDate}</div>
             </div>
           </div>
 
@@ -745,16 +790,16 @@ export function printBookingPass({
           <div class="grid">
             <div style="grid-column: span 2;">
               <div class="field-label">Reserved Treatment / Service</div>
-              <div class="field-value service-name">${service || 'ZAYRO Signature Grooming'}</div>
+              <div class="field-value service-name">${safeService}</div>
             </div>
             <div>
               <div class="field-label">Date & Scheduled Time</div>
-              <div class="field-value">${date} at ${time}</div>
+              <div class="field-value">${safeDate} at ${safeTime}</div>
             </div>
             <div>
               <div class="field-label">Salon Branch</div>
-              <div class="field-value">${location || 'ZAYRO Flagship Lounge'}</div>
-              ${address ? `<div style="font-size: 11px; color: #777; margin-top: 2px;">${address}</div>` : ''}
+              <div class="field-value">${safeLocation}</div>
+              ${safeAddress ? `<div style="font-size: 11px; color: #777; margin-top: 2px;">${safeAddress}</div>` : ''}
             </div>
           </div>
 
@@ -768,9 +813,9 @@ export function printBookingPass({
             </ul>
           </div>
 
-          ${notes ? `
+          ${safeNotes ? `
           <div style="font-size: 11px; color: #555; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 22px;">
-            <strong>Special Requests:</strong> ${notes}
+            <strong>Special Requests:</strong> ${safeNotes}
           </div>` : ''}
 
           <div class="footer">

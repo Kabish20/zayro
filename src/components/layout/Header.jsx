@@ -123,7 +123,7 @@ export default function Header({ currentView, setCurrentView, openBooking, openR
               id="nav-btn-concierge"
               href={getWhatsAppUrl('Hi ZAYRO Concierge, I would like to inquire about a service.')}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="text-[11px] font-semibold text-[#F5ECDE] hover:text-[#E6B25C] px-3 py-1.5 rounded-lg border border-[#476346] hover:border-[#E6B25C] bg-[#1A2719]/50 transition-all flex items-center gap-1.5 shadow-sm"
               title="Chat on WhatsApp"
             >

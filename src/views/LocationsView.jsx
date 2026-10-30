@@ -106,7 +106,7 @@ export default function LocationsView({ openBooking }) {
               <a
                 href={flagship.mapsUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="w-full sm:w-auto bg-white hover:bg-[#F5ECDE] text-[#30452F] border border-[#30452F]/40 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <Navigation className="w-4 h-4 text-[#E6B25C]" />
@@ -151,7 +151,7 @@ export default function LocationsView({ openBooking }) {
                 <a
                   href={flagship.mapsUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs text-[#E6B25C] font-semibold underline underline-offset-4 hover:text-white transition-colors"
                 >
                   <span>Launch Google Navigation Now</span>

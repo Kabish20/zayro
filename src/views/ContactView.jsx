@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Loader2 } from 'lucide-react';
 import { submitToGoogleSheets } from '@/services';
 import { CONTACT, getWhatsAppUrl } from '@/constants';
+import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
 
 export default function ContactView() {
   const [formData, setFormData] = useState({
@@ -12,9 +13,15 @@ export default function ContactView() {
     message: ''
   });
 
+  const [honeypot, setHoneypot] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const formOpenedAtRef = useRef(null);
+
+  useEffect(() => {
+    formOpenedAtRef.current = Date.now();
+  }, []);
 
   const handlePhoneChange = (e) => {
     let raw = e.target.value.replace(/\D/g, '');
@@ -44,7 +51,12 @@ export default function ContactView() {
 
   const validate = () => {
     const err = {};
-    if (!formData.name.trim()) err.name = 'Full name is required';
+    if (!formData.name.trim()) {
+      err.name = 'Full name is required';
+    } else if (!isValidName(formData.name)) {
+      err.name = 'Please enter your name (2 to 80 characters)';
+    }
+
     const cleanedPhone = (formData.phone || '').replace(/[\s-]/g, '');
     if (!cleanedPhone) {
       err.phone = 'Mobile number is required';
@@ -57,7 +69,17 @@ export default function ContactView() {
     } else if (!/^[6-9][0-9]{9}$/.test(cleanedPhone)) {
       err.phone = 'Enter a valid 10-digit mobile number';
     }
-    if (!formData.message.trim()) err.message = 'Please type your message';
+
+    if (formData.email && !isValidEmail(formData.email)) {
+      err.email = 'Enter a valid email address';
+    }
+
+    if (!formData.message.trim()) {
+      err.message = 'Please type your message';
+    } else if (formData.message.trim().length > 1000) {
+      err.message = 'Message cannot exceed 1000 characters';
+    }
+
     setErrors(err);
     return Object.keys(err).length === 0;
   };
@@ -68,18 +90,25 @@ export default function ContactView() {
     
     setIsSubmitting(true);
     try {
-      await submitToGoogleSheets({
+      const res = await submitToGoogleSheets({
         formType: 'Contact',
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        subject: formData.subject,
-        message: formData.message
+        name: sanitizeInput(formData.name, 80),
+        phone: sanitizeInput(formData.phone, 15),
+        email: sanitizeInput(formData.email, 100),
+        subject: sanitizeInput(formData.subject, 100),
+        message: sanitizeInput(formData.message, 1000),
+        honeypot,
+        formOpenedAt: formOpenedAtRef.current
       });
+
+      if (!res.success) {
+        setErrors((prev) => ({ ...prev, submit: res.error || 'Submission could not be completed.' }));
+        setIsSubmitting(false);
+        return;
+      }
       setSubmitted(true);
-    } catch (err) {
-      console.error('Error submitting contact form:', err);
-      setSubmitted(true);
+    } catch {
+      setErrors((prev) => ({ ...prev, submit: 'Network connection issue. Please connect via WhatsApp.' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -159,7 +188,7 @@ export default function ContactView() {
               <a
                 href={getWhatsAppUrl('Hi ZAYRO Concierge, I would like to inquire about your services.')}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="w-full bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider py-3.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
               >
                 <MessageSquare className="w-4 h-4" />
@@ -225,6 +254,24 @@ export default function ContactView() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Anti-Bot Honeypot Field */}
+              <div 
+                className="hidden" 
+                aria-hidden="true" 
+                style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+              >
+                <label htmlFor="zyr_ct_fax">Security verification (leave blank)</label>
+                <input
+                  id="zyr_ct_fax"
+                  type="text"
+                  name="fax_field"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+
               <div className="space-y-1 mb-2 border-b border-stone-100 pb-3">
                 <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C9943B] block">
                   Direct Inquiries & Feedback
@@ -244,6 +291,8 @@ export default function ContactView() {
                   </label>
                   <input
                     type="text"
+                    maxLength={80}
+                    autoComplete="name"
                     placeholder="Full name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -298,11 +347,16 @@ export default function ContactView() {
                   </label>
                   <input
                     type="email"
+                    maxLength={100}
+                    autoComplete="email"
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 bg-stone-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] transition-all"
+                    className={`w-full px-3.5 py-2.5 text-sm rounded-xl border bg-stone-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] transition-all ${
+                      errors.email ? 'border-red-500' : 'border-gray-200'
+                    }`}
                   />
+                  {errors.email && <p className="text-[11px] text-red-500 mt-1">{errors.email}</p>}
                 </div>
 
                 <div>
@@ -329,6 +383,7 @@ export default function ContactView() {
                 </label>
                 <textarea
                   rows="4"
+                  maxLength={1000}
                   placeholder="How can our styling concierge assist you?"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -338,6 +393,13 @@ export default function ContactView() {
                 ></textarea>
                 {errors.message && <p className="text-[11px] text-red-500 mt-1">{errors.message}</p>}
               </div>
+
+              {/* Submission Error Banner */}
+              {errors.submit && (
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+                  {errors.submit}
+                </div>
+              )}
 
               <button
                 type="submit"

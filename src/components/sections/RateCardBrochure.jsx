@@ -114,7 +114,7 @@ export default function RateCardBrochure({ openBooking }) {
                   <a 
                     href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
                     target="_blank" 
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="text-[#E6B25C] hover:underline"
                   >
                     📸 @zayro.coming_soon
@@ -203,7 +203,7 @@ export default function RateCardBrochure({ openBooking }) {
                   <a 
                     href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
                     target="_blank" 
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="text-[#E6B25C] hover:underline"
                   >
                     📸 @zayro.coming_soon
@@ -240,7 +240,7 @@ export default function RateCardBrochure({ openBooking }) {
           <a
             href="https://wa.me/919150022115?text=Hi%20ZAYRO,%20I%20would%20like%20to%20book%20a%20slot%20from%20your%20Rate%20Card%20/%20Combo%20Menu."
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="flex-1 sm:flex-none bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             <MessageSquare className="w-4 h-4" />

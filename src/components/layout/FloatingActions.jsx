@@ -17,7 +17,7 @@ export default function FloatingActions() {
       <a
         href={getWhatsAppUrl('Hello ZAYRO Salon Concierge, I would like to inquire about an appointment or franchise.')}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
         className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 p-2.5 sm:p-3 group border-2 border-white/50"
         title="Chat on WhatsApp"
         aria-label="WhatsApp"

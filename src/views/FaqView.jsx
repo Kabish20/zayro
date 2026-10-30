@@ -96,7 +96,7 @@ export default function FaqView({ openBooking }) {
           <a
             href={getWhatsAppUrl('Hi ZAYRO Concierge, I have a question regarding salon services / franchise.')}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl shadow-md flex items-center gap-2"
           >
             <MessageSquare className="w-4 h-4" />

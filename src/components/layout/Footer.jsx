@@ -92,7 +92,7 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
                 <a 
                   href={CONTACT.social.instagram.url} 
                   target="_blank" 
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="font-semibold text-white hover:text-[#E6B25C] transition-colors"
                 >
                   {CONTACT.social.instagram.handle}
@@ -108,7 +108,7 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
               <a 
                 href={CONTACT.social.instagram.url} 
                 target="_blank" 
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[#30452F] text-[#E6B25C] hover:bg-[#E6B25C] hover:text-[#1F2E1E] flex items-center justify-center transition-all"
                 aria-label={`Instagram ${CONTACT.social.instagram.handle}`}
                 title={`Instagram ${CONTACT.social.instagram.handle}`}
@@ -120,7 +120,7 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
               <a 
                 href={CONTACT.social.facebook.url} 
                 target="_blank" 
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[#30452F] text-[#E6B25C] hover:bg-[#E6B25C] hover:text-[#1F2E1E] flex items-center justify-center transition-all"
                 aria-label={`Facebook ${CONTACT.social.facebook.handle}`}
                 title={`Facebook ${CONTACT.social.facebook.handle}`}
@@ -132,7 +132,7 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
               <a 
                 href={getWhatsAppUrl('Hi ZAYRO Concierge, I would like to inquire about an appointment.')} 
                 target="_blank" 
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-lg bg-[#30452F] text-[#E6B25C] hover:bg-[#E6B25C] hover:text-[#1F2E1E] flex items-center justify-center transition-all"
                 aria-label="WhatsApp"
                 title="WhatsApp Concierge"

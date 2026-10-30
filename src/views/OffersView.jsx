@@ -275,7 +275,7 @@ export default function OffersView({ openBooking }) {
                 <a
                   href={getWhatsAppUrl(`Hi ZAYRO, I would like to book ${combo.shortTitle} (${combo.price}) - ${combo.tagline}`)}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="p-3 bg-[#25D366] hover:bg-[#1ebd5b] text-white rounded-xl shadow-md transition-all flex items-center justify-center"
                   title="Book on WhatsApp"
                 >

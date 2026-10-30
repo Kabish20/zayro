@@ -129,7 +129,7 @@ export default function MembershipPlans({ openBooking }) {
                   <a
                     href={`https://wa.me/919150022115?text=${encodeURIComponent(`Hi ZAYRO Salon, I would like to purchase the ${plan.name} (${plan.price} - ${plan.duration}).`)}`}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
                     className="p-2.5 rounded-xl bg-[#25D366] hover:bg-[#1ebd5b] text-white transition-all shadow-sm flex items-center justify-center shrink-0"
                     title="Inquire via WhatsApp"
@@ -203,7 +203,7 @@ export default function MembershipPlans({ openBooking }) {
                   <a
                     href={`https://wa.me/919150022115?text=${encodeURIComponent(`Hi ZAYRO Salon, I would like to purchase the ${plan.name} (${plan.price} - ${plan.duration}).`)}`}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
                     className="p-2.5 rounded-xl bg-[#25D366] hover:bg-[#1ebd5b] text-white transition-all shadow-md flex items-center justify-center shrink-0"
                     title="Inquire via WhatsApp"

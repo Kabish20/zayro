@@ -78,7 +78,7 @@ export default function FranchiseView({ openFranchiseModal }) {
                 <a
                   href={getWhatsAppUrl('Hello ZAYRO Team, I am interested in a ZAYRO Salon Franchise Opportunity.')}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
                 >
                   <MessageSquare className="w-4 h-4" />

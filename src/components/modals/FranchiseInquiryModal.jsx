@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X, Briefcase, CheckCircle, MessageSquare, Loader2, Phone } from 'lucide-react';
 import { submitToGoogleSheets } from '@/services/googleSheetsService';
+import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
 
 export default function FranchiseInquiryModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -15,9 +16,17 @@ export default function FranchiseInquiryModal({ isOpen, onClose }) {
     notes: ''
   });
 
+  const [honeypot, setHoneypot] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const formOpenedAtRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      formOpenedAtRef.current = Date.now();
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -49,7 +58,12 @@ export default function FranchiseInquiryModal({ isOpen, onClose }) {
 
   const validate = () => {
     const err = {};
-    if (!formData.name.trim()) err.name = 'Full name is required';
+    if (!formData.name.trim()) {
+      err.name = 'Full name is required';
+    } else if (!isValidName(formData.name)) {
+      err.name = 'Please enter a valid name (2 to 80 characters)';
+    }
+
     const cleanedPhone = (formData.phone || '').replace(/[\s-]/g, '');
     if (!cleanedPhone) {
       err.phone = 'Mobile number is required';
@@ -62,7 +76,17 @@ export default function FranchiseInquiryModal({ isOpen, onClose }) {
     } else if (!/^[6-9][0-9]{9}$/.test(cleanedPhone)) {
       err.phone = 'Enter a valid 10-digit mobile number';
     }
-    if (!formData.city.trim()) err.city = 'City/Target Location is required';
+
+    if (formData.email && !isValidEmail(formData.email)) {
+      err.email = 'Enter a valid email address';
+    }
+
+    if (!formData.city.trim()) {
+      err.city = 'City/Target Location is required';
+    } else if (formData.city.trim().length > 80) {
+      err.city = 'City name cannot exceed 80 characters';
+    }
+
     setErrors(err);
     return Object.keys(err).length === 0;
   };
@@ -91,22 +115,29 @@ _Request for ZAYRO Franchise Information Memorandum_`;
     
     setIsSubmitting(true);
     try {
-      await submitToGoogleSheets({
+      const res = await submitToGoogleSheets({
         formType: 'Franchise',
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        city: formData.city,
-        space: formData.space,
-        budget: formData.budget,
-        model: formData.model,
-        experience: formData.experience,
-        notes: formData.notes
+        name: sanitizeInput(formData.name, 80),
+        phone: sanitizeInput(formData.phone, 15),
+        email: sanitizeInput(formData.email, 100),
+        city: sanitizeInput(formData.city, 80),
+        space: sanitizeInput(formData.space, 80),
+        budget: sanitizeInput(formData.budget, 80),
+        model: sanitizeInput(formData.model, 40),
+        experience: sanitizeInput(formData.experience, 120),
+        notes: sanitizeInput(formData.notes, 500),
+        honeypot,
+        formOpenedAt: formOpenedAtRef.current
       });
+
+      if (!res.success) {
+        setErrors((prev) => ({ ...prev, submit: res.error || 'Submission could not be completed.' }));
+        setIsSubmitting(false);
+        return;
+      }
       setSubmitted(true);
-    } catch (err) {
-      console.error('Error submitting franchise inquiry:', err);
-      setSubmitted(true);
+    } catch {
+      setErrors((prev) => ({ ...prev, submit: 'Network connection issue. Please connect via WhatsApp.' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -168,7 +199,7 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                 <a
                   href={buildFranchiseWhatsApp()}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
                 >
                   <MessageSquare className="w-4 h-4" />
@@ -184,6 +215,24 @@ _Request for ZAYRO Franchise Information Memorandum_`;
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Anti-Bot Honeypot Field */}
+              <div 
+                className="hidden" 
+                aria-hidden="true" 
+                style={{ display: 'none', position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+              >
+                <label htmlFor="zyr_fr_fax">Security verification (leave blank)</label>
+                <input
+                  id="zyr_fr_fax"
+                  type="text"
+                  name="fax_field"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F] mb-1">
@@ -191,6 +240,8 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                   </label>
                   <input
                     type="text"
+                    maxLength={80}
+                    autoComplete="name"
                     placeholder="e.g. Ramesh Kumar / Sarah Chen"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -245,11 +296,16 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                   </label>
                   <input
                     type="email"
+                    maxLength={100}
+                    autoComplete="email"
                     placeholder="investor@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C]"
+                    className={`w-full px-3 py-2 text-sm rounded-lg border bg-white focus:outline-none focus:ring-2 focus:ring-[#E6B25C] ${
+                      errors.email ? 'border-red-500' : 'border-gray-200'
+                    }`}
                   />
+                  {errors.email && <p className="text-[11px] text-red-500 mt-1">{errors.email}</p>}
                 </div>
 
                 <div>
@@ -258,6 +314,7 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                   </label>
                   <input
                     type="text"
+                    maxLength={80}
                     placeholder="e.g. Pune, Kochi, Chandigarh..."
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
@@ -336,6 +393,13 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                 </div>
               </div>
 
+              {/* Submission Error Banner */}
+              {errors.submit && (
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+                  {errors.submit}
+                </div>
+              )}
+
               <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <button
                   type="submit"
@@ -358,7 +422,7 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                 <a
                   href={buildFranchiseWhatsApp()}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold py-3 px-5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2"
                 >
                   <MessageSquare className="w-4 h-4" />

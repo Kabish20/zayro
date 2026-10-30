@@ -47,6 +47,8 @@ export const getWhatsAppUrl = (
   text = 'Hello ZAYRO Salon Concierge, I would like to inquire about an appointment or franchise.',
   phone = CONTACT.phoneRaw
 ) => {
-  return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  // Sanitize phone to digits only to prevent any parameter injection or protocol tampering
+  const cleanPhone = String(phone || '').replace(/\D/g, '') || CONTACT.phoneRaw;
+  return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
 };
 

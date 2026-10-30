@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Search, Clock, Sparkles, ChevronRight, Check, ArrowRight } from 'lucide-react';
 import { categories, services, rateCardServices } from '@/data';
+import { VIEWS } from '@/constants/navigation';
 
-export default function ServicesView({ openBooking, openServiceDetail }) {
+export default function ServicesView({ setCurrentView, openBooking, openServiceDetail }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -112,7 +113,7 @@ export default function ServicesView({ openBooking, openServiceDetail }) {
               <a 
                 href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
                 target="_blank" 
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="hover:underline hover:text-white transition-colors"
               >
                 📸 @zayro.coming_soon
@@ -257,19 +258,13 @@ export default function ServicesView({ openBooking, openServiceDetail }) {
           </p>
         </div>
 
-        <a
-          href="/#offers"
-          onClick={(e) => {
-            e.preventDefault();
-            // will navigate to offers
-            window.location.hash = '#offers';
-            window.dispatchEvent(new CustomEvent('nav-to-offers'));
-          }}
+        <button
+          onClick={() => setCurrentView?.(VIEWS.OFFERS)}
           className="bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#1A2719] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition-all shadow-lg flex items-center gap-2 whitespace-nowrap"
         >
           <span>Explore 10 Combo Offers</span>
           <ArrowRight className="w-4 h-4" />
-        </a>
+        </button>
       </div>
 
     </div>
