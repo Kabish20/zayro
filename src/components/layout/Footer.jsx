@@ -270,7 +270,7 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
                 <div>
                   <span className="font-semibold text-white block">Flagship Salon:</span>
                   <a 
-                    href="https://maps.app.goo.gl/cm1jPer19fpYee2y7?g_st=awb"
+                    href="https://www.google.com/maps/search/?api=1&query=No.+115,+Rajaram+Road,+Near+KK+Nagar+Bus+Terminus,+Opp.+Sumaya+Super+Market,+Tiruchirappalli+-+620021"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-[#E6B25C] transition-colors"

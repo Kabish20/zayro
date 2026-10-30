@@ -17,7 +17,8 @@ const EVENT_DETAILS = {
     "Tiruchirappalli - 620021."
   ],
   fullAddressText: "No. 115, Rajaram Road, Near KK Nagar Bus Terminus, Opp. Sumaya Super Market, Tiruchirappalli - 620021.",
-  mapsUrl: "https://maps.app.goo.gl/cm1jPer19fpYee2y7?g_st=awb",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=No.+115,+Rajaram+Road,+Near+KK+Nagar+Bus+Terminus,+Opp.+Sumaya+Super+Market,+Tiruchirappalli+-+620021",
+  directionsUrl: "https://www.google.com/maps/dir/?api=1&destination=No.+115,+Rajaram+Road,+Near+KK+Nagar+Bus+Terminus,+Opp.+Sumaya+Super+Market,+Tiruchirappalli+-+620021",
   phone: "+91 91500 22115",
   whatsappRaw: "919150022115",
   pageUrl: "https://zayrosalon.com/kknagarinvite"
@@ -264,6 +265,15 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
                     >
                       <Navigation className="w-4 h-4 fill-current" />
                       <span>Open in Google Maps</span>
+                    </a>
+                    <a
+                      href={EVENT_DETAILS.directionsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 flex-1 sm:flex-initial bg-[#132415] border border-[#E6B25C]/40 hover:border-[#E6B25C] text-[#E6B25C] hover:text-white font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl transition-all"
+                    >
+                      <MapPin className="w-4 h-4" />
+                      <span>GPS Directions</span>
                     </a>
                     <a
                       href={whatsappShareUrl}

@@ -27,6 +27,7 @@ export const salonLocations = [
       'Complimentary Espresso & Herbal Tea Bar',
       'Hospital-Grade UV Tool Sterilization'
     ],
-    mapsUrl: 'https://maps.app.goo.gl/cm1jPer19fpYee2y7?g_st=awb'
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=No.+115,+Rajaram+Road,+Near+KK+Nagar+Bus+Terminus,+Opp.+Sumaya+Super+Market,+Tiruchirappalli+-+620021',
+    directionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=No.+115,+Rajaram+Road,+Near+KK+Nagar+Bus+Terminus,+Opp.+Sumaya+Super+Market,+Tiruchirappalli+-+620021'
   }
 ];
