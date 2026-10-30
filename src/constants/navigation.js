@@ -15,6 +15,7 @@ export const VIEWS = {
   FAQ: 'faq',
   PRIVACY: 'privacy',
   TERMS: 'terms',
+  KKNAGAR_INVITE: 'kknagarinvite',
 };
 
 export const NAV_ITEMS = [

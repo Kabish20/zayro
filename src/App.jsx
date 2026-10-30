@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Header, Footer, FloatingActions, ModalRoot } from '@/components';
 import { ModalProvider } from '@/context';
 import { useModal } from '@/hooks/useModal';
@@ -14,13 +14,46 @@ import {
   ContactView,
   FaqView,
   LegalView,
+  KkNagarInviteView,
 } from '@/views';
+
+/**
+ * Parses initial view from browser pathname or URL hash
+ */
+const getViewFromLocation = () => {
+  if (typeof window === 'undefined') return VIEWS.HOME;
+  const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+  const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+
+  if (
+    path === 'kknagarinvite' || 
+    path === 'kknagar-invite' || 
+    path === 'kknagar' ||
+    hash === 'kknagarinvite' || 
+    hash === 'kknagar-invite' ||
+    hash === 'kknagar'
+  ) {
+    return VIEWS.KKNAGAR_INVITE;
+  }
+  if (path === 'services' || hash === 'services') return VIEWS.SERVICES;
+  if (path === 'offers' || hash === 'offers') return VIEWS.OFFERS;
+  if (path === 'gallery' || hash === 'gallery') return VIEWS.GALLERY;
+  if (path === 'franchise' || hash === 'franchise') return VIEWS.FRANCHISE;
+  if (path === 'locations' || hash === 'locations') return VIEWS.LOCATIONS;
+  if (path === 'about' || hash === 'about') return VIEWS.ABOUT;
+  if (path === 'contact' || hash === 'contact') return VIEWS.CONTACT;
+  if (path === 'faq' || hash === 'faq') return VIEWS.FAQ;
+  if (path === 'privacy' || hash === 'privacy') return VIEWS.PRIVACY;
+  if (path === 'terms' || hash === 'terms') return VIEWS.TERMS;
+
+  return VIEWS.HOME;
+};
 
 /**
  * Inner application layout with view routing and global UI chrome
  */
 function MainLayout() {
-  const [currentView, setCurrentView] = useState(VIEWS.HOME);
+  const [currentView, setCurrentView] = useState(() => getViewFromLocation());
   const {
     openBooking,
     openServiceDetail,
@@ -29,13 +62,46 @@ function MainLayout() {
     openRateCard,
   } = useModal();
 
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentView(getViewFromLocation());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleNavigate = useCallback((nextView) => {
+    setCurrentView(nextView);
+    if (typeof window !== 'undefined') {
+      const urlMap = {
+        [VIEWS.HOME]: '/',
+        [VIEWS.SERVICES]: '/services',
+        [VIEWS.OFFERS]: '/offers',
+        [VIEWS.GALLERY]: '/gallery',
+        [VIEWS.FRANCHISE]: '/franchise',
+        [VIEWS.LOCATIONS]: '/locations',
+        [VIEWS.ABOUT]: '/about',
+        [VIEWS.CONTACT]: '/contact',
+        [VIEWS.FAQ]: '/faq',
+        [VIEWS.PRIVACY]: '/privacy',
+        [VIEWS.TERMS]: '/terms',
+        [VIEWS.KKNAGAR_INVITE]: '/kknagarinvite',
+      };
+      const targetUrl = urlMap[nextView] || '/';
+      if (window.location.pathname !== targetUrl) {
+        window.history.pushState({ view: nextView }, '', targetUrl);
+      }
+    }
+  }, []);
+
   // View Router
   const renderView = () => {
     switch (currentView) {
       case VIEWS.HOME:
         return (
           <HomeView
-            setCurrentView={setCurrentView}
+            setCurrentView={handleNavigate}
             openBooking={openBooking}
             openServiceDetail={openServiceDetail}
             openLightbox={openLightbox}
@@ -46,7 +112,7 @@ function MainLayout() {
       case VIEWS.SERVICES:
         return (
           <ServicesView
-            setCurrentView={setCurrentView}
+            setCurrentView={handleNavigate}
             openBooking={openBooking}
             openServiceDetail={openServiceDetail}
             openRateCard={openRateCard}
@@ -98,10 +164,17 @@ function MainLayout() {
         return <LegalView initialTab="privacy" />;
       case VIEWS.TERMS:
         return <LegalView initialTab="terms" />;
+      case VIEWS.KKNAGAR_INVITE:
+        return (
+          <KkNagarInviteView
+            openBooking={openBooking}
+            openRateCard={openRateCard}
+          />
+        );
       default:
         return (
           <HomeView
-            setCurrentView={setCurrentView}
+            setCurrentView={handleNavigate}
             openBooking={openBooking}
             openServiceDetail={openServiceDetail}
             openLightbox={openLightbox}
@@ -117,7 +190,7 @@ function MainLayout() {
       {/* Main Navigation Header */}
       <Header
         currentView={currentView}
-        setCurrentView={setCurrentView}
+        setCurrentView={handleNavigate}
         openBooking={openBooking}
         openRateCard={openRateCard}
       />
@@ -129,7 +202,7 @@ function MainLayout() {
 
       {/* Global Luxury Footer */}
       <Footer
-        setCurrentView={setCurrentView}
+        setCurrentView={handleNavigate}
         openBooking={openBooking}
         openRateCard={openRateCard}
       />

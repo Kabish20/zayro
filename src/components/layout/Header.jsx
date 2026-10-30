@@ -29,7 +29,16 @@ export default function Header({ currentView, setCurrentView, openBooking, openR
               <strong className="text-[#E6B25C]">LUXURY MADE AFFORDABLE:</strong> Haircuts ₹99 • Combos from ₹299 • Memberships from ₹259
             </span>
           </div>
-          <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-semibold">
+          <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs font-semibold">
+            <button 
+              onClick={() => handleNavClick(VIEWS.KKNAGAR_INVITE)}
+              className="bg-[#E6B25C]/20 border border-[#E6B25C]/60 text-[#E6B25C] hover:bg-[#E6B25C] hover:text-[#1A2719] px-2.5 py-0.5 rounded-full transition-all flex items-center gap-1 font-bold text-[10px]"
+              title="Grand Opening Invitation - KK Nagar Trichy"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C] animate-ping shrink-0"></span>
+              <span>KK Nagar Grand Opening (04 Nov)</span>
+            </button>
+            <span className="text-[#476346] hidden md:inline">|</span>
             <button 
               onClick={() => openRateCard?.()}
               className="text-[#E6B25C] hover:text-white transition-colors flex items-center gap-1"
@@ -166,6 +175,21 @@ export default function Header({ currentView, setCurrentView, openBooking, openR
         {mobileMenuOpen && (
           <div className="lg:hidden bg-[#1A2719] border-t border-[#30452F] px-4 py-6 space-y-4 shadow-2xl animate-fade-in">
             <div className="space-y-1">
+              <button
+                onClick={() => handleNavClick(VIEWS.KKNAGAR_INVITE)}
+                className={`w-full flex items-center justify-between text-left py-2.5 px-3 rounded-lg text-sm font-bold transition-colors mb-2 ${
+                  currentView === VIEWS.KKNAGAR_INVITE
+                    ? 'bg-[#E6B25C] text-[#1A2719]'
+                    : 'bg-[#162719] text-[#E6B25C] border border-[#E6B25C]/40 hover:bg-[#E6B25C] hover:text-[#1A2719]'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#E6B25C] animate-ping" />
+                  <span>Grand Opening Invitation (KK Nagar)</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-[#E6B25C]" />
+              </button>
+
               {NAV_ITEMS.map((item) => {
                 const active = isItemActive(item);
                 const target = item.targetView || item.id;
