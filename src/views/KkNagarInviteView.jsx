@@ -9,7 +9,7 @@ const EVENT_DETAILS = {
   time: "6:30 PM",
   dateNum: "04",
   dateMonthYear: "NOV, 2025",
-  fullDate: "Tuesday, 04 November 2025",
+  fullDate: "Wednesday, 04 November 2025",
   addressLines: [
     "No. 115, Rajaram Road,",
     "Near KK Nagar Bus Terminus,",
@@ -60,13 +60,13 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
     };
 
     const cleanupMeta = [
-      setMetaTag('meta[name="description"]', 'content', 'A new grooming experience is arriving in Trichy. Cordially inviting you to the Grand Opening of ZAYRO KK Nagar on Tuesday, 04 NOV 2025 at 6:30 PM. Tap to view invitation & GPS directions.'),
+      setMetaTag('meta[name="description"]', 'content', 'A new grooming experience is arriving in Trichy. Cordially inviting you to the Grand Opening of ZAYRO KK Nagar on Wednesday, 04 NOV 2025 at 6:30 PM. Tap to view invitation & GPS directions.'),
       setMetaTag('meta[property="og:title"]', 'content', "Grand Opening Invitation • ZAYRO KK Nagar, Trichy"),
-      setMetaTag('meta[property="og:description"]', 'content', "A new grooming experience is arriving in Trichy. Tuesday, 04 NOV 2025 at 6:30 PM. Venue: No. 115, Rajaram Road, Near KK Nagar Bus Terminus, Opp. Sumaya Super Market. Tap to view invitation & GPS directions."),
+      setMetaTag('meta[property="og:description"]', 'content', "A new grooming experience is arriving in Trichy. Wednesday, 04 NOV 2025 at 6:30 PM. Venue: No. 115, Rajaram Road, Near KK Nagar Bus Terminus, Opp. Sumaya Super Market. Tap to view invitation & GPS directions."),
       setMetaTag('meta[property="og:image"]', 'content', "https://zayrosalon.com/images/kknagar-invite-og.jpg"),
       setMetaTag('meta[property="og:url"]', 'content', EVENT_DETAILS.pageUrl),
       setMetaTag('meta[name="twitter:title"]', 'content', "Grand Opening Invitation • ZAYRO KK Nagar, Trichy"),
-      setMetaTag('meta[name="twitter:description"]', 'content', "A new grooming experience is arriving in Trichy. Tuesday, 04 NOV 2025 at 6:30 PM. Venue: No. 115, Rajaram Road, Near KK Nagar Bus Terminus. Tap for directions & RSVP."),
+      setMetaTag('meta[name="twitter:description"]', 'content', "A new grooming experience is arriving in Trichy. Wednesday, 04 NOV 2025 at 6:30 PM. Venue: No. 115, Rajaram Road, Near KK Nagar Bus Terminus. Tap for directions & RSVP."),
       setMetaTag('meta[name="twitter:image"]', 'content', "https://zayrosalon.com/images/kknagar-invite-og.jpg"),
     ];
 
@@ -87,7 +87,7 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
   const handleShare = async () => {
     const shareData = {
       title: "Grand Opening Invitation • ZAYRO KK Nagar, Trichy",
-      text: "A new grooming experience is arriving in Trichy. You are cordially invited to the Grand Opening of ZAYRO Men's Grooming Lounge at KK Nagar on Tuesday, 04 NOV 2025 at 6:30 PM. 🌿✂️",
+      text: "A new grooming experience is arriving in Trichy. You are cordially invited to the Grand Opening of ZAYRO Men's Grooming Lounge at KK Nagar on Wednesday, 04 NOV 2025 at 6:30 PM. 🌿✂️",
       url: EVENT_DETAILS.pageUrl
     };
 
@@ -127,7 +127,7 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
 
   const whatsappShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
     `🌿 *Grand Opening Invitation — ZAYRO Men's Grooming Lounge, KK Nagar, Trichy* ✂️\n\n` +
-    `A new grooming experience is arriving in Trichy! You are cordially invited to our Grand Opening on *Tuesday, 04 November 2025 at 6:30 PM*.\n\n` +
+    `A new grooming experience is arriving in Trichy! You are cordially invited to our Grand Opening on *Wednesday, 04 November 2025 at 6:30 PM*.\n\n` +
     `📍 *Venue:* ${EVENT_DETAILS.fullAddressText}\n` +
     `🗺️ *Google Maps:* ${EVENT_DETAILS.mapsUrl}\n\n` +
     `✨ *View Invitation Card & Preview:*\n${EVENT_DETAILS.pageUrl}`
@@ -173,19 +173,12 @@ export default function KkNagarInviteView({ openBooking, openRateCard }) {
           <div className="text-center space-y-4 sm:space-y-6 pt-2">
             
             {/* Logo and Brand */}
-            <div className="flex flex-col items-center justify-center space-y-1">
+            <div className="flex flex-col items-center justify-center">
               <img 
                 src="/images/logo/Transparent Logo.png" 
                 alt="ZAYRO Men's Grooming" 
                 className="h-16 sm:h-20 w-auto object-contain drop-shadow-md mx-auto"
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
-              <div className="text-2xl sm:text-3xl font-bold font-serif tracking-[0.25em] text-white">
-                ZAYRO
-              </div>
-              <div className="text-[11px] sm:text-xs font-semibold tracking-[0.35em] text-[#E6B25C] uppercase">
-                Men's Grooming
-              </div>
             </div>
 
             {/* Grand Opening Typography (Artistic Calligraphy + Metallic Caps) */}
