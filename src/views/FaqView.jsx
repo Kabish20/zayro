@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, MessageSquare } from 'lucide-react';
+import { ChevronDown, ChevronUp, MessageSquare, Phone } from 'lucide-react';
 import { faqList } from '@/data';
-import { getWhatsAppUrl } from '@/constants';
+import { getWhatsAppUrl, FRANCHISE_CONTACT } from '@/constants';
 
 export default function FaqView({ openBooking }) {
   const [openIdx, setOpenIdx] = useState(0);
@@ -101,6 +101,13 @@ export default function FaqView({ openBooking }) {
           >
             <MessageSquare className="w-4 h-4" />
             <span>Chat on WhatsApp</span>
+          </a>
+          <a
+            href={FRANCHISE_CONTACT.telLink}
+            className="bg-[#30452F] hover:bg-[#476346] text-[#E6B25C] text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-xl border border-[#E6B25C]/40 flex items-center gap-2 transition-colors"
+          >
+            <Phone className="w-4 h-4 text-[#E6B25C]" />
+            <span>Franchise Desk: {FRANCHISE_CONTACT.phoneDisplay}</span>
           </a>
           <button
             onClick={() => openBooking()}

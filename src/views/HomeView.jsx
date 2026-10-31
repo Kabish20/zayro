@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { services, galleryItems, packagesData, rateCardServices, reviewsData } from '@/data';
 import { MembershipPlans, AnimatedCounter } from '@/components';
-import { CONTACT } from '@/constants';
+import { CONTACT, FRANCHISE_CONTACT } from '@/constants';
 
 export default function HomeView({ 
   setCurrentView, 
@@ -368,13 +368,20 @@ export default function HomeView({
                 </div>
               </div>
 
-              <div className="pt-3 flex flex-wrap items-center gap-4">
+              <div className="pt-3 flex flex-wrap items-center gap-3 sm:gap-4">
                 <button
                   onClick={() => openFranchiseModal()}
                   className="bg-gradient-to-r from-[#E6B25C] to-[#C9943B] hover:from-[#F3CF8A] hover:to-[#E6B25C] text-[#30452F] font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-lg transition-transform hover:scale-105"
                 >
                   Apply for Franchise
                 </button>
+                <a
+                  href={FRANCHISE_CONTACT.telLink}
+                  className="bg-[#1A2719] hover:bg-[#30452F] text-[#E6B25C] border border-[#E6B25C]/40 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
+                >
+                  <Phone className="w-4 h-4 text-[#E6B25C]" />
+                  <span>Franchise Desk: {FRANCHISE_CONTACT.phoneDisplay}</span>
+                </a>
                 <button
                   onClick={() => {
                     setCurrentView('franchise');

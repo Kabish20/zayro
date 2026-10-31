@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldCheck, FileText, CheckCircle2, AlertCircle, Mail, Phone, MapPin, Printer } from 'lucide-react';
-import { CONTACT } from '@/constants';
+import { CONTACT, FRANCHISE_CONTACT } from '@/constants';
 
 export default function LegalView({ initialTab = 'privacy' }) {
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -361,7 +361,7 @@ export default function LegalView({ initialTab = 'privacy' }) {
               All franchise metrics, annual ROI calculations (e.g. 38% annual ROI), EBITDA margins, daily footfall models, and payback horizons displayed on this website represent financial model simulations based on flagship operations and historical performance.
             </p>
             <p>
-              These simulations are provided for educational and illustrative evaluation purposes only and do not constitute an explicit earnings warranty or commercial guarantee. Binding franchise rights, territory allocations, fee structures, and capital obligations are governed exclusively by the formal signed bilateral <em>ZAYRO Franchise Agreement</em> and <em>Franchise Disclosure Document</em>.
+              These simulations are provided for educational and illustrative evaluation purposes only and do not constitute an explicit earnings warranty or commercial guarantee. Binding franchise rights, territory allocations, fee structures, and capital obligations are governed exclusively by the formal signed bilateral <em>ZAYRO Franchise Agreement</em> and <em>Franchise Disclosure Document</em>. For formal franchise inquiries, reach our expansion team at {FRANCHISE_CONTACT.phoneDisplay}.
             </p>
           </section>
 
@@ -420,6 +420,14 @@ export default function LegalView({ initialTab = 'privacy' }) {
                 <div>
                   <span className="font-bold text-[#30452F] block">Contact Number</span>
                   <a href={CONTACT.telLink} className="hover:underline text-stone-700">{CONTACT.phoneDisplay}</a>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FBF7F0] border border-[#E8DCB8]/60 flex items-start gap-2.5">
+                <Phone className="w-4 h-4 text-[#30452F] shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold text-[#30452F] block">Franchise Desk</span>
+                  <a href={FRANCHISE_CONTACT.telLink} className="hover:underline text-stone-700">{FRANCHISE_CONTACT.phoneDisplay}</a>
                 </div>
               </div>
 

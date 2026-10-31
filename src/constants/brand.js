@@ -20,6 +20,10 @@ export const CONTACT = {
   phoneDisplay: '+91 91500 22115',
   phoneRaw: '919150022115',
   telLink: 'tel:+919150022115',
+  franchisePhone: '7200279002',
+  franchisePhoneDisplay: '+91 72002 79002',
+  franchisePhoneRaw: '917200279002',
+  franchiseTelLink: 'tel:+917200279002',
   email: 'partner@zayroclub.com',
   mailLink: 'mailto:partner@zayroclub.com',
   hours: '10:00 AM – 9:30 PM (All 7 Days)',
@@ -37,6 +41,16 @@ export const CONTACT = {
   },
 };
 
+export const FRANCHISE_CONTACT = {
+  phone: '7200279002',
+  phoneDisplay: '+91 72002 79002',
+  phoneRaw: '917200279002',
+  telLink: 'tel:+917200279002',
+  email: 'partner@zayroclub.com',
+  mailLink: 'mailto:partner@zayroclub.com',
+  whatsappUrl: 'https://wa.me/917200279002',
+};
+
 /**
  * Generate formatted WhatsApp link with prefilled text
  * @param {string} text Message body
@@ -44,11 +58,22 @@ export const CONTACT = {
  * @returns {string} WhatsApp direct link
  */
 export const getWhatsAppUrl = (
-  text = 'Hello ZAYRO Salon Concierge, I would like to inquire about an appointment or franchise.',
+  text = 'Hello ZAYRO Salon Concierge, I would like to inquire about an appointment or services.',
   phone = CONTACT.phoneRaw
 ) => {
   // Sanitize phone to digits only to prevent any parameter injection or protocol tampering
   const cleanPhone = String(phone || '').replace(/\D/g, '') || CONTACT.phoneRaw;
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+};
+
+/**
+ * Generate formatted WhatsApp link for franchise inquiries
+ * @param {string} text Message body
+ * @returns {string} WhatsApp direct link
+ */
+export const getFranchiseWhatsAppUrl = (
+  text = 'Hello ZAYRO Franchise Team, I am interested in a ZAYRO Salon Franchise Opportunity.'
+) => {
+  return `https://wa.me/${FRANCHISE_CONTACT.phoneRaw}?text=${encodeURIComponent(text)}`;
 };
 

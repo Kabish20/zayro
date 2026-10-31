@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import { franchiseStats, franchiseModels, franchiseSupportPillars } from '@/data';
 import { AnimatedCounter } from '@/components';
-import { CONTACT, getWhatsAppUrl } from '@/constants';
+import { FRANCHISE_CONTACT, getFranchiseWhatsAppUrl } from '@/constants';
 
 export default function FranchiseView({ openFranchiseModal }) {
   // Interactive ROI Calculator State
@@ -76,13 +76,20 @@ export default function FranchiseView({ openFranchiseModal }) {
                   <span>Submit Franchise Expression of Interest</span>
                 </button>
                 <a
-                  href={getWhatsAppUrl('Hello ZAYRO Team, I am interested in a ZAYRO Salon Franchise Opportunity.')}
+                  href={getFranchiseWhatsAppUrl('Hello ZAYRO Team, I am interested in a ZAYRO Salon Franchise Opportunity.')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Chat with Franchise Director</span>
+                </a>
+                <a
+                  href={FRANCHISE_CONTACT.telLink}
+                  className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-[#E6B25C] border border-[#E6B25C]/40 font-bold text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
+                >
+                  <Phone className="w-4 h-4 text-[#E6B25C]" />
+                  <span>Call: {FRANCHISE_CONTACT.phoneDisplay}</span>
                 </a>
               </div>
             </div>
@@ -450,11 +457,11 @@ export default function FranchiseView({ openFranchiseModal }) {
               Open Franchise Application Form
             </button>
             <a
-              href={CONTACT.telLink}
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-gray-300 text-xs font-bold text-[#30452F] hover:bg-white transition-all flex items-center justify-center gap-2"
+              href={FRANCHISE_CONTACT.telLink}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[#30452F]/30 text-xs font-bold text-[#30452F] hover:bg-white transition-all flex items-center justify-center gap-2"
             >
               <Phone className="w-4 h-4 text-[#30452F]" />
-              <span>Contact Number: {CONTACT.phoneDisplay}</span>
+              <span>Franchise Desk: {FRANCHISE_CONTACT.phoneDisplay}</span>
             </a>
           </div>
         </div>

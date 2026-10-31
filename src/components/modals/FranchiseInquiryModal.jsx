@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Briefcase, CheckCircle, MessageSquare, Loader2, Phone } from 'lucide-react';
 import { submitToGoogleSheets } from '@/services/googleSheetsService';
+import { FRANCHISE_CONTACT } from '@/constants/brand';
 import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
 
 export default function FranchiseInquiryModal({ isOpen, onClose }) {
@@ -106,7 +107,7 @@ export default function FranchiseInquiryModal({ isOpen, onClose }) {
 ---------------------------------
 _Request for ZAYRO Franchise Information Memorandum_`;
 
-    return `https://wa.me/919150022115?text=${encodeURIComponent(text)}`;
+    return `https://wa.me/${FRANCHISE_CONTACT.phoneRaw}?text=${encodeURIComponent(text)}`;
   };
 
   const handleSubmit = async (e) => {
@@ -203,11 +204,18 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                   className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-105"
                 >
                   <MessageSquare className="w-4 h-4" />
-                  <span>Connect with Franchise VP on WhatsApp</span>
+                  <span>WhatsApp Franchise VP ({FRANCHISE_CONTACT.phoneDisplay})</span>
+                </a>
+                <a
+                  href={FRANCHISE_CONTACT.telLink}
+                  className="w-full sm:w-auto bg-[#30452F] hover:bg-[#476346] text-[#E6B25C] text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl border border-[#E6B25C]/30 flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Call: {FRANCHISE_CONTACT.phoneDisplay}</span>
                 </a>
                 <button
                   onClick={onClose}
-                  className="w-full sm:w-auto bg-[#30452F] text-[#E6B25C] text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl border border-[#E6B25C]/30"
+                  className="w-full sm:w-auto bg-stone-200 hover:bg-stone-300 text-stone-700 text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-xl transition-colors"
                 >
                   Close Window
                 </button>
@@ -427,6 +435,17 @@ _Request for ZAYRO Franchise Information Memorandum_`;
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>WhatsApp Franchise Team</span>
+                </a>
+              </div>
+
+              <div className="pt-2 text-center text-xs text-gray-500 flex flex-wrap items-center justify-center gap-1.5">
+                <span>Direct Franchise Expansion Desk:</span>
+                <a 
+                  href={FRANCHISE_CONTACT.telLink} 
+                  className="font-bold text-[#30452F] hover:underline flex items-center gap-1 ml-1"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#C9943B]" />
+                  <span>{FRANCHISE_CONTACT.phoneDisplay}</span>
                 </a>
               </div>
             </form>

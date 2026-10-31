@@ -1,6 +1,6 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Clock, ShieldCheck, Award, Sparkles, MessageSquare } from 'lucide-react';
-import { BRAND, CONTACT, getWhatsAppUrl, VIEWS } from '@/constants';
+import { BRAND, CONTACT, FRANCHISE_CONTACT, getWhatsAppUrl, VIEWS } from '@/constants';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -284,6 +284,12 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
                 <Phone className="w-4 h-4 text-[#E6B25C] shrink-0" />
                 <a href={CONTACT.telLink} className="hover:text-white transition-colors">
                   Contact Number: {CONTACT.phoneDisplay}
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-[#E6B25C] shrink-0" />
+                <a href={FRANCHISE_CONTACT.telLink} className="hover:text-[#E6B25C] transition-colors">
+                  Franchise Desk: {FRANCHISE_CONTACT.phoneDisplay}
                 </a>
               </div>
               <div className="flex items-center gap-2">

@@ -415,6 +415,6 @@ export const faqList = [
   {
     category: 'Franchise',
     question: 'What are the criteria to become a ZAYRO Men’s Grooming franchise partner?',
-    answer: 'We seek passionate entrepreneurs or investors with suitable commercial real estate (800 to 2,000 sq.ft in high-street or premium residential zones) and capital between ₹28 to ₹55 Lakhs depending on the FOCO or FOFO model selected.'
+    answer: 'We seek passionate entrepreneurs or investors with suitable commercial real estate (800 to 2,000 sq.ft in high-street or premium residential zones) and capital between ₹28 to ₹55 Lakhs depending on the FOCO or FOFO model selected. Connect with our dedicated Franchise Desk at +91 72002 79002 for the complete Information Memorandum and site feasibility study.'
   }
 ];

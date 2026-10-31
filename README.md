@@ -48,7 +48,7 @@ ZAYRO's visual aesthetics blend traditional royal barber craftsmanship with a se
    - ZAYRO Signature Luxe Lounge — Ultra-luxury metro flagship
    - **Interactive ROI & Revenue Simulator**: Dynamic sliders for daily footfall and ticket size calculating monthly EBITDA, payback period, and annual ROI percentage
    - 6 Pillars of Corporate Support (Turnkey 3D design, ZAYRO Academy, supply chain, localized SEO, cloud ERP, quality audits)
-   - Partner application form with instant pre-filled WhatsApp dispatch
+   - Partner application form with instant pre-filled WhatsApp dispatch to Franchise Desk (+91 72002 79002)
 
 6. **Appointment Enquiry & WhatsApp Booking**:
    - Branch locator and stylist tier selector (Master Creative Director, Senior Stylist)

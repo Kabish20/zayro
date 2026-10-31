@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Loader2 } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Loader2, Briefcase } from 'lucide-react';
 import { submitToGoogleSheets } from '@/services';
-import { CONTACT, getWhatsAppUrl } from '@/constants';
+import { CONTACT, FRANCHISE_CONTACT, getWhatsAppUrl } from '@/constants';
 import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
 
 export default function ContactView() {
@@ -157,6 +157,18 @@ export default function ContactView() {
                   <span className="font-bold text-[#30452F] block">Central Hotline:</span>
                   <a href={CONTACT.telLink} className="hover:text-[#30452F] transition-colors font-semibold text-sm">
                     {CONTACT.phoneDisplay}
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-[#E6B25C]/20 flex items-center justify-center text-[#30452F] shrink-0 border border-[#E6B25C]/30">
+                  <Briefcase className="w-4 h-4 text-[#30452F]" />
+                </div>
+                <div>
+                  <span className="font-bold text-[#30452F] block">Franchise Inquiries:</span>
+                  <a href={FRANCHISE_CONTACT.telLink} className="hover:text-[#30452F] transition-colors font-semibold text-sm">
+                    {FRANCHISE_CONTACT.phoneDisplay}
                   </a>
                 </div>
               </div>
@@ -374,6 +386,14 @@ export default function ContactView() {
                     <option value="Corporate / Brand Tie-up">Corporate Tie-up</option>
                     <option value="Client Feedback">Guest Feedback & Review</option>
                   </select>
+                  {formData.subject === 'Franchise Partnership' && (
+                    <div className="mt-2.5 p-3 rounded-xl bg-[#30452F]/10 border border-[#30452F]/20 text-xs text-[#30452F] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 animate-fadeIn">
+                      <span>Franchise Expansion Desk Direct Hotline: <strong>{FRANCHISE_CONTACT.phoneDisplay}</strong></span>
+                      <a href={FRANCHISE_CONTACT.telLink} className="font-bold underline hover:text-[#C9943B] shrink-0">
+                        Call {FRANCHISE_CONTACT.phoneDisplay}
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
 
