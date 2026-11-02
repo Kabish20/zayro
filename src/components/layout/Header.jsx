@@ -36,7 +36,7 @@ export default function Header({ currentView, setCurrentView, openBooking, openR
               title="Grand Opening Invitation - KK Nagar Trichy"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C] animate-ping shrink-0"></span>
-              <span>KK Nagar Grand Opening (04 Nov)</span>
+              <span>KK Nagar Grand Opening (05 Nov)</span>
             </button>
             <span className="text-[#476346] hidden md:inline">|</span>
             <button 

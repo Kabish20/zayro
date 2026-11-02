@@ -194,7 +194,7 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
                   className="hover:text-white transition-colors text-[#E6B25C] font-semibold flex items-center gap-1.5"
                 >
                   <Sparkles className="w-3 h-3 text-[#E6B25C]" />
-                  <span>KK Nagar Grand Opening (04 Nov)</span>
+                  <span>KK Nagar Grand Opening (05 Nov)</span>
                 </button>
               </li>
             </ul>
@@ -270,12 +270,12 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
                 <div>
                   <span className="font-semibold text-white block">Flagship Salon:</span>
                   <a 
-                    href="https://www.google.com/maps/search/?api=1&query=No.+115,+Rajaram+Road,+Near+KK+Nagar+Bus+Terminus,+Opp.+Sumaya+Super+Market,+Tiruchirappalli+-+620021"
+                    href="https://www.google.com/maps/search/?api=1&query=No.+115,+Rajaram+Road,+Near+KK+Nagar+Bus+Terminus,+Opp.+Sumaiya+Multi+Shoping,+KK+Nagar,+Trichy+-+620021"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-[#E6B25C] transition-colors"
                   >
-                    No. 115, Rajaram Road, Near KK Nagar Bus Terminus, Opp. Sumaya Super Market, Trichy – 620021
+                    No. 115, Rajaram Road, Near KK Nagar Bus Terminus, Opp. Sumaiya Multi Shoping, KK Nagar, Trichy – 620021
                   </a>
                 </div>
               </div>
