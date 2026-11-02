@@ -105,8 +105,7 @@ zayro/
 │   │   ├── useModal.js          # Direct modal controls hook
 │   │   └── index.js             # Hooks barrel export
 │   │
-│   ├── services/                # External API integrations
-│   │   ├── googleSheetsService.js # Google Apps Script lead capture endpoint
+│   ├── services/                # Services layer
 │   │   └── index.js             # Services barrel export
 │   │
 │   ├── utils/                   # Pure utility functions

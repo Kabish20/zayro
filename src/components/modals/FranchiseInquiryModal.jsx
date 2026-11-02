@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Briefcase, CheckCircle, MessageSquare, Loader2, Phone } from 'lucide-react';
-import { submitToGoogleSheets } from '@/services/googleSheetsService';
 import { FRANCHISE_CONTACT } from '@/constants/brand';
 import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
 
@@ -116,29 +115,11 @@ _Request for ZAYRO Franchise Information Memorandum_`;
     
     setIsSubmitting(true);
     try {
-      const res = await submitToGoogleSheets({
-        formType: 'Franchise',
-        name: sanitizeInput(formData.name, 80),
-        phone: sanitizeInput(formData.phone, 15),
-        email: sanitizeInput(formData.email, 100),
-        city: sanitizeInput(formData.city, 80),
-        space: sanitizeInput(formData.space, 80),
-        budget: sanitizeInput(formData.budget, 80),
-        model: sanitizeInput(formData.model, 40),
-        experience: sanitizeInput(formData.experience, 120),
-        notes: sanitizeInput(formData.notes, 500),
-        honeypot,
-        formOpenedAt: formOpenedAtRef.current
-      });
-
-      if (!res.success) {
-        setErrors((prev) => ({ ...prev, submit: res.error || 'Submission could not be completed.' }));
-        setIsSubmitting(false);
-        return;
-      }
+      // Simulate quick processing delay for realistic UX
+      await new Promise((res) => setTimeout(res, 500));
       setSubmitted(true);
     } catch {
-      setErrors((prev) => ({ ...prev, submit: 'Network connection issue. Please connect via WhatsApp.' }));
+      setErrors((prev) => ({ ...prev, submit: 'Something went wrong. Please connect via WhatsApp.' }));
     } finally {
       setIsSubmitting(false);
     }

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Loader2, Briefcase } from 'lucide-react';
-import { submitToGoogleSheets } from '@/services';
 import { CONTACT, FRANCHISE_CONTACT, getWhatsAppUrl } from '@/constants';
 import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
 
@@ -90,25 +89,11 @@ export default function ContactView() {
     
     setIsSubmitting(true);
     try {
-      const res = await submitToGoogleSheets({
-        formType: 'Contact',
-        name: sanitizeInput(formData.name, 80),
-        phone: sanitizeInput(formData.phone, 15),
-        email: sanitizeInput(formData.email, 100),
-        subject: sanitizeInput(formData.subject, 100),
-        message: sanitizeInput(formData.message, 1000),
-        honeypot,
-        formOpenedAt: formOpenedAtRef.current
-      });
-
-      if (!res.success) {
-        setErrors((prev) => ({ ...prev, submit: res.error || 'Submission could not be completed.' }));
-        setIsSubmitting(false);
-        return;
-      }
+      // Simulate quick processing delay for realistic UX
+      await new Promise((res) => setTimeout(res, 500));
       setSubmitted(true);
     } catch {
-      setErrors((prev) => ({ ...prev, submit: 'Network connection issue. Please connect via WhatsApp.' }));
+      setErrors((prev) => ({ ...prev, submit: 'Something went wrong. Please connect via WhatsApp.' }));
     } finally {
       setIsSubmitting(false);
     }

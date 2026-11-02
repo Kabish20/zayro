@@ -6,7 +6,6 @@ import {
 import { salonLocations } from '@/data/locationsData';
 import { services } from '@/data/servicesData';
 import { comboOffers, membershipPlans } from '@/data/packagesData';
-import { submitToGoogleSheets } from '@/services/googleSheetsService';
 import { downloadBookingPassImage } from '@/utils/bookingPassGenerator';
 import { 
   safeGetStorageJson, 
@@ -331,26 +330,8 @@ _Sent via ZAYRO Online Concierge Portal_`;
     setIsSubmitting(true);
     
     try {
-      const result = await submitToGoogleSheets({
-        formType: 'Bookings',
-        bookingRef: generatedRef,
-        name: sanitizeInput(formData.name, 80),
-        phone: sanitizeInput(formData.phone, 15),
-        email: sanitizeInput(formData.email, 100),
-        location: selectedLocationObj.name,
-        service: selectedServiceObj?.name || formData.service,
-        date: formData.date,
-        time: formData.time,
-        notes: sanitizeInput(formData.notes, 500),
-        honeypot,
-        formOpenedAt: formOpenedAtRef.current
-      });
-
-      if (!result.success) {
-        setErrors((prev) => ({ ...prev, submit: result.error || 'Submission could not be completed.' }));
-        setIsSubmitting(false);
-        return;
-      }
+      // Simulate quick processing delay for realistic UX
+      await new Promise((res) => setTimeout(res, 500));
 
       // Store completed slot so it is immediately removed from display for this date
       const updatedList = storeCompletedSlot({
@@ -362,7 +343,7 @@ _Sent via ZAYRO Online Concierge Portal_`;
       setCompletedSlots(updatedList);
       setIsSubmitted(true);
     } catch {
-      setErrors((prev) => ({ ...prev, submit: 'Network error encountered. Please try via WhatsApp.' }));
+      setErrors((prev) => ({ ...prev, submit: 'Something went wrong. Please try via WhatsApp.' }));
     } finally {
       setIsSubmitting(false);
     }
