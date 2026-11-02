@@ -187,6 +187,16 @@ function MainLayout() {
     }
   };
 
+  // Standalone Layout for Grand Opening Invitation (Free from Website UI Chrome)
+  if (currentView === VIEWS.KKNAGAR_INVITE) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#070F09] text-[#F5ECDE] font-sans antialiased">
+        <KkNagarInviteView setCurrentView={handleNavigate} />
+        <ModalRoot />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F5ECDE] text-[#1F2E1E] font-sans antialiased">
       {/* Main Navigation Header */}
