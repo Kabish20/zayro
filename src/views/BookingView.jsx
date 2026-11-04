@@ -1,12 +1,11 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import {
-  Calendar, Clock, MapPin, User, Phone, Mail, Scissors, MessageSquare,
-  Loader2, Copy, Check, Download, ArrowLeft, CheckCircle2
+  Calendar, Clock, MapPin, User, Phone, Mail, Scissors,
+  Loader2, Copy, Check, ArrowLeft, CheckCircle2
 } from 'lucide-react';
 import { salonLocations } from '@/data/locationsData';
 import { services } from '@/data/servicesData';
 import { comboOffers, membershipPlans } from '@/data/packagesData';
-import { downloadBookingPassImage } from '@/utils/bookingPassGenerator';
 import {
   safeGetStorageJson,
   safeSetStorageJson,
@@ -131,7 +130,6 @@ export default function BookingView({ onBack, preselectedService = null }) {
   const [isSubmitted,           setIsSubmitted]           = useState(false);
   const [bookingRef,            setBookingRef]            = useState('');
   const [copiedRef,             setCopiedRef]             = useState(false);
-  const [isDownloading,         setIsDownloading]         = useState(false);
   const [takenSlots,            setTakenSlots]            = useState(() => getStoredSlots());
   const [appointmentId,         setAppointmentId]         = useState(null);
   const [isLiveApiSynced,       setIsLiveApiSynced]       = useState(false);
@@ -253,11 +251,6 @@ export default function BookingView({ onBack, preselectedService = null }) {
     return Object.keys(e).length === 0;
   };
 
-  const buildWhatsAppMessage = () => {
-    const text = `*New ZAYRO Salon Appointment Request* 🌿✨\n---------------------------------\n👤 *Guest Name:* ${formData.name || 'Guest'}\n📱 *Phone:* ${formData.phone || 'Not provided'}\n📍 *Salon Branch:* ${selectedLocationObj.name}\n✂️ *Service:* ${selectedServiceObj?.name || formData.service || 'Consultation'}\n📅 *Preferred Date:* ${formData.date || 'Earliest available'}\n⏰ *Preferred Time:* ${formData.time}\n📝 *Notes:* ${formData.notes || 'None'}\n---------------------------------\n_Sent via ZAYRO Online Concierge Portal_`;
-    return `https://wa.me/${selectedLocationObj.whatsapp || '919150022115'}?text=${encodeURIComponent(text)}`;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -302,16 +295,9 @@ export default function BookingView({ onBack, preselectedService = null }) {
       setTakenSlots(updated);
       setIsSubmitted(true);
     } catch {
-      setErrors(prev => ({ ...prev, submit: 'Something went wrong. Please book via WhatsApp.' }));
+      setErrors(prev => ({ ...prev, submit: 'Unable to complete booking at this moment. Please try again.' }));
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleWhatsAppBooking = () => {
-    if (formData.date && formData.time) {
-      const updated = storeSlot({ date: formData.date, time: formData.time, location: formData.location, bookingRef: generateBookingRef() });
-      setTakenSlots(updated);
     }
   };
 
@@ -323,32 +309,10 @@ export default function BookingView({ onBack, preselectedService = null }) {
     }
   };
 
-  const handleDownloadPass = async () => {
-    setIsDownloading(true);
-    try {
-      await downloadBookingPassImage({
-        bookingRef: bookingRef || 'ZYR-849201',
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        service: selectedServiceObj?.name || formData.service || 'ZAYRO Signature Grooming',
-        location: selectedLocationObj.name,
-        address: selectedLocationObj.address,
-        date: formData.date,
-        time: formData.time,
-        notes: formData.notes,
-      });
-    } catch (err) {
-      console.error('Pass generation error:', err);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
   // ── CONFIRMATION VIEW ──────────────────────────────────────────────────────
   if (isSubmitted) {
     return (
-      <div ref={topRef} className="min-h-screen bg-gradient-to-br from-[#0C160E] via-[#162719] to-[#0A130B] text-[#F5ECDE] py-8 px-4">
+      <div ref={topRef} className="min-h-screen bg-gradient-to-br from-[#0C160E] via-[#162719] to-[#0A130B] text-[#F5ECDE] py-10 px-4">
         <div className="max-w-2xl mx-auto">
 
           {/* Back */}
@@ -357,57 +321,53 @@ export default function BookingView({ onBack, preselectedService = null }) {
           </button>
 
           {/* Confirmed card */}
-          <div className="relative rounded-2xl bg-gradient-to-br from-[#162719] via-[#203723] to-[#122014] p-5 sm:p-8 border-2 border-[#E6B25C]/70 shadow-2xl overflow-hidden">
+          <div className="relative rounded-2xl bg-gradient-to-br from-[#162719] via-[#203723] to-[#122014] p-6 sm:p-10 border border-[#E6B25C]/40 shadow-2xl overflow-hidden text-center">
 
-            <div className="absolute top-0 right-0 w-56 h-56 bg-[#E6B25C]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#E6B25C]/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-[#E6B25C] to-transparent" />
 
-            {/* Top status */}
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E6B25C]/15 border border-[#E6B25C]/40 text-[#E6B25C] text-[10px] font-bold uppercase tracking-widest mb-3">
-                Official Appointment Pass · Private Concierge
-              </div>
-              <div className="flex justify-center mb-3">
-                <img src="/images/logo/Transparent Logo.png" alt="ZAYRO" className="h-12 sm:h-16 w-auto object-contain drop-shadow" />
-              </div>
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                <span className="text-emerald-400 font-bold text-sm">Appointment Confirmed &amp; Logged</span>
-              </div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white">Your VIP Booking Pass</h2>
+            {/* Checkmark Icon */}
+            <div className="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center mx-auto mb-4 text-emerald-400 shadow-lg">
+              <CheckCircle2 className="w-9 h-9" />
             </div>
 
-            {/* Ref + Status */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 p-4 bg-black/30 rounded-xl border border-[#E6B25C]/30">
-              <div className="flex items-center gap-3">
-                <div>
-                  <span className="text-[9px] uppercase tracking-wider text-[#9BB899] block font-semibold">Pass Reference</span>
-                  <span className="font-mono text-sm sm:text-base font-bold text-[#E6B25C]">#{bookingRef}</span>
-                  {appointmentId && (
-                    <span className="block text-[11px] text-emerald-400 font-mono mt-0.5">
-                      Salon360 POS Appt #{appointmentId}
-                    </span>
-                  )}
-                </div>
-                <button onClick={handleCopyRef} type="button" title="Copy" className="p-1.5 rounded-lg bg-[#30452F] hover:bg-[#476346] text-[#E6B25C] transition-colors">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white mb-2">
+              Appointment Confirmed!
+            </h2>
+            <p className="text-sm text-[#9BB899] max-w-md mx-auto mb-6">
+              Thank you, <span className="text-white font-medium">{formData.name}</span>. Your appointment has been successfully scheduled.
+            </p>
+
+            {/* Reference Badge */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-6">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-black/40 border border-[#E6B25C]/30">
+                <span className="text-xs uppercase tracking-wider text-[#9BB899]">Appointment ID:</span>
+                <span className="font-mono text-sm sm:text-base font-bold text-[#E6B25C]">#{bookingRef}</span>
+                {appointmentId && (
+                  <span className="text-xs text-emerald-400 font-mono pl-2 border-l border-[#E6B25C]/20">
+                    Salon360 Appt #{appointmentId}
+                  </span>
+                )}
+                <button onClick={handleCopyRef} type="button" title="Copy Reference" className="p-1 rounded bg-[#30452F] hover:bg-[#476346] text-[#E6B25C] transition-colors ml-1">
                   {copiedRef ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 </button>
               </div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2ECC71] bg-black/30 px-3 py-1.5 rounded-xl border border-emerald-500/30">
-                <span className="w-2 h-2 rounded-full bg-[#2ECC71] animate-pulse" />
-                {isLiveApiSynced ? 'Synced to Salon360 POS' : 'Confirmed Appointment Request'}
-              </div>
+              {isLiveApiSynced && (
+                <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/30">
+                  ✓ Synced with Salon360 POS
+                </span>
+              )}
             </div>
 
-            {/* Detail grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 py-5 border-y border-[#E6B25C]/20 mb-5">
+            {/* Detail Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left p-5 bg-black/20 rounded-xl border border-white/10 mb-6">
               {[
-                { icon: <Scissors className="w-3.5 h-3.5 text-[#E6B25C]" />, label: 'Reserved Treatment', value: selectedServiceObj?.name || 'ZAYRO Grooming', sub: selectedServiceObj?.price },
-                { icon: <Clock className="w-3.5 h-3.5 text-[#E6B25C]" />,    label: 'Date & Preferred Time', value: `${formData.date}  ·  ${formData.time}`, sub: 'Priority Concierge Seating' },
-                { icon: <User className="w-3.5 h-3.5 text-[#E6B25C]" />,     label: 'Guest Contact Details', value: formData.name, sub: `+91 ${formData.phone}${formData.email ? '  ·  ' + formData.email : ''}` },
-                { icon: <MapPin className="w-3.5 h-3.5 text-[#E6B25C]" />,   label: 'Salon Branch', value: selectedLocationObj.name, sub: selectedLocationObj.address },
+                { icon: <Scissors className="w-4 h-4 text-[#E6B25C]" />, label: 'Reserved Treatment', value: selectedServiceObj?.name || 'ZAYRO Grooming', sub: selectedServiceObj?.price },
+                { icon: <Clock className="w-4 h-4 text-[#E6B25C]" />,    label: 'Date & Time', value: `${formData.date}  ·  ${formData.time}`, sub: 'Chair Reserved' },
+                { icon: <User className="w-4 h-4 text-[#E6B25C]" />,     label: 'Guest Details', value: formData.name, sub: `+91 ${formData.phone}${formData.email ? '  ·  ' + formData.email : ''}` },
+                { icon: <MapPin className="w-4 h-4 text-[#E6B25C]" />,   label: 'Salon Branch', value: selectedLocationObj.name, sub: selectedLocationObj.address },
               ].map(({ icon, label, value, sub }) => (
-                <div key={label} className="space-y-1">
+                <div key={label} className="space-y-0.5">
                   <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#E6B25C] font-semibold">
                     {icon} <span>{label}</span>
                   </div>
@@ -417,50 +377,40 @@ export default function BookingView({ onBack, preselectedService = null }) {
               ))}
             </div>
 
-            {/* Concierge privileges */}
-            <div className="mb-5">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-[#E6B25C] block mb-2">Included Concierge Privileges:</span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-[#E8DCB8]">
-                {['1-on-1 Hair Texture Diagnosis', 'Botanical Cleanse & Warm Towel', 'Artisan Espresso / Herbal Refreshment', 'Zero Waiting Chair Allocation'].map(p => (
-                  <div key={p} className="flex items-center gap-2"><span className="text-[#E6B25C]">✦</span><span>{p}</span></div>
-                ))}
-              </div>
-            </div>
+            <p className="text-xs text-[#E8DCB8]/80 mb-6">
+              A reminder notification will be sent to your phone prior to your scheduled slot. We look forward to welcoming you to ZAYRO.
+            </p>
 
-            {/* Barcode strip */}
-            <div className="relative my-4 flex items-center justify-between">
-              <div className="w-3 h-5 bg-[#0C160E] rounded-r-full -ml-5 sm:-ml-8" />
-              <div className="flex-1 border-t border-dashed border-[#E6B25C]/40 mx-2" />
-              <div className="w-3 h-5 bg-[#0C160E] rounded-l-full -mr-5 sm:-mr-8" />
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center">
-              <p className="text-[11px] text-[#9BB899]">Present this pass or state Pass ID at salon desk.</p>
-              <div className="font-mono text-[10px] text-[#E6B25C] tracking-widest bg-black/40 px-3 py-1.5 rounded-lg border border-[#E6B25C]/20">
-                |||| || |||||| || ||| #{bookingRef}
-              </div>
-            </div>
-          </div>
-
-          {/* Action buttons */}
-          <div className="mt-5 space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button onClick={handleDownloadPass} disabled={isDownloading} type="button"
-                className="bg-gradient-to-r from-[#C9943B] via-[#E6B25C] to-[#C9943B] hover:brightness-110 text-[#142314] font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-60 transition-all shadow-lg">
-                {isDownloading ? <><Loader2 className="w-4 h-4 animate-spin" /><span>Generating…</span></> : <><Download className="w-4 h-4" /><span>Download VIP Pass (PNG)</span></>}
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => {
+                  setIsSubmitted(false);
+                  setFormData({
+                    name: '',
+                    phone: '',
+                    email: '',
+                    location: 'trichy-kk-nagar',
+                    service: services[0]?.id || '',
+                    date: '',
+                    time: '',
+                    notes: '',
+                  });
+                }}
+                type="button"
+                className="px-5 py-3 rounded-xl bg-[#30452F] hover:bg-[#476346] text-[#E6B25C] font-bold text-sm transition-colors border border-[#E6B25C]/30"
+              >
+                Book Another Service
               </button>
-              <a href={buildWhatsAppMessage()} target="_blank" rel="noopener noreferrer"
-                className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all shadow-md">
-                <MessageSquare className="w-4 h-4" /><span>Send to WhatsApp Concierge</span>
-              </a>
+              <button
+                onClick={onBack}
+                type="button"
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#C9943B] via-[#E6B25C] to-[#C9943B] hover:brightness-110 text-[#142314] font-bold text-sm transition-all shadow-lg"
+              >
+                Back to Home
+              </button>
             </div>
-            <button onClick={onBack} type="button"
-              className="w-full bg-white/10 hover:bg-white/20 text-[#F5ECDE] font-bold py-2.5 px-4 rounded-xl text-sm transition-colors border border-white/20">
-              ← Back to Home
-            </button>
           </div>
-          <p className="text-[11px] text-gray-500 text-center mt-4">
-            Your appointment request is saved. Our branch manager will confirm your slot via call or WhatsApp.
-          </p>
         </div>
       </div>
     );
@@ -667,19 +617,15 @@ export default function BookingView({ onBack, preselectedService = null }) {
             <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">{errors.submit}</div>
           )}
 
-          {/* Submit buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-1">
+          {/* Submit button */}
+          <div className="pt-2">
             <button type="submit" disabled={isSubmitting}
-              className="flex-1 bg-gradient-to-r from-[#30452F] to-[#1A2719] hover:from-[#476346] hover:to-[#30452F] text-[#E6B25C] font-bold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-70 transition-all shadow-md border border-[#E6B25C]/30">
+              className="w-full bg-gradient-to-r from-[#30452F] to-[#1A2719] hover:from-[#476346] hover:to-[#30452F] text-[#E6B25C] font-bold py-4 px-6 rounded-xl text-base flex items-center justify-center gap-2 disabled:opacity-70 transition-all shadow-lg border border-[#E6B25C]/30 text-center">
               {isSubmitting
-                ? <><Loader2 className="w-4 h-4 animate-spin" /><span>Recording Appointment…</span></>
-                : <><Calendar className="w-4 h-4" /><span>Confirm Appointment</span></>
+                ? <><Loader2 className="w-5 h-5 animate-spin" /><span>Confirming Your Appointment…</span></>
+                : <><Calendar className="w-5 h-5" /><span>Confirm Appointment</span></>
               }
             </button>
-            <a href={buildWhatsAppMessage()} target="_blank" rel="noopener noreferrer" onClick={handleWhatsAppBooking}
-              className="bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold py-3.5 px-5 rounded-xl text-sm flex items-center justify-center gap-2 hover:scale-[1.02] transition-all shadow-md">
-              <MessageSquare className="w-4 h-4" /> Book via WhatsApp
-            </a>
           </div>
 
           {/* Trust note */}
