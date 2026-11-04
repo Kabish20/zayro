@@ -107,8 +107,14 @@ function MainLayout() {
     }
   }, []);
 
-  // When any button triggers booking, close any open modal and redirect to dedicated booking page
+  // When any button triggers booking, close any open modal and redirect to dedicated booking page (or external Salon360 URL if configured)
   const handleOpenBooking = useCallback((service = null) => {
+    const externalUrl = import.meta.env.VITE_SALON360_BOOKING_URL;
+    if (externalUrl) {
+      window.location.href = externalUrl;
+      return;
+    }
+
     if (service) {
       triggerModalBooking(service);
     }

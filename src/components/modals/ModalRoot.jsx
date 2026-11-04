@@ -1,6 +1,5 @@
 import React from 'react';
 import { useModal } from '@/hooks/useModal';
-import BookingModal from './BookingModal';
 import ServiceDetailModal from './ServiceDetailModal';
 import LightboxModal from './LightboxModal';
 import FranchiseInquiryModal from './FranchiseInquiryModal';
@@ -12,8 +11,6 @@ import RateCardModal from './RateCardModal';
  */
 export default function ModalRoot() {
   const {
-    bookingOpen,
-    closeBooking,
     openBooking,
 
     serviceDetailOpen,
@@ -35,11 +32,6 @@ export default function ModalRoot() {
 
   return (
     <>
-      <BookingModal
-        isOpen={bookingOpen}
-        onClose={closeBooking}
-      />
-
       <ServiceDetailModal
         service={selectedService}
         isOpen={serviceDetailOpen}
