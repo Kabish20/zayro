@@ -5,7 +5,6 @@ import { useModal } from '@/hooks/useModal';
 import { VIEWS } from '@/constants/navigation';
 import {
   HomeView,
-  BookingView,
   ServicesView,
   GalleryView,
   FranchiseView,
@@ -17,6 +16,32 @@ import {
   LegalView,
   KkNagarInviteView,
 } from '@/views';
+
+/**
+ * Salon360 Direct Redirect Screen
+ */
+function Salon360Redirect() {
+  const salon360Url =
+    import.meta.env.VITE_SALON360_BOOKING_URL ||
+    'https://api.salon360app.com/api/online-booking/v1/external/booking?storeId=868&orgId=555';
+
+  useEffect(() => {
+    window.location.href = salon360Url;
+  }, [salon360Url]);
+
+  return (
+    <div className="min-h-screen bg-[#30452F] text-white flex flex-col items-center justify-center p-6 text-center">
+      <h2 className="font-serif text-2xl font-bold mb-2 text-[#E6B25C]">Redirecting to Salon360…</h2>
+      <p className="text-sm text-[#9BB899] mb-4">Please wait while we redirect you to the booking portal.</p>
+      <a
+        href={salon360Url}
+        className="px-5 py-2.5 bg-[#E6B25C] text-[#1F2E1E] font-bold text-sm rounded-xl shadow-lg hover:brightness-105"
+      >
+        Click here if you are not redirected
+      </a>
+    </div>
+  );
+}
 
 /**
  * Parses initial view from browser pathname or URL hash
@@ -59,17 +84,11 @@ const getViewFromLocation = () => {
 function MainLayout() {
   const [currentView, setCurrentView] = useState(() => getViewFromLocation());
   const {
-    openBooking: triggerModalBooking,
     closeBooking,
-    preselectedService,
     openServiceDetail,
-    closeServiceDetail,
     openLightbox,
-    closeLightbox,
     openFranchiseModal,
-    closeFranchiseModal,
     openRateCard,
-    closeRateCard,
     bookingOpen,
   } = useModal();
 
@@ -107,33 +126,26 @@ function MainLayout() {
     }
   }, []);
 
-  // When any button triggers booking, close any open modal and redirect to dedicated booking page (or external Salon360 URL if configured)
-  const handleOpenBooking = useCallback((service = null) => {
-    const externalUrl = import.meta.env.VITE_SALON360_BOOKING_URL;
-    if (externalUrl) {
-      window.location.href = externalUrl;
-      return;
+  // When any button triggers booking, redirect directly to Salon360
+  const handleOpenBooking = useCallback(() => {
+    const salon360Url =
+      import.meta.env.VITE_SALON360_BOOKING_URL ||
+      'https://api.salon360app.com/api/online-booking/v1/external/booking?storeId=868&orgId=555';
+    if (typeof window !== 'undefined') {
+      window.location.href = salon360Url;
     }
+  }, []);
 
-    if (service) {
-      triggerModalBooking(service);
-    }
-    closeBooking?.();
-    closeServiceDetail?.();
-    closeRateCard?.();
-    closeLightbox?.();
-    closeFranchiseModal?.();
-    handleNavigate(VIEWS.BOOKING);
-  }, [handleNavigate, triggerModalBooking, closeBooking, closeServiceDetail, closeRateCard, closeLightbox, closeFranchiseModal]);
-
-  // If booking modal was ever opened via direct context call, auto-redirect to booking page
+  // If booking modal was ever opened via direct context call, auto-redirect to Salon360
   useEffect(() => {
     if (bookingOpen) {
       closeBooking();
-      const t = setTimeout(() => handleNavigate(VIEWS.BOOKING), 0);
-      return () => clearTimeout(t);
+      const salon360Url =
+        import.meta.env.VITE_SALON360_BOOKING_URL ||
+        'https://api.salon360app.com/api/online-booking/v1/external/booking?storeId=868&orgId=555';
+      window.location.href = salon360Url;
     }
-  }, [bookingOpen, closeBooking, handleNavigate]);
+  }, [bookingOpen, closeBooking]);
 
   // View Router
   const renderView = () => {
@@ -150,12 +162,7 @@ function MainLayout() {
           />
         );
       case VIEWS.BOOKING:
-        return (
-          <BookingView
-            onBack={() => handleNavigate(VIEWS.HOME)}
-            preselectedService={preselectedService}
-          />
-        );
+        return <Salon360Redirect />;
       case VIEWS.SERVICES:
         return (
           <ServicesView
