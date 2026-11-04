@@ -13,7 +13,6 @@ import RateCardModal from './RateCardModal';
 export default function ModalRoot() {
   const {
     bookingOpen,
-    preselectedService,
     closeBooking,
     openBooking,
 
@@ -39,7 +38,6 @@ export default function ModalRoot() {
       <BookingModal
         isOpen={bookingOpen}
         onClose={closeBooking}
-        preselectedService={preselectedService}
       />
 
       <ServiceDetailModal
