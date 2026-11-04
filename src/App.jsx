@@ -5,6 +5,7 @@ import { useModal } from '@/hooks/useModal';
 import { VIEWS } from '@/constants/navigation';
 import {
   HomeView,
+  BookingView,
   ServicesView,
   GalleryView,
   FranchiseView,
@@ -37,6 +38,7 @@ const getViewFromLocation = () => {
   ) {
     return VIEWS.KKNAGAR_INVITE;
   }
+  if (path === 'booking' || hash === 'booking') return VIEWS.BOOKING;
   if (path === 'services' || hash === 'services') return VIEWS.SERVICES;
   if (path === 'offers' || hash === 'offers') return VIEWS.OFFERS;
   if (path === 'gallery' || hash === 'gallery') return VIEWS.GALLERY;
@@ -57,11 +59,18 @@ const getViewFromLocation = () => {
 function MainLayout() {
   const [currentView, setCurrentView] = useState(() => getViewFromLocation());
   const {
-    openBooking,
+    openBooking: triggerModalBooking,
+    closeBooking,
+    preselectedService,
     openServiceDetail,
+    closeServiceDetail,
     openLightbox,
+    closeLightbox,
     openFranchiseModal,
+    closeFranchiseModal,
     openRateCard,
+    closeRateCard,
+    bookingOpen,
   } = useModal();
 
   // Handle browser back/forward buttons
@@ -89,6 +98,7 @@ function MainLayout() {
         [VIEWS.PRIVACY]: '/privacy',
         [VIEWS.TERMS]: '/terms',
         [VIEWS.KKNAGAR_INVITE]: '/kknagarinvite',
+        [VIEWS.BOOKING]: '/booking',
       };
       const targetUrl = urlMap[nextView] || '/';
       if (window.location.pathname !== targetUrl) {
@@ -97,6 +107,28 @@ function MainLayout() {
     }
   }, []);
 
+  // When any button triggers booking, close any open modal and redirect to dedicated booking page
+  const handleOpenBooking = useCallback((service = null) => {
+    if (service) {
+      triggerModalBooking(service);
+    }
+    closeBooking?.();
+    closeServiceDetail?.();
+    closeRateCard?.();
+    closeLightbox?.();
+    closeFranchiseModal?.();
+    handleNavigate(VIEWS.BOOKING);
+  }, [handleNavigate, triggerModalBooking, closeBooking, closeServiceDetail, closeRateCard, closeLightbox, closeFranchiseModal]);
+
+  // If booking modal was ever opened via direct context call, auto-redirect to booking page
+  useEffect(() => {
+    if (bookingOpen) {
+      closeBooking();
+      const t = setTimeout(() => handleNavigate(VIEWS.BOOKING), 0);
+      return () => clearTimeout(t);
+    }
+  }, [bookingOpen, closeBooking, handleNavigate]);
+
   // View Router
   const renderView = () => {
     switch (currentView) {
@@ -104,18 +136,25 @@ function MainLayout() {
         return (
           <HomeView
             setCurrentView={handleNavigate}
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
             openServiceDetail={openServiceDetail}
             openLightbox={openLightbox}
             openFranchiseModal={openFranchiseModal}
             openRateCard={openRateCard}
           />
         );
+      case VIEWS.BOOKING:
+        return (
+          <BookingView
+            onBack={() => handleNavigate(VIEWS.HOME)}
+            preselectedService={preselectedService}
+          />
+        );
       case VIEWS.SERVICES:
         return (
           <ServicesView
             setCurrentView={handleNavigate}
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
             openServiceDetail={openServiceDetail}
             openRateCard={openRateCard}
           />
@@ -124,7 +163,7 @@ function MainLayout() {
         return (
           <GalleryView
             openLightbox={openLightbox}
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
           />
         );
       case VIEWS.FRANCHISE:
@@ -136,20 +175,20 @@ function MainLayout() {
       case VIEWS.OFFERS:
         return (
           <OffersView
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
             openRateCard={openRateCard}
           />
         );
       case VIEWS.LOCATIONS:
         return (
           <LocationsView
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
           />
         );
       case VIEWS.ABOUT:
         return (
           <AboutView
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
             openFranchiseModal={openFranchiseModal}
           />
         );
@@ -158,7 +197,7 @@ function MainLayout() {
       case VIEWS.FAQ:
         return (
           <FaqView
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
             openFranchiseModal={openFranchiseModal}
           />
         );
@@ -169,7 +208,7 @@ function MainLayout() {
       case VIEWS.KKNAGAR_INVITE:
         return (
           <KkNagarInviteView
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
             openRateCard={openRateCard}
           />
         );
@@ -177,7 +216,7 @@ function MainLayout() {
         return (
           <HomeView
             setCurrentView={handleNavigate}
-            openBooking={openBooking}
+            openBooking={handleOpenBooking}
             openServiceDetail={openServiceDetail}
             openLightbox={openLightbox}
             openFranchiseModal={openFranchiseModal}
@@ -191,7 +230,7 @@ function MainLayout() {
   if (currentView === VIEWS.KKNAGAR_INVITE) {
     return (
       <div className="min-h-screen flex flex-col bg-[#070F09] text-[#F5ECDE] font-sans antialiased">
-        <KkNagarInviteView setCurrentView={handleNavigate} />
+        <KkNagarInviteView setCurrentView={handleNavigate} openBooking={handleOpenBooking} />
         <ModalRoot />
       </div>
     );
@@ -203,7 +242,7 @@ function MainLayout() {
       <Header
         currentView={currentView}
         setCurrentView={handleNavigate}
-        openBooking={openBooking}
+        openBooking={handleOpenBooking}
         openRateCard={openRateCard}
       />
 
@@ -215,7 +254,7 @@ function MainLayout() {
       {/* Global Luxury Footer */}
       <Footer
         setCurrentView={handleNavigate}
-        openBooking={openBooking}
+        openBooking={handleOpenBooking}
         openRateCard={openRateCard}
       />
 

@@ -4,6 +4,7 @@
  */
 
 export { default as AboutView } from './AboutView';
+export { default as BookingView } from './BookingView';
 export { default as ContactView } from './ContactView';
 export { default as FaqView } from './FaqView';
 export { default as FranchiseView } from './FranchiseView';

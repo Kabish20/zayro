@@ -16,6 +16,7 @@ export const VIEWS = {
   PRIVACY: 'privacy',
   TERMS: 'terms',
   KKNAGAR_INVITE: 'kknagarinvite',
+  BOOKING: 'booking',
 };
 
 export const NAV_ITEMS = [
