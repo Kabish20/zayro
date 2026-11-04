@@ -14,7 +14,11 @@ import {
   isValidName,
   sanitizeInput
 } from '@/utils/security';
-import { submitBooking } from '@/services/bookingService';
+import {
+  submitBooking,
+  getAvailableWindowsForDate,
+  windowsToSlots,
+} from '@/services/bookingService';
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 const getLocalDateString = (d = new Date()) => {
@@ -121,14 +125,18 @@ export default function BookingView({ onBack, preselectedService = null }) {
     notes: '',
   });
 
-  const [errors,       setErrors]       = useState({});
-  const [honeypot,     setHoneypot]     = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted,  setIsSubmitted]  = useState(false);
-  const [bookingRef,   setBookingRef]   = useState('');
-  const [copiedRef,    setCopiedRef]    = useState(false);
-  const [isDownloading,setIsDownloading]= useState(false);
-  const [takenSlots,   setTakenSlots]   = useState(() => getStoredSlots());
+  const [errors,                setErrors]                = useState({});
+  const [honeypot,              setHoneypot]              = useState('');
+  const [isSubmitting,          setIsSubmitting]          = useState(false);
+  const [isSubmitted,           setIsSubmitted]           = useState(false);
+  const [bookingRef,            setBookingRef]            = useState('');
+  const [copiedRef,             setCopiedRef]             = useState(false);
+  const [isDownloading,         setIsDownloading]         = useState(false);
+  const [takenSlots,            setTakenSlots]            = useState(() => getStoredSlots());
+  const [appointmentId,         setAppointmentId]         = useState(null);
+  const [isLiveApiSynced,       setIsLiveApiSynced]       = useState(false);
+  const [liveSlots,             setLiveSlots]             = useState(null);
+  const [isCheckingLiveSlots,   setIsCheckingLiveSlots]   = useState(false);
 
   const topRef = useRef(null);
 
@@ -140,10 +148,40 @@ export default function BookingView({ onBack, preselectedService = null }) {
   // Scroll to top on mount
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
-  const availableSlots = useMemo(
-    () => getAvailableSlots(formData.date, formData.location, takenSlots),
-    [formData.date, formData.location, takenSlots],
-  );
+  // Check Salon360 live availability when date or service changes, with graceful fallback
+  useEffect(() => {
+    if (!formData.date || !formData.service) {
+      return;
+    }
+    let isCancelled = false;
+    const checkLiveSlots = async () => {
+      setIsCheckingLiveSlots(true);
+      try {
+        const res = await getAvailableWindowsForDate(formData.date, formData.service);
+        if (!isCancelled) {
+          if (!res.isFallback && res.status === 'AVAILABLE' && Array.isArray(res.feasibleWindows) && res.feasibleWindows.length > 0) {
+            setLiveSlots(windowsToSlots(res.feasibleWindows));
+          } else if (!res.isFallback && res.status === 'FULLY_BOOKED') {
+            setLiveSlots([]);
+          } else {
+            // Fallback to local smart schedule
+            setLiveSlots(null);
+          }
+        }
+      } catch {
+        if (!isCancelled) setLiveSlots(null);
+      } finally {
+        if (!isCancelled) setIsCheckingLiveSlots(false);
+      }
+    };
+    checkLiveSlots();
+    return () => { isCancelled = true; };
+  }, [formData.date, formData.service]);
+
+  const availableSlots = useMemo(() => {
+    if (liveSlots !== null) return liveSlots;
+    return getAvailableSlots(formData.date, formData.location, takenSlots);
+  }, [formData.date, formData.location, takenSlots, liveSlots]);
 
   // ── Derived objects ─────────────────────────────────────────────────────────
   const selectedLocationObj = salonLocations.find(l => l.id === formData.location) || salonLocations[0];
@@ -227,34 +265,40 @@ export default function BookingView({ onBack, preselectedService = null }) {
     const ref = generateBookingRef();
     setBookingRef(ref);
     setIsSubmitting(true);
-    try {
-      // 1. Attempt Salon360 API call
-      try {
-        const timeMatch = formData.time.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
-        let h = timeMatch ? parseInt(timeMatch[1], 10) : 10;
-        const m = timeMatch ? timeMatch[2] : '30';
-        const ampm = (timeMatch?.[3] || '').toUpperCase();
-        if (ampm === 'PM' && h < 12) h += 12;
-        if (ampm === 'AM' && h === 12) h = 0;
-        const hms = `${String(h).padStart(2, '0')}:${m}:00`;
+    let syncedApptId = null;
 
-        await submitBooking({
+    try {
+      // 1. Attempt Salon360 API call (uses toHMS internally for accurate 24h store-local time)
+      try {
+        const apiResult = await submitBooking({
           date: formData.date,
-          startTime: hms,
+          startTime: formData.time,
           serviceKey: formData.service,
           name: sanitizeInput(formData.name, 80),
           phone: formData.phone,
           email: formData.email || null,
           notes: formData.notes || null,
         });
+
+        if (apiResult?.appointmentId) {
+          syncedApptId = apiResult.appointmentId;
+          setAppointmentId(syncedApptId);
+          setIsLiveApiSynced(true);
+        }
       } catch (apiErr) {
-        // Salon360 endpoint not yet deployed by their team; continue gracefully
+        // Salon360 endpoint not yet deployed/active on their backend; continue gracefully
         console.warn('[Salon360] Live API not yet active, logging booking locally:', apiErr?.message);
       }
 
       // 2. Always record locally and confirm
       await new Promise(res => setTimeout(res, 400));
-      const updated = storeSlot({ date: formData.date, time: formData.time, location: formData.location, bookingRef: ref });
+      const updated = storeSlot({
+        date: formData.date,
+        time: formData.time,
+        location: formData.location,
+        bookingRef: ref,
+        appointmentId: syncedApptId,
+      });
       setTakenSlots(updated);
       setIsSubmitted(true);
     } catch {
@@ -339,6 +383,11 @@ export default function BookingView({ onBack, preselectedService = null }) {
                 <div>
                   <span className="text-[9px] uppercase tracking-wider text-[#9BB899] block font-semibold">Pass Reference</span>
                   <span className="font-mono text-sm sm:text-base font-bold text-[#E6B25C]">#{bookingRef}</span>
+                  {appointmentId && (
+                    <span className="block text-[11px] text-emerald-400 font-mono mt-0.5">
+                      Salon360 POS Appt #{appointmentId}
+                    </span>
+                  )}
                 </div>
                 <button onClick={handleCopyRef} type="button" title="Copy" className="p-1.5 rounded-lg bg-[#30452F] hover:bg-[#476346] text-[#E6B25C] transition-colors">
                   {copiedRef ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -346,7 +395,7 @@ export default function BookingView({ onBack, preselectedService = null }) {
               </div>
               <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2ECC71] bg-black/30 px-3 py-1.5 rounded-xl border border-emerald-500/30">
                 <span className="w-2 h-2 rounded-full bg-[#2ECC71] animate-pulse" />
-                Confirmed Appointment Request
+                {isLiveApiSynced ? 'Synced to Salon360 POS' : 'Confirmed Appointment Request'}
               </div>
             </div>
 
@@ -568,12 +617,20 @@ export default function BookingView({ onBack, preselectedService = null }) {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#30452F]">Preferred Time Slot *</label>
-                {formData.date && availableSlots.length > 0 && (
-                  <span className="text-[10px] font-bold text-[#476346] bg-[#476346]/10 px-2 py-0.5 rounded-full">{availableSlots.length} available</span>
-                )}
-                {formData.date && availableSlots.length === 0 && (
-                  <span className="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">Fully Booked</span>
-                )}
+                <div className="flex items-center gap-2">
+                  {isCheckingLiveSlots && (
+                    <span className="text-[10px] text-[#476346] flex items-center gap-1 font-medium">
+                      <Loader2 className="w-3 h-3 animate-spin text-[#E6B25C]" />
+                      Checking...
+                    </span>
+                  )}
+                  {formData.date && !isCheckingLiveSlots && availableSlots.length > 0 && (
+                    <span className="text-[10px] font-bold text-[#476346] bg-[#476346]/10 px-2 py-0.5 rounded-full">{availableSlots.length} available</span>
+                  )}
+                  {formData.date && !isCheckingLiveSlots && availableSlots.length === 0 && (
+                    <span className="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">Fully Booked</span>
+                  )}
+                </div>
               </div>
               <div className="relative">
                 <Clock className="w-4 h-4 absolute left-3 top-3 text-gray-400" />

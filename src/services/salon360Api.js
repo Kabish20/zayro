@@ -23,7 +23,7 @@ const ORG_ID   = 555;
  *                   (key injected by the proxy; never sent to the browser)
  * In production   → Point this to YOUR backend proxy endpoint
  */
-const API_BASE = import.meta.env.VITE_SALON360_PROXY_URL || '/salon360-api';
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SALON360_PROXY_URL) || '/salon360-api';
 
 /** Maximum days per availability call (Salon360 limit: 7 days) */
 const MAX_DAYS_PER_CALL = 7;
@@ -59,7 +59,44 @@ async function unwrapEnvelope(httpResponse) {
     throw err;
   }
 
-  return body?.response ?? body;
+  return ('response' in (body || {})) ? body.response : body;
+}
+
+/**
+ * Quick diagnostic probe to check if the Salon360 API is active or pending deployment.
+ * Never throws.
+ *
+ * @returns {Promise<{ok: boolean, status: number, isPendingActivation: boolean, message: string}>}
+ */
+export async function checkApiHealth() {
+  try {
+    const res = await fetch(`${API_BASE}/config?storeId=${STORE_ID}&orgId=${ORG_ID}`);
+    const data = await res.json().catch(() => null);
+    if (res.ok && data?.responseCode === 200) {
+      return { ok: true, status: 200, isPendingActivation: false, message: 'Salon360 API is active and operational.' };
+    }
+    if (res.status === 401 || data?.responseCode === 401) {
+      return {
+        ok: false,
+        status: 401,
+        isPendingActivation: true,
+        message: 'Endpoint reachable, pending API key activation on Salon360 backend.',
+      };
+    }
+    return {
+      ok: false,
+      status: res.status,
+      isPendingActivation: false,
+      message: data?.dynMsg || res.statusText || 'Unexpected response',
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      status: 0,
+      isPendingActivation: false,
+      message: `Network/Proxy error: ${err.message}`,
+    };
+  }
 }
 
 // --- Shared fetch helper ------------------------------------------------------

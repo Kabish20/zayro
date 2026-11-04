@@ -42,21 +42,16 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         /**
-         * Salon360 API Proxy (development only)
+         * Salon360 API Proxy (development & preview)
          * ------------------------------------------------------------------
          * Any request to /salon360-api/... is:
          *   1. Rewritten to strip the /salon360-api prefix
          *   2. Forwarded to the real Salon360 API base URL
          *   3. The x-api-key header is injected HERE (server-side)
          *      so the secret is NEVER sent to the browser
-         *
-         * Example:
-         *   Browser → GET /salon360-api/config?storeId=868&orgId=555
-         *   Proxy   → GET https://api.salon360app.com/.../config?storeId=868&orgId=555
-         *             with x-api-key: <secret>
          */
         '/salon360-api': {
-          target:      salon360ApiBase,
+          target:       salon360ApiBase,
           changeOrigin: true,
           rewrite:      (p) => p.replace(/^\/salon360-api/, ''),
           configure: (proxy) => {
@@ -76,6 +71,20 @@ export default defineConfig(({ mode }) => {
         'X-XSS-Protection': '1; mode=block',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), payment=()',
+      },
+      proxy: {
+        '/salon360-api': {
+          target:       salon360ApiBase,
+          changeOrigin: true,
+          rewrite:      (p) => p.replace(/^\/salon360-api/, ''),
+          configure: (proxy) => {
+            proxy.on('proxyReq', (proxyReq) => {
+              if (salon360ApiKey) {
+                proxyReq.setHeader('x-api-key', salon360ApiKey);
+              }
+            });
+          },
+        },
       },
     },
   };

@@ -12,7 +12,7 @@ import {
   fetchAvailability,
   createBooking,
   generateUUID,
-} from './salon360Api';
+} from './salon360Api.js';
 
 // ---------------------------------------------------------------------------
 // Salon360 service catalogue mapping
@@ -83,41 +83,93 @@ export function resolveService(serviceKey) {
  *
  * Returns an array of { startTime: 'HH:mm:ss', endTime: 'HH:mm:ss' } windows
  * when the date is AVAILABLE, or [] when FULLY_BOOKED / CLOSED.
+ * If the API is not yet live (e.g. 401 INVALID_API_KEY) or offline,
+ * returns { status: 'FALLBACK', feasibleWindows: [], isFallback: true }.
  *
  * @param {string} date       - 'YYYY-MM-DD'
  * @param {string} serviceKey - ZAYRO service id
- * @returns {Promise<{ status: string, feasibleWindows: Array<{startTime: string, endTime: string}> }>}
+ * @returns {Promise<{ status: string, feasibleWindows: Array<{startTime: string, endTime: string}>, isFallback?: boolean }>}
  */
 export async function getAvailableWindowsForDate(date, serviceKey) {
-  const { serviceId, durationMinutes } = resolveService(serviceKey);
+  try {
+    const { serviceId, durationMinutes } = resolveService(serviceKey);
 
-  const results = await fetchAvailability({
-    startDate: date,
-    endDate:   date,
-    slotIntervalMinutes: 30,
-    staffSelectionMode: 'ANY',
-    services: [{ serviceId, durationMinutes }],
-  });
+    const results = await fetchAvailability({
+      startDate: date,
+      endDate:   date,
+      slotIntervalMinutes: 30,
+      staffSelectionMode: 'ANY',
+      services: [{ serviceId, durationMinutes }],
+    });
 
-  const dayResult = Array.isArray(results)
-    ? results.find((r) => r.date === date)
-    : null;
+    const dayResult = Array.isArray(results)
+      ? results.find((r) => r.date === date)
+      : null;
 
-  if (!dayResult) {
-    return { status: 'CLOSED', feasibleWindows: [] };
+    if (!dayResult) {
+      return { status: 'CLOSED', feasibleWindows: [], isFallback: false };
+    }
+
+    return {
+      status: dayResult.status,
+      feasibleWindows: dayResult.status === 'AVAILABLE'
+        ? (dayResult.feasibleWindows || [])
+        : [],
+      isFallback: false,
+    };
+  } catch (err) {
+    // Graceful fallback when Salon360 API is pending activation or offline
+    return {
+      status: 'FALLBACK',
+      feasibleWindows: [],
+      isFallback: true,
+      error: err?.message || 'API unavailable',
+    };
   }
-
-  return {
-    status: dayResult.status,
-    feasibleWindows: dayResult.status === 'AVAILABLE'
-      ? (dayResult.feasibleWindows || [])
-      : [],
-  };
 }
 
 // ---------------------------------------------------------------------------
 // Time helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * Convert any time string ('10:30 AM', '09:05:00', '14:30', '9:05')
+ * to standard store-local 'HH:mm:ss' format required by Salon360.
+ *
+ * @param {string} timeStr
+ * @returns {string} - 'HH:mm:ss'
+ */
+export function toHMS(timeStr) {
+  if (!timeStr) return '10:30:00';
+  const clean = String(timeStr).trim();
+
+  // If already HH:mm:ss
+  if (/^\d{2}:\d{2}:\d{2}$/.test(clean)) {
+    return clean;
+  }
+
+  // 12-hour AM/PM format (e.g. "10:30 AM", "1:00 PM")
+  const ampmMatch = clean.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)$/i);
+  if (ampmMatch) {
+    let h = parseInt(ampmMatch[1], 10);
+    const m = ampmMatch[2];
+    const s = ampmMatch[3] || '00';
+    const period = ampmMatch[4].toUpperCase();
+    if (period === 'PM' && h < 12) h += 12;
+    if (period === 'AM' && h === 12) h = 0;
+    return `${String(h).padStart(2, '0')}:${m}:${s}`;
+  }
+
+  // 24-hour format (e.g. "09:05", "14:30")
+  const h24Match = clean.match(/^(\d{1,2}):(\d{2})$/);
+  if (h24Match) {
+    const h = parseInt(h24Match[1], 10);
+    const m = h24Match[2];
+    return `${String(h).padStart(2, '0')}:${m}:00`;
+  }
+
+  return '10:30:00';
+}
 
 /**
  * Parse a 'HH:mm:ss' time string to { h, m } integers.
@@ -163,11 +215,12 @@ export function windowsToSlots(windows) {
  * Compute the endTime for a service given its startTime and durationMinutes.
  * Returns 'HH:mm:ss'.
  *
- * @param {string} startTime      - 'HH:mm:ss'
+ * @param {string} startTime      - 'HH:mm:ss' or any standard time string
  * @param {number} durationMinutes
  */
 export function computeEndTime(startTime, durationMinutes) {
-  const { h, m } = parseHMS(startTime);
+  const hms = toHMS(startTime);
+  const { h, m } = parseHMS(hms);
   const totalMins = h * 60 + m + durationMinutes;
   const eh = Math.floor(totalMins / 60) % 24;
   const em = totalMins % 60;
@@ -183,7 +236,7 @@ export function computeEndTime(startTime, durationMinutes) {
  *
  * @param {Object} params
  * @param {string} params.date       - 'YYYY-MM-DD'
- * @param {string} params.startTime  - 'HH:mm:ss'
+ * @param {string} params.startTime  - 'HH:mm:ss' or '10:30 AM'
  * @param {string} params.serviceKey - ZAYRO service id
  * @param {string} params.name       - customer name
  * @param {string} params.phone      - 10-digit mobile (we prepend nothing; API accepts as-is)
@@ -204,12 +257,13 @@ export async function submitBooking({
   idempotencyKey,
 }) {
   const { serviceId, durationMinutes, numericPrice } = resolveService(serviceKey);
-  const endTime = computeEndTime(startTime, durationMinutes);
+  const formattedStartTime = toHMS(startTime);
+  const endTime = computeEndTime(formattedStartTime, durationMinutes);
   const iKey    = idempotencyKey || generateUUID();
 
   const result = await createBooking({
     date,
-    startTime,
+    startTime: formattedStartTime,
     customer: {
       name,
       mobile: phone,
@@ -222,7 +276,7 @@ export async function submitBooking({
         price:       numericPrice,
         taxId:       null,
         taxGroupId:  null,
-        startTime,
+        startTime:   formattedStartTime,
         endTime,
         artistShares: [], // empty for ANY mode
       },
