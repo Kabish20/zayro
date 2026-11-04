@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "server": "node server.js",
     "test:salon360": "node scripts/verify-salon360.mjs"
   },
   "dependencies": {
