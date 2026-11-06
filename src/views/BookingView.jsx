@@ -704,3 +704,13 @@ export default function BookingView({ preselectedService, onBack }) {
               <p className="text-[11px] text-stone-400 flex items-center justify-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#E6B25C]" />
                 <span>API Endpoint: api.salon360app.com/api/online-booking/v1/external/booking • Store ID 868</span>
+              </p>
+            </div>
+
+          </form>
+        )}
+
+      </div>
+    </div>
+  );
+}
