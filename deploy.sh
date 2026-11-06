@@ -222,11 +222,6 @@ server {
         proxy_read_timeout 60s;
     }
 
-    # Health Check
-    location /health {
-        proxy_pass http://127.0.0.1:8000/health;
-        proxy_set_header Host $host;
-    }
 
     # Online Booking Direct Link / Redirect
     location = /online-booking {
