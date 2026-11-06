@@ -163,4 +163,4 @@ npm run build
 npm run preview
 ```
 
-The output in `dist/` is completely static and ready for direct drag-and-drop deployment to **Netlify**, **Vercel**, **GitHub Pages**, **AWS S3 / CloudFront**, or standard static web hosting.
+The output in `dist/` is completely static and ready for direct deployment to Nginx, Apache, or standard production web hosting.
