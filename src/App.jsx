@@ -107,27 +107,33 @@ function MainLayout() {
     }
   }, []);
 
-  // When any button triggers booking, navigate cleanly to the dedicated booking page
-  const handleOpenBooking = useCallback((service = null) => {
-    if (service) {
-      triggerModalBooking(service);
-    }
+  // When any button triggers booking, redirect directly to Salon360 API URL without form UI
+  const handleOpenBooking = useCallback(() => {
     closeBooking?.();
     closeServiceDetail?.();
     closeRateCard?.();
     closeLightbox?.();
     closeFranchiseModal?.();
-    handleNavigate(VIEWS.BOOKING);
-  }, [handleNavigate, triggerModalBooking, closeBooking, closeServiceDetail, closeRateCard, closeLightbox, closeFranchiseModal]);
+    const salon360Url =
+      import.meta.env.VITE_SALON360_BOOKING_URL ||
+      'https://api.salon360app.com/api/online-booking/v1/external/booking?storeId=868&orgId=555';
+    if (typeof window !== 'undefined') {
+      window.location.href = salon360Url;
+    }
+  }, [closeBooking, closeServiceDetail, closeRateCard, closeLightbox, closeFranchiseModal]);
 
-  // If booking modal was ever opened via direct context call, auto-navigate to booking page
+  // If booking modal was ever opened via direct context call, auto-redirect to Salon360
   useEffect(() => {
     if (bookingOpen) {
       closeBooking();
-      const t = setTimeout(() => handleNavigate(VIEWS.BOOKING), 0);
-      return () => clearTimeout(t);
+      const salon360Url =
+        import.meta.env.VITE_SALON360_BOOKING_URL ||
+        'https://api.salon360app.com/api/online-booking/v1/external/booking?storeId=868&orgId=555';
+      if (typeof window !== 'undefined') {
+        window.location.href = salon360Url;
+      }
     }
-  }, [bookingOpen, closeBooking, handleNavigate]);
+  }, [bookingOpen, closeBooking]);
 
   // View Router
   const renderView = () => {
