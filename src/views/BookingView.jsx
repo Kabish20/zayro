@@ -112,7 +112,7 @@ export default function BookingView({ onBack }) {
       const result = await res.json();
 
       if (res.ok && result.responseCode === 200) {
-        const apptId = result?.response?.appointmentId || Math.floor(1000 + Math.random() * 9000);
+        const apptId = result?.response?.appointmentId || result?.appointmentId || Math.floor(1000 + Math.random() * 9000);
         setConfirmedBooking({
           appointmentId: apptId,
           name: customerName,
@@ -124,17 +124,8 @@ export default function BookingView({ onBack }) {
           price: selectedService.price,
         });
       } else {
-        // Fallback confirmation if Salon360 upstream is still syncing
-        setConfirmedBooking({
-          appointmentId: `ZYR-${Math.floor(10000 + Math.random() * 90000)}`,
-          name: customerName,
-          phone: cleanPhone,
-          service: selectedService.name,
-          staff: selectedStaff ? selectedStaff.name : 'Master Stylist',
-          date: selectedDate,
-          time: selectedTime,
-          price: selectedService.price,
-        });
+        const dyn = result?.dynMsg || (result?.responseMsg ? result.responseMsg.replace(/_/g, ' ') : 'The selected slot is currently not available');
+        setErrorMsg(`Salon360: ${dyn}. Please select another time or tap "Book directly on WhatsApp" below.`);
       }
     } catch (err) {
       setErrorMsg('Booking request could not be processed. Please try again or book via WhatsApp.');
