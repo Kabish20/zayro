@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     HealthCheckView,
+    Salon360StatusTestView,
     ConfigProxyView,
     StaffProxyView,
     AvailabilityProxyView,
@@ -10,10 +11,14 @@ from .views import (
 )
 
 urlpatterns = [
-    # Health checks
+    # Health and Diagnostic checks
     path('health', HealthCheckView.as_view(), name='health-no-slash'),
     path('health/', HealthCheckView.as_view(), name='health'),
     path('api/health/', HealthCheckView.as_view(), name='api-health'),
+    path('api/salon360/status', Salon360StatusTestView.as_view(), name='salon360-status-no-slash'),
+    path('api/salon360/status/', Salon360StatusTestView.as_view(), name='salon360-status'),
+    path('api/salon360/test', Salon360StatusTestView.as_view(), name='salon360-test-no-slash'),
+    path('api/salon360/test/', Salon360StatusTestView.as_view(), name='salon360-test'),
 
     # Direct Salon360 API Proxy Endpoints
     path('salon360-api/config', ConfigProxyView.as_view(), name='proxy-config-direct'),

@@ -9,6 +9,56 @@ from rest_framework import status
 from .salon360_client import salon360
 from .models import SalonConfig, Staff, BookingRecord
 
+class Salon360StatusTestView(APIView):
+    """
+    GET /api/salon360/status/ or /api/salon360/test/
+    Live automated diagnostic verifying connection to Salon360 API and reporting status.
+    """
+    def get(self, request):
+        cfg_status, cfg_data = salon360.get_config()
+        staff_status, staff_data = salon360.get_staff()
+        staff_count = len(staff_data.get('response', [])) if isinstance(staff_data, dict) and isinstance(staff_data.get('response'), list) else 0
+
+        today_str = datetime.now().strftime('%Y-%m-%d')
+        avail_status, avail_data = salon360.check_availability({
+            'startDate': today_str,
+            'endDate': today_str,
+            'slotIntervalMinutes': 30,
+            'staffSelectionMode': 'ANY',
+            'services': [{'serviceId': 102003, 'durationMinutes': 30}],
+            'staffId': None,
+            'serviceStaffAssignments': None,
+        })
+
+        is_connected = cfg_status == 200 and staff_status == 200
+
+        return Response({
+            "connected": is_connected,
+            "status": "ONLINE" if is_connected else "DEGRADED",
+            "storeId": settings.SALON360_STORE_ID,
+            "orgId": settings.SALON360_ORG_ID,
+            "apiKeyConfigured": bool(settings.SALON360_API_KEY),
+            "endpoints": {
+                "config": {
+                    "status": cfg_status,
+                    "ok": cfg_status == 200,
+                    "timeZone": cfg_data.get('response', {}).get('timeZoneStr') if isinstance(cfg_data, dict) and isinstance(cfg_data.get('response'), dict) else None,
+                },
+                "staff": {
+                    "status": staff_status,
+                    "ok": staff_status == 200,
+                    "count": staff_count,
+                    "staffList": staff_data.get('response') if isinstance(staff_data, dict) else None,
+                },
+                "availability": {
+                    "status": avail_status,
+                    "ok": avail_status == 200,
+                    "calendarStatus": (avail_data.get('response', [{}])[0].get('status') if isinstance(avail_data, dict) and isinstance(avail_data.get('response'), list) and len(avail_data.get('response', [])) > 0 else None),
+                }
+            },
+            "timestamp": datetime.now().isoformat(),
+        }, status=status.HTTP_200_OK if is_connected else status.HTTP_502_BAD_GATEWAY)
+
 class HealthCheckView(APIView):
     """
     Health check diagnostic verifying Django server, PostgreSQL, and Salon360 configuration.
