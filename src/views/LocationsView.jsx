@@ -134,7 +134,7 @@ export default function LocationsView({ openBooking }) {
             
             <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold text-[#30452F] border border-[#E6B25C]/40 shadow-sm flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Open 7 Days: 10:00 AM – 9:30 PM</span>
+              <span>Open 7 Days: 7:00 AM – 9:00 PM</span>
             </div>
 
             <div className="absolute bottom-8 left-8 right-8 text-white space-y-3">

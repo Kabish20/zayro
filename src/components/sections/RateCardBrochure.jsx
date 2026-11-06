@@ -27,7 +27,7 @@ export default function RateCardBrochure({ openBooking }) {
               : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
           }`}
         >
-          Page 1: Standard Rate Card (From ₹50)
+          Page 1: Standard Rate Card (From ₹49)
         </button>
         <button
           onClick={() => setActiveTab('page2')}
@@ -108,20 +108,33 @@ export default function RateCardBrochure({ openBooking }) {
                 ))}
               </div>
 
-              {/* Page 1 Footer */}
-              <div className="pt-4 border-t border-[#E6B25C]/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-[#C1D6BF]">
-                <div className="flex items-center gap-2">
+              {/* Page 1 Opening Hours & Footer */}
+              <div className="pt-4 border-t border-[#E6B25C]/30 space-y-3">
+                <div className="text-center py-2 px-3 rounded-xl bg-black/20 border border-[#E6B25C]/20">
+                  <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#E6B25C] block">
+                    OPENING HOURS
+                  </span>
+                  <span className="text-[11px] uppercase tracking-wider text-stone-300 font-semibold block">
+                    MONDAY - SUNDAY
+                  </span>
+                  <span className="font-sans text-base sm:text-lg font-black tracking-wider text-white">
+                    7:00AM - 9:00PM
+                  </span>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-[#C1D6BF] pt-1">
+                  <a href="tel:+917200279002" className="text-[#E6B25C] hover:underline font-semibold">
+                    📞 FOR FRANCHISE: 72 002 79 002
+                  </a>
                   <a 
-                    href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
+                    href="https://www.instagram.com/zayro.saloon" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-[#E6B25C] hover:underline"
+                    className="text-[#E6B25C] hover:underline flex items-center gap-1 font-semibold"
                   >
-                    📸 @zayro.coming_soon
+                    📸 @zayro.saloon
                   </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[#E6B25C] font-medium">🌐 www.zayrosalon.com</span>
+                  <span className="text-[#E6B25C] font-semibold">🌐 www.zayrosalon.com</span>
                 </div>
               </div>
 
@@ -199,19 +212,18 @@ export default function RateCardBrochure({ openBooking }) {
 
               {/* Page 2 Footer */}
               <div className="pt-4 border-t border-[#E6B25C]/30 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-[#C1D6BF]">
-                <div className="flex items-center gap-2">
-                  <a 
-                    href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-[#E6B25C] hover:underline"
-                  >
-                    📸 @zayro.coming_soon
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[#E6B25C] font-medium">🌐 www.zayrosalon.com</span>
-                </div>
+                <a href="tel:+917200279002" className="text-[#E6B25C] hover:underline font-semibold">
+                  📞 FOR FRANCHISE: 72 002 79 002
+                </a>
+                <a 
+                  href="https://www.instagram.com/zayro.saloon" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#E6B25C] hover:underline flex items-center gap-1 font-semibold"
+                >
+                  📸 @zayro.saloon
+                </a>
+                <span className="text-[#E6B25C] font-semibold">🌐 www.zayrosalon.com</span>
               </div>
 
             </div>

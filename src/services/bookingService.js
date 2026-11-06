@@ -28,9 +28,12 @@ import {
 const SERVICE_MAP = {
   // ── Official Rate Card ────────────────────────────────────────────────────
   'rate-haircut':       { serviceId: 102003, durationMinutes: 30,  numericPrice: 99   },
-  'rate-shave':         { serviceId: 102003, durationMinutes: 20,  numericPrice: 50   },
-  'rate-kids-cut':      { serviceId: 102003, durationMinutes: 25,  numericPrice: 75   },
+  'rate-beard-trim':    { serviceId: 102003, durationMinutes: 20,  numericPrice: 69   },
+  'rate-shave':         { serviceId: 102003, durationMinutes: 20,  numericPrice: 49   },
+  'rate-kids-cut':      { serviceId: 102003, durationMinutes: 25,  numericPrice: 69   },
+  'rate-head-massage':  { serviceId: 102003, durationMinutes: 15,  numericPrice: 199  },
   'rate-oil-massage':   { serviceId: 102003, durationMinutes: 15,  numericPrice: 199  },
+  'rate-de-tan':        { serviceId: 102003, durationMinutes: 25,  numericPrice: 199  },
   'rate-face-cleanup':  { serviceId: 102003, durationMinutes: 35,  numericPrice: 299  },
   'rate-hair-colour':   { serviceId: 102003, durationMinutes: 45,  numericPrice: 349  },
 
@@ -55,11 +58,10 @@ const SERVICE_MAP = {
   'combo-9':  { serviceId: 102003, durationMinutes: 110, numericPrice: 1199 },
   'combo-10': { serviceId: 102003, durationMinutes: 120, numericPrice: 1499 },
 
-  // ── Membership Plans (booking inquiry only — no live-pricing on API) ───────
+  // ── Membership Plans (From Official Brochure) ─────────────────────────────
   'membership-silver':   { serviceId: 102003, durationMinutes: 30, numericPrice: 259  },
   'membership-gold':     { serviceId: 102003, durationMinutes: 30, numericPrice: 549  },
-  'membership-platinum': { serviceId: 102003, durationMinutes: 30, numericPrice: 1099 },
-  'membership-diamond':  { serviceId: 102003, durationMinutes: 30, numericPrice: 1999 },
+  'membership-diamond':  { serviceId: 102003, durationMinutes: 30, numericPrice: 1099 },
 };
 
 /** Default fallback when a service key isn't found in SERVICE_MAP */

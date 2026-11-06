@@ -26,17 +26,21 @@ export const CONTACT = {
   franchiseTelLink: 'tel:+917200279002',
   email: 'partner@zayroclub.com',
   mailLink: 'mailto:partner@zayroclub.com',
-  hours: '10:00 AM – 9:30 PM (All 7 Days)',
+  hours: '7:00 AM – 9:00 PM (Monday - Sunday)',
   openingDays: 'Monday to Sunday',
   
   social: {
     instagram: {
-      handle: '@zayro.coming_soon',
-      url: 'https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr',
+      handle: '@zayro.saloon',
+      url: 'https://www.instagram.com/zayro.saloon',
     },
     facebook: {
       handle: '@zayro.saloon',
-      url: 'https://www.facebook.com/share/1879j1nK1w/?mibextid=wwXIfr',
+      url: 'https://www.facebook.com/zayro.saloon',
+    },
+    youtube: {
+      handle: '@zayro.saloon',
+      url: 'https://www.youtube.com/@zayro.saloon',
     },
   },
 };

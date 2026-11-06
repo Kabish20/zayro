@@ -93,3 +93,4 @@ class Salon360Client:
         return self._request('POST', '/create', json_data=data, idempotency_key=idempotency_key)
 
 salon360 = Salon360Client()
+

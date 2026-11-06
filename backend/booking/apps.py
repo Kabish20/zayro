@@ -4,3 +4,4 @@ class BookingConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'booking'
     verbose_name = 'Zayro Salon360 Booking'
+

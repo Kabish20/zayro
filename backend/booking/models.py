@@ -54,3 +54,4 @@ class BookingRecord(models.Model):
 
     def __str__(self):
         return f"Booking #{self.appointment_id or 'NEW'} - {self.customer_name} ({self.booking_date} {self.start_time})"
+

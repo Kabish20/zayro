@@ -1,6 +1,6 @@
 // ZAYRO Men's Grooming - Official Rate Card & Combo Offers Data
 // Extracted from official brand brochure: "LUXURY MADE AFFORDABLE"
-// Website: www.zayrosalon.com | Social: @zayro.coming_soon
+// Website: www.zayrosalon.com | Social: @zayro.saloon
 
 export const rateCardServices = [
   {
@@ -13,10 +13,19 @@ export const rateCardServices = [
     description: 'Clean architectural haircut tailored to individual South Asian hair texture and growth pattern. Includes styling consultation and clean hairline finish.'
   },
   {
+    id: 'rate-beard-trim',
+    name: 'Beard Trim',
+    price: '₹69',
+    numericPrice: 69,
+    duration: '20 mins',
+    tagline: 'Razor-sharp zero-gap clipper and beard line sculpting',
+    description: 'Precision beard shaping and zero-gap trim defining clean cheek and necklines with soothing antiseptic after-balm.'
+  },
+  {
     id: 'rate-shave',
     name: 'Shave',
-    price: '₹50',
-    numericPrice: 50,
+    price: '₹49',
+    numericPrice: 49,
     duration: '20 mins',
     tagline: 'Traditional warm lather razor shave & soothing finish',
     description: 'Classic barber shave with rich lather, sterilized razor blade, hot towel wrap, and soothing antiseptic balm to prevent razor burn.'
@@ -24,15 +33,15 @@ export const rateCardServices = [
   {
     id: 'rate-kids-cut',
     name: 'Kids Cut',
-    price: '₹75',
-    numericPrice: 75,
+    price: '₹69',
+    numericPrice: 69,
     duration: '25 mins',
     tagline: 'Gentle, patient scissor styling for junior gentlemen',
     description: 'Fun and gentle styling experience designed for boys. Patient master barbers ensure a neat, cool, and comfortable haircut.'
   },
   {
-    id: 'rate-oil-massage',
-    name: 'Oil Massage',
+    id: 'rate-head-massage',
+    name: 'Head Massage',
     price: '₹199',
     numericPrice: 199,
     duration: '15 mins',
@@ -40,13 +49,13 @@ export const rateCardServices = [
     description: 'Therapeutic warm botanical oil infused into the scalp with acupressure finger work to relieve mental stress and stimulate follicles, followed by a refreshing hair wash.'
   },
   {
-    id: 'rate-hair-colour',
-    name: 'Hair Colour',
-    price: '₹349',
-    numericPrice: 349,
-    duration: '45 mins',
-    tagline: 'Global hair color & natural grey coverage',
-    description: 'Gentle ammonia-free formulation delivering rich, long-lasting natural black or brown tones with smooth grey coverage and scalp protection.'
+    id: 'rate-de-tan',
+    name: 'De-Tan',
+    price: '₹199',
+    numericPrice: 199,
+    duration: '25 mins',
+    tagline: 'Cooling herbal face de-tan pack to erase sun dullness',
+    description: 'Gentle herbal exfoliation and active de-tanning mask that brightens sun-damaged skin, balances skin tone, and restores natural radiance.'
   },
   {
     id: 'rate-face-cleanup',
@@ -56,6 +65,15 @@ export const rateCardServices = [
     duration: '35 mins',
     tagline: 'Deep pore clarifying cleanse and instant glow',
     description: 'Multi-stage facial cleanse removing trapped dust, excess sebum, and blackheads. Finished with an herbal cooling pack for fresh, radiant skin.'
+  },
+  {
+    id: 'rate-hair-colour',
+    name: 'Hair Colour',
+    price: '₹349',
+    numericPrice: 349,
+    duration: '45 mins',
+    tagline: 'Global hair color & natural grey coverage',
+    description: 'Gentle ammonia-free formulation delivering rich, long-lasting natural black or brown tones with smooth grey coverage and scalp protection.'
   }
 ];
 
@@ -289,7 +307,7 @@ export const membershipPlans = [
     price: '₹259',
     numericPrice: 259,
     theme: 'light',
-    tagline: 'Your everyday grooming membership.',
+    tagline: 'YOUR EVERYDAY GROOMING MEMBERSHIP',
     badgeType: 'silver',
     bgColor: 'bg-[#F9F6F0]',
     borderColor: 'border-stone-300',
@@ -311,7 +329,7 @@ export const membershipPlans = [
     price: '₹549',
     numericPrice: 549,
     theme: 'dark-green',
-    tagline: 'More grooming. More value.',
+    tagline: 'MORE GROOMING. MORE VALUE.',
     badgeType: 'gold',
     bgColor: 'bg-[#223928]',
     borderColor: 'border-[#E6B25C]/40',
@@ -329,40 +347,14 @@ export const membershipPlans = [
     ]
   },
   {
-    id: 'membership-platinum',
-    tier: 'PLATINUM',
-    name: 'ZAYRO PLATINUM',
-    duration: '11 MONTHS MEMBERSHIP',
-    price: '₹1,099',
-    numericPrice: 1099,
-    theme: 'light',
-    tagline: 'Elevated grooming. Exceptional care.',
-    badgeType: 'platinum',
-    bgColor: 'bg-[#F9F6F0]',
-    borderColor: 'border-stone-300',
-    titleColor: 'text-stone-800',
-    priceColor: 'text-stone-900',
-    textColor: 'text-stone-700',
-    dividerColor: 'border-stone-300',
-    quoteColor: 'text-stone-500',
-    includes: [
-      '11 Haircuts',
-      '5 Beard Trims',
-      '3 Hair Washes',
-      '1 Complimentary Oil Massage',
-      '1 Clean-up',
-      '15% off selected additional services'
-    ]
-  },
-  {
     id: 'membership-diamond',
     tier: 'DIAMOND',
     name: 'ZAYRO DIAMOND',
     duration: '12 MONTHS MEMBERSHIP',
-    price: '₹1,999',
-    numericPrice: 1999,
+    price: '₹1,099',
+    numericPrice: 1099,
     theme: 'deep-emerald',
-    tagline: 'The ultimate ZAYRO grooming privilege.',
+    tagline: 'MORE PRIVILEGE. UNMATCHED VALUE.',
     badgeType: 'diamond',
     bgColor: 'bg-[#152619]',
     borderColor: 'border-[#E6B25C]/60',
@@ -373,11 +365,11 @@ export const membershipPlans = [
     quoteColor: 'text-[#E6B25C]',
     isDiamond: true,
     includes: [
-      'Unlimited Haircuts',
-      'Unlimited Beard Trims',
-      '4 Hair Washes',
-      '3 Complimentary Oil Massages',
-      '2 Clean-ups',
+      '10 Haircuts',
+      '5 Beard Trims',
+      '3 Hair Washes',
+      '1 Complimentary Oil Massage',
+      '1 Clean-up',
       '15% off selected additional services'
     ]
   }
@@ -390,12 +382,12 @@ export const faqList = [
   {
     category: 'Appointments',
     question: 'How do I book an appointment or Combo Offer at ZAYRO?',
-    answer: 'You can book directly via our online enquiry form, choose any of our 10 official Combo Offers (starting from ₹299), or click "Book via WhatsApp" to instantly message our salon desk. Appointments are confirmed within 15 minutes.'
+    answer: 'You can book directly via our online booking portal, choose any of our 10 official Combo Offers (starting from ₹299), or click "Book via WhatsApp" to instantly message our salon desk at +91 91500 22115. Appointments are confirmed immediately.'
   },
   {
     category: 'Services',
     question: 'Are all 10 Combo Offers available at every ZAYRO location?',
-    answer: 'Yes! All 10 Combo Offers (from Combo 1 at ₹299 to Combo 10 at ₹1,499) as well as our standard rate card services (Haircut ₹99, Shave ₹50, Kids Cut ₹75, Oil Massage ₹199, Hair Colour ₹349, Face Cleanup ₹299) are universally honored across all ZAYRO branches under our "Luxury Made Affordable" brand guarantee.'
+    answer: 'Yes! All 10 Combo Offers (from Combo 1 at ₹299 to Combo 10 at ₹1,499) as well as our standard rate card services (Haircut ₹99, Beard Trim ₹69, Shave ₹49, Kids Cut ₹69, Head Massage ₹199, De-Tan ₹199, Face Cleanup ₹299, Hair Colour ₹349) are universally honored across all ZAYRO branches under our "Luxury Made Affordable" brand guarantee.'
   },
   {
     category: 'Services',

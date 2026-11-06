@@ -39,7 +39,7 @@ export default function OffersView({ openBooking }) {
           </p>
 
           <p className="text-xs sm:text-sm text-[#9BB899] leading-relaxed max-w-2xl">
-            Experience our complete grooming protocols engineered for South Asian men. Choose individual services starting at ₹50 or save up to 43% with our 10 curated combo rituals starting at ₹299.
+            Experience our complete grooming protocols engineered for South Asian men. Choose individual services starting at ₹49 or save up to 43% with our 10 curated combo rituals starting at ₹299.
           </p>
 
           {/* Quick Stats Banner */}
@@ -50,7 +50,7 @@ export default function OffersView({ openBooking }) {
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
               <span className="block text-[10px] uppercase text-[#9BB899] font-semibold">Shave From</span>
-              <span className="font-sans text-xl sm:text-2xl font-bold text-[#E6B25C]">₹50</span>
+              <span className="font-sans text-xl sm:text-2xl font-bold text-[#E6B25C]">₹49</span>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
               <span className="block text-[10px] uppercase text-[#9BB899] font-semibold">Combos From</span>

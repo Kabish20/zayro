@@ -40,7 +40,7 @@ export default function ServicesView({ setCurrentView, openBooking, openServiceD
             "Luxury Made Affordable"
           </p>
           <p className="text-xs sm:text-sm text-[#9BB899] leading-relaxed">
-            Every service is tailored around individual facial architecture and hair texture biology. Choose single services starting at just ₹50 or explore our 10 value combos.
+            Every service is tailored around individual facial architecture and hair texture biology. Choose single services starting at just ₹49 or explore our 10 value combos.
           </p>
         </div>
       </div>
@@ -111,12 +111,12 @@ export default function ServicesView({ setCurrentView, openBooking, openServiceD
             <span>✨ Walk-ins welcome daily • Sanitized tools & single-use biodegradable towels</span>
             <span className="text-[#E6B25C] font-medium">
               <a 
-                href="https://www.instagram.com/zayro.coming_soon?srtk=YWpzaXZpNWtiZGlr&utm_source=qr" 
+                href="https://www.instagram.com/zayro.saloon" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:underline hover:text-white transition-colors"
               >
-                📸 @zayro.coming_soon
+                📸 @zayro.saloon
               </a>
               {' '}• 🌐 www.zayrosalon.com
             </span>

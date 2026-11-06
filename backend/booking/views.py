@@ -173,3 +173,4 @@ class Salon360RedirectView(APIView):
     def get(self, request):
         target_url = settings.SALON360_HOSTED_BOOKING_URL
         return redirect(target_url)
+

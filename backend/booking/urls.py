@@ -42,3 +42,4 @@ urlpatterns = [
     path('booking/redirect/', Salon360RedirectView.as_view(), name='booking-redirect'),
     path('online-booking/', Salon360RedirectView.as_view(), name='online-booking-redirect'),
 ]
+

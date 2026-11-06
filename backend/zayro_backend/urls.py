@@ -9,3 +9,4 @@ urlpatterns = [
     # Booking & Salon360 API routes
     path('', include('booking.urls')),
 ]
+

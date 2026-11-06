@@ -1,6 +1,6 @@
 export const categories = [
   { id: 'all', name: 'All Services' },
-  { id: 'ratecard', name: 'Official Rate Card (From ₹50)' },
+  { id: 'ratecard', name: 'Official Rate Card (From ₹49)' },
   { id: 'haircut', name: 'Haircuts & Styling' },
   { id: 'grooming', name: 'Beard & Shaving' },
   { id: 'scalp', name: 'Scalp & Hair Therapy' },
@@ -9,7 +9,7 @@ export const categories = [
 ];
 
 export const services = [
-  // Official Rate Card Services from PDF Page 1
+  // Official Rate Card Services from Brochure Page 1
   {
     id: 'rate-haircut',
     category: 'haircut',
@@ -36,29 +36,53 @@ export const services = [
     recommendedFor: 'Gentlemen seeking a sharp, stylish haircut at an unbeatable luxury-value price point.'
   },
   {
+    id: 'rate-beard-trim',
+    category: 'grooming',
+    isRateCard: true,
+    name: 'Beard Trim (Zero)',
+    tagline: 'Razor-sharp zero-gap clipper and cheek line definition',
+    price: '₹69',
+    duration: '20 mins',
+    image: '/images/services/beard_shave.jpg',
+    description: 'Precision beard grooming and zero-gap trim defining clean cheek and necklines with soothing antiseptic after-balm.',
+    highlights: ['Zero-gap precision trimming', 'Cheek & neckline definition', 'Antiseptic cooling balm'],
+    benefits: [
+      'Crisp, symmetrical beard contours',
+      'Maintains sharp profile with zero skin irritation',
+      'Finished with cooling sandalwood conditioning'
+    ],
+    steps: [
+      'Beard length and outline assessment',
+      'Zero-gap clipper contouring along cheeks and jaw',
+      'Crisp neck taper and flyaway trimming',
+      'Antiseptic cooling splash and beard balm'
+    ],
+    recommendedFor: 'Men wanting sharp beard lines and effortless maintenance at an everyday price.'
+  },
+  {
     id: 'rate-shave',
     category: 'grooming',
     isRateCard: true,
-    name: 'Traditional Barber Shave / Beard Trim',
-    tagline: 'Warm foam razor shave & zero-gap beard lineup',
-    price: '₹50',
+    name: 'Traditional Barber Shave',
+    tagline: 'Warm foam razor shave & soothing finish',
+    price: '₹49',
     duration: '20 mins',
     image: '/images/services/beard_shave.jpg',
     description: 'Classic barber craftsmanship featuring warm rich lather, sterilized fresh razor blade, steamed towel wrap, and soothing antiseptic aftershave splash.',
     highlights: ['Single-use surgical blade', 'Hot steam towel wrap', 'Antiseptic cooling aftershave balm'],
     benefits: [
       'Baby-smooth clean shave without irritation or razor burn',
-      'Crisp zero-gap cheek and neckline definition',
+      'Sterilized single-use blade for complete safety',
       'Leaves facial skin calmed, refreshed, and invigorated'
     ],
     steps: [
       'Pre-shave essential oil application',
       'Warm foam lather application',
-      'Precision single-stroke razor shave or zero trim',
+      'Precision single-stroke razor shave',
       'Cool mint towel compress to close pores',
       'Soothing sandalwood aftershave balm massage'
     ],
-    recommendedFor: 'Men wanting a clean, razor-sharp shave or weekly beard zero maintenance.'
+    recommendedFor: 'Men wanting a clean, razor-sharp shave with classic barbershop pampering.'
   },
   {
     id: 'rate-kids-cut',
@@ -66,7 +90,7 @@ export const services = [
     isRateCard: true,
     name: 'Kids & Junior Haircut',
     tagline: 'Patient, gentle styling for junior gentlemen',
-    price: '₹75',
+    price: '₹69',
     duration: '25 mins',
     image: '/images/gallery/indian_haircut.jpg',
     description: 'A friendly, calm salon experience designed specially for young boys. Our master barbers ensure a relaxed atmosphere and a sharp, trendy haircut.',
@@ -85,10 +109,10 @@ export const services = [
     recommendedFor: 'Junior gentlemen (ages 2 to 14) needing a neat school cut or festive styling.'
   },
   {
-    id: 'rate-oil-massage',
+    id: 'rate-head-massage',
     category: 'scalp',
     isRateCard: true,
-    name: 'Herbal Oil Massage & Hair Wash',
+    name: 'Head Massage & Hair Wash',
     tagline: '15 mins invigorating scalp acupressure & clarifying wash',
     price: '₹199',
     duration: '15 mins',
@@ -108,6 +132,30 @@ export const services = [
       'Towel dry and refreshing cooling mist'
     ],
     recommendedFor: 'Gentlemen seeking rapid stress relief and deeper sleep after a demanding week.'
+  },
+  {
+    id: 'rate-de-tan',
+    category: 'skincare',
+    isRateCard: true,
+    name: 'Face & Neck De-Tan',
+    tagline: 'Herbal cooling face de-tan pack to erase sun dullness',
+    price: '₹199',
+    duration: '25 mins',
+    image: '/images/services/facial.jpg',
+    description: 'Targeted botanical de-tan treatment that extracts sun damage, balances pigmentation, and restores instant freshness to tired South Asian skin.',
+    highlights: ['Herbal de-tan active pack', 'Instant sun tan extraction', 'Cooling botanical toner'],
+    benefits: [
+      'Erases stubborn outdoor sun tanning across face and neck',
+      'Evens out skin tone without harsh chemical peeling',
+      'Leaves skin soft, bright, and deeply hydrated'
+    ],
+    steps: [
+      'Gentle foaming cleanser',
+      'Even brush application of herbal de-tan formulation',
+      '15-minute active tan removal phase',
+      'Cool water wash and pore-firming herbal mist'
+    ],
+    recommendedFor: 'Men exposed to outdoor sun and traffic pollution seeking quick complexion brightening.'
   },
   {
     id: 'rate-face-cleanup',

@@ -16,7 +16,7 @@ export const salonLocations = [
     landmark: 'Near KK Nagar Bus Terminus, Opp. Sumaiya Multi Shoping',
     phone: '+91 91500 22115',
     whatsapp: '919150022115',
-    hours: '10:00 AM – 09:30 PM (Monday – Sunday)',
+    hours: '7:00 AM – 09:00 PM (Monday – Sunday)',
     type: 'Flagship Salon & VIP Royal Groom Suite',
     stations: '12 Luxury Styling Stations • Private VIP Treatment Suites',
     amenities: [

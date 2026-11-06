@@ -148,3 +148,4 @@ SALON360_HOSTED_BOOKING_URL = os.getenv(
     'VITE_SALON360_BOOKING_URL',
     f"https://api.salon360app.com/api/online-booking/v1/external/booking?storeId={SALON360_STORE_ID}&orgId={SALON360_ORG_ID}"
 )
+

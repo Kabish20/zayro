@@ -17,3 +17,4 @@ class BookingRecordAdmin(admin.ModelAdmin):
     list_filter = ('status', 'booking_date')
     search_fields = ('customer_name', 'customer_mobile', 'appointment_id')
     readonly_fields = ('created_at',)
+

@@ -23,8 +23,8 @@ export default function MembershipPlans({ openBooking }) {
         </p>
       </div>
 
-      {/* 4 Membership Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* 3 Official Membership Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {membershipPlans.map((plan) => {
           const isDark = plan.theme === 'dark-green' || plan.theme === 'deep-emerald';
           const isPopupOpen = activePlanId === plan.id;
@@ -57,8 +57,8 @@ export default function MembershipPlans({ openBooking }) {
                   {/* Metallic Badge from Image */}
                   <div className="shrink-0 transition-transform duration-300 group-hover:scale-110">
                     {plan.badgeType === 'diamond' ? (
-                      <div className="w-12 h-12 rounded-2xl bg-[#0F1B12] border-2 border-[#E6B25C] flex items-center justify-center shadow-md">
-                        <svg className="w-6 h-6 text-[#E6B25C]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#10b981] via-[#059669] to-[#047857] border-2 border-[#34d399] flex items-center justify-center shadow-md">
+                        <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                           <path d="M6 3h12l4 6-10 12L2 9l4-6z" />
                           <path d="M11 3l-3 6 4 12" />
                           <path d="M13 3l3 6-4 12" />
@@ -68,10 +68,6 @@ export default function MembershipPlans({ openBooking }) {
                     ) : plan.badgeType === 'gold' ? (
                       <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#E6B25C] via-[#F3CF8A] to-[#B38029] shadow-md border border-[#F3CF8A]/60 flex items-center justify-center">
                         <span className="w-4 h-4 rounded-full bg-white/30 backdrop-blur-xs"></span>
-                      </div>
-                    ) : plan.badgeType === 'platinum' ? (
-                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-slate-200 via-gray-100 to-slate-400 shadow-md border border-slate-300 flex items-center justify-center">
-                        <span className="w-4 h-4 rounded-full bg-black/10 backdrop-blur-xs"></span>
                       </div>
                     ) : (
                       /* Silver Badge */

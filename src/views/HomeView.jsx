@@ -43,7 +43,7 @@ export default function HomeView({
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1A2719]/80 border border-[#E6B25C]/40 backdrop-blur-md shadow-sm animate-float">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#E6B25C] animate-pulse"></span>
                 <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#E6B25C]">
-                  LUXURY MADE AFFORDABLE • HAIRCUT ₹99 • SHAVE ₹50 • COMBOS FROM ₹299
+                  LUXURY MADE AFFORDABLE • HAIRCUT ₹99 • SHAVE ₹49 • COMBOS FROM ₹299
                 </span>
               </div>
             </div>
@@ -505,7 +505,7 @@ export default function HomeView({
                 "Luxury Made Affordable"
               </p>
               <p className="text-xs text-stone-600 mt-1 max-w-xl">
-                Experience high-end barbering and clinical scalp hygiene at everyday prices. Walk in for ₹50 shaves and ₹99 haircuts, or save up to 43% with our all-inclusive combos.
+                Experience high-end barbering and clinical scalp hygiene at everyday prices. Walk in for ₹49 shaves and ₹99 haircuts, or save up to 43% with our all-inclusive combos.
               </p>
             </div>
 
@@ -843,7 +843,7 @@ export default function HomeView({
                   <div className="pt-3 border-t border-[#E8DCB8]/60 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-stone-700">
                     <div className="flex items-center gap-2.5">
                       <Clock className="w-4 h-4 text-[#30452F] shrink-0" />
-                      <span><strong>Hours:</strong> 10:00 AM – 09:30 PM (Mon – Sun)</span>
+                      <span><strong>Hours:</strong> 7:00 AM – 09:00 PM (Mon – Sun)</span>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <Phone className="w-4 h-4 text-[#30452F] shrink-0" />
@@ -922,7 +922,7 @@ export default function HomeView({
               
               <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-[11px] font-bold text-[#30452F] border border-[#E6B25C]/40 shadow-sm flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Open Today: 10:00 AM – 9:30 PM</span>
+                <span>Open Today: 7:00 AM – 9:00 PM</span>
               </div>
 
               <div className="absolute bottom-6 left-6 right-6 text-white space-y-2">

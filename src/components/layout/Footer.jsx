@@ -216,10 +216,10 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
               </li>
               <li>
                 <button 
-                  onClick={() => openBooking({ name: 'Traditional Hot Towel Shave', price: '₹50' })} 
+                  onClick={() => openBooking({ name: 'Traditional Shave', price: '₹49' })} 
                   className="hover:text-white transition-colors text-left"
                 >
-                  Hot Towel Shave (₹50)
+                  Traditional Shave (₹49)
                 </button>
               </li>
               <li>
