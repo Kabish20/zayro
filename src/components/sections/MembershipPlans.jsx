@@ -123,7 +123,7 @@ export default function MembershipPlans({ openBooking }) {
                   </button>
 
                   <a
-                    href={`https://wa.me/919150022115?text=${encodeURIComponent(`Hi ZAYRO Salon, I would like to purchase the ${plan.name} (${plan.price} - ${plan.duration}).`)}`}
+                    href={`https://wa.me/917904242311?text=${encodeURIComponent(`Hi ZAYRO Salon, I would like to purchase the ${plan.name} (${plan.price} - ${plan.duration}).`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
@@ -197,7 +197,7 @@ export default function MembershipPlans({ openBooking }) {
                   </button>
 
                   <a
-                    href={`https://wa.me/919150022115?text=${encodeURIComponent(`Hi ZAYRO Salon, I would like to purchase the ${plan.name} (${plan.price} - ${plan.duration}).`)}`}
+                    href={`https://wa.me/917904242311?text=${encodeURIComponent(`Hi ZAYRO Salon, I would like to purchase the ${plan.name} (${plan.price} - ${plan.duration}).`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}

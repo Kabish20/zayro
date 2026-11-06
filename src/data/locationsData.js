@@ -2,8 +2,8 @@ export const headOffice = {
   name: "ZAYRO Corporate Head Office",
   region: "Trichy, India 🇮🇳",
   address: "5, Crescent Park Apartment, Hazrath Sulaiman Street, Kaja Nagar, Trichy – 620020",
-  phone: "+91 91500 22115",
-  whatsapp: "919150022115",
+  phone: "+91 79042 42311",
+  whatsapp: "917904242311",
   email: "partner@zayroclub.com"
 };
 
@@ -14,8 +14,8 @@ export const salonLocations = [
     name: "ZAYRO Men's Grooming Lounge — Flagship",
     address: 'No. 115, Rajaram Road, Near KK Nagar Bus Terminus, Opp. Sumaiya Multi Shoping, KK Nagar, Tiruchirappalli - 620021',
     landmark: 'Near KK Nagar Bus Terminus, Opp. Sumaiya Multi Shoping',
-    phone: '+91 91500 22115',
-    whatsapp: '919150022115',
+    phone: '+91 79042 42311',
+    whatsapp: '917904242311',
     hours: '7:00 AM – 09:00 PM (Monday – Sunday)',
     type: 'Flagship Salon & VIP Royal Groom Suite',
     stations: '12 Luxury Styling Stations • Private VIP Treatment Suites',

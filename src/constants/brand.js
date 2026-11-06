@@ -17,9 +17,9 @@ export const BRAND = {
 };
 
 export const CONTACT = {
-  phoneDisplay: '+91 91500 22115',
-  phoneRaw: '919150022115',
-  telLink: 'tel:+919150022115',
+  phoneDisplay: '+91 79042 42311',
+  phoneRaw: '917904242311',
+  telLink: 'tel:+917904242311',
   franchisePhone: '7200279002',
   franchisePhoneDisplay: '+91 72002 79002',
   franchisePhoneRaw: '917200279002',

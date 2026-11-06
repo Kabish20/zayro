@@ -847,7 +847,7 @@ export default function HomeView({
                     </div>
                     <div className="flex items-center gap-2.5">
                       <Phone className="w-4 h-4 text-[#30452F] shrink-0" />
-                      <span><strong>Contact Number:</strong> +91 91500 22115</span>
+                      <span><strong>Contact Number:</strong> +91 79042 42311</span>
                     </div>
                   </div>
                 </div>

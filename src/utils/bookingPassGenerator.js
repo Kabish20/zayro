@@ -490,7 +490,7 @@ export async function renderBookingPassCanvas({
 
   ctx.fillStyle = '#E8DCB8';
   ctx.font = '600 12px "Plus Jakarta Sans", sans-serif';
-  ctx.fillText('Concierge Hotline: +91 91500 22115   •   Website: www.zayrosalon.com   •   Central Lounge: Trichy, Tamil Nadu', canvas.width / 2, footerY + 24);
+  ctx.fillText('Concierge Hotline: +91 79042 42311   •   Website: www.zayrosalon.com   •   Central Lounge: Trichy, Tamil Nadu', canvas.width / 2, footerY + 24);
 
   ctx.fillStyle = 'rgba(230, 178, 92, 0.7)';
   ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
@@ -820,7 +820,7 @@ export function printBookingPass({
 
           <div class="footer">
             <div style="font-weight: 600; color: #30452F;">Please present this pass or state your booking reference upon arrival at salon reception.</div>
-            <div>Central Concierge Desk: +91 91500 22115 &nbsp;•&nbsp; www.zayrosalon.com &nbsp;•&nbsp; Trichy, Tamil Nadu</div>
+            <div>Central Concierge Desk: +91 79042 42311 &nbsp;•&nbsp; www.zayrosalon.com &nbsp;•&nbsp; Trichy, Tamil Nadu</div>
           </div>
         </div>
 

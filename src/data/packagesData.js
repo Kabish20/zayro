@@ -382,7 +382,7 @@ export const faqList = [
   {
     category: 'Appointments',
     question: 'How do I book an appointment or Combo Offer at ZAYRO?',
-    answer: 'You can book directly via our online booking portal, choose any of our 10 official Combo Offers (starting from ₹299), or click "Book via WhatsApp" to instantly message our salon desk at +91 91500 22115. Appointments are confirmed immediately.'
+    answer: 'You can book directly via our online booking portal, choose any of our 10 official Combo Offers (starting from ₹299), or click "Book via WhatsApp" to instantly message our salon desk at +91 79042 42311. Appointments are confirmed immediately.'
   },
   {
     category: 'Services',

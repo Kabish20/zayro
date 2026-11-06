@@ -343,7 +343,7 @@ export default function BookingView({ preselectedService, onBack }) {
           <div className="text-[11px] text-[#E6B25C] font-semibold flex items-center justify-center gap-2">
             <span>⏰ Salon Hours: 7:00 AM – 9:00 PM (Monday – Sunday)</span>
             <span>•</span>
-            <span>📞 Concierge: +91 91500 22115</span>
+            <span>📞 Concierge: +91 79042 42311</span>
           </div>
         </div>
 
@@ -395,7 +395,7 @@ export default function BookingView({ preselectedService, onBack }) {
             {/* Actions */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
               <a
-                href={`https://wa.me/919150022115?text=${whatsAppBookingText}`}
+                href={`https://wa.me/917904242311?text=${whatsAppBookingText}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3.5 px-6 rounded-xl bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg"
@@ -690,7 +690,7 @@ export default function BookingView({ preselectedService, onBack }) {
               </button>
 
               <a
-                href={`https://wa.me/919150022115?text=${whatsAppBookingText}`}
+                href={`https://wa.me/917904242311?text=${whatsAppBookingText}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto py-3.5 px-6 rounded-xl bg-[#25D366] hover:bg-[#1ebd5b] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg"
@@ -704,13 +704,3 @@ export default function BookingView({ preselectedService, onBack }) {
               <p className="text-[11px] text-stone-400 flex items-center justify-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#E6B25C]" />
                 <span>API Endpoint: api.salon360app.com/api/online-booking/v1/external/booking • Store ID 868</span>
-              </p>
-            </div>
-
-          </form>
-        )}
-
-      </div>
-    </div>
-  );
-}
