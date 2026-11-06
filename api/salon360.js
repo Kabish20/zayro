@@ -9,7 +9,7 @@
 import https from 'node:https';
 
 const SALON360_HOST = 'api.salon360app.com';
-const SALON360_BASE = '/api/online-booking/v1/external/booking';
+const SALON360_BASE = '/api/online-booking/v1/booking';
 
 // Store 868 / Org 555 API Key
 const CLIENT_KEY = process.env.SALON360_CLIENT_KEY || '64afb73f-ec89-4d1f-b639-914960f34f47';

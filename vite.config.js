@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   const salon360ApiBase = env.SALON360_API_BASE ||
-    'https://api.salon360app.com/api/online-booking/v1/external/booking';
+    'https://api.salon360app.com/api/online-booking/v1/booking';
   const salon360ApiKey  = env.SALON360_API_KEY  || '';
 
   return {

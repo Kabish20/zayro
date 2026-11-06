@@ -3,7 +3,7 @@
  * 
  * Integration Guide Reference:
  *   Store: storeId 868, orgId 555
- *   Base URL: https://api.salon360app.com/api/online-booking/v1/external/booking
+ *   Base URL: https://api.salon360app.com/api/online-booking/v1/booking
  * 
  * ⚠️  SECURITY NOTE (from Salon360 integration guide):
  *   The x-api-key grants full access to this store's booking API.

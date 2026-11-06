@@ -41,7 +41,7 @@ const CLIENT_KEY = '64afb73f-ec89-4d1f-b639-914960f34f47';
 const CLIENT_SECRET = 'b3c52a47-845c-40af-bb43-37e52df12ce7';
 const API_KEY = envApiKey || `${CLIENT_KEY}:${CLIENT_SECRET}`;
 const HOSTNAME = 'api.salon360app.com';
-const BASE_PATH = '/api/online-booking/v1/external/booking';
+const BASE_PATH = '/api/online-booking/v1/booking';
 
 function makeRequest(method, endpoint, body = null, extraHeaders = {}) {
   return new Promise((resolve) => {

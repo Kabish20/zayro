@@ -51,7 +51,7 @@ const CLIENT_KEY = process.env.SALON360_CLIENT_KEY || '64afb73f-ec89-4d1f-b639-9
 const CLIENT_SECRET = process.env.SALON360_CLIENT_SECRET || 'b3c52a47-845c-40af-bb43-37e52df12ce7';
 const API_KEY = process.env.SALON360_API_KEY || `${CLIENT_KEY}:${CLIENT_SECRET}`;
 const SALON360_HOST = 'api.salon360app.com';
-const SALON360_BASE = '/api/online-booking/v1/external/booking';
+const SALON360_BASE = '/api/online-booking/v1/booking';
 
 const server = http.createServer(async (req, res) => {
   // CORS Headers
