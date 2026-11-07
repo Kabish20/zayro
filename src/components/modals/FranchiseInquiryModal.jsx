@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Briefcase, CheckCircle, MessageSquare, Loader2, Phone } from 'lucide-react';
 import { FRANCHISE_CONTACT } from '@/constants/brand';
-import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
+import { isValidEmail, isValidName } from '@/utils/security';
 
 export default function FranchiseInquiryModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({

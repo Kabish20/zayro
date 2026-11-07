@@ -59,7 +59,6 @@ const getViewFromLocation = () => {
 function MainLayout() {
   const [currentView, setCurrentView] = useState(() => getViewFromLocation());
   const {
-    openBooking: triggerModalBooking,
     closeBooking,
     preselectedService,
     openServiceDetail,
@@ -108,7 +107,7 @@ function MainLayout() {
   }, []);
 
   // When any button triggers booking, navigate cleanly to the dedicated booking portal
-  const handleOpenBooking = useCallback((service) => {
+  const handleOpenBooking = useCallback((_service) => {
     closeBooking?.();
     closeServiceDetail?.();
     closeRateCard?.();

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle, Loader2, Briefcase } from 'lucide-react';
 import { CONTACT, FRANCHISE_CONTACT, getWhatsAppUrl } from '@/constants';
-import { isValidEmail, isValidName, sanitizeInput } from '@/utils/security';
+import { isValidEmail, isValidName } from '@/utils/security';
 
 export default function ContactView() {
   const [formData, setFormData] = useState({

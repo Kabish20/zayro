@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  MapPin, Calendar, Navigation, Share2, Check, 
+  Calendar, Navigation, Share2, Check, 
   MessageSquare, Download, Eye, X, PhoneCall, ExternalLink,
-  ArrowLeft, Copy
+  Copy
 } from 'lucide-react';
 import { VIEWS } from '@/constants/navigation';
 
@@ -35,7 +35,6 @@ const EVENT_DETAILS = {
 
 export default function KkNagarInviteView({ setCurrentView }) {
   const [copiedAddress, setCopiedAddress] = useState(false);
-  const [copiedLink, setCopiedLink] = useState(false);
   const [showFullPoster, setShowFullPoster] = useState(false);
 
   useEffect(() => {
@@ -109,18 +108,10 @@ export default function KkNagarInviteView({ setCurrentView }) {
       try {
         await navigator.share(shareData);
       } catch {
-        copyPageLink();
+        window.open(whatsappShareUrl, '_blank');
       }
     } else {
-      copyPageLink();
-    }
-  };
-
-  const copyPageLink = () => {
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(EVENT_DETAILS.pageUrl);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2200);
+      window.open(whatsappShareUrl, '_blank');
     }
   };
 
@@ -269,15 +260,14 @@ export default function KkNagarInviteView({ setCurrentView }) {
             <span className="truncate">{copiedAddress ? "Address Copied!" : "Copy Postal Address"}</span>
           </button>
 
-          <a
-            href={whatsappShareUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#25D366] hover:underline font-bold flex items-center gap-1 shrink-0 ml-2"
+          <button
+            onClick={handleShare}
+            type="button"
+            className="text-[#25D366] hover:underline font-bold flex items-center gap-1 shrink-0 ml-2 cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>Share Invite</span>
-          </a>
+          </button>
         </div>
 
         {/* Event Quick Facts Badge */}

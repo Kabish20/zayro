@@ -7,10 +7,9 @@ import {
   Navigation, 
   Sparkles, 
   ShieldCheck, 
-  CheckCircle2, 
   ArrowLeft 
 } from 'lucide-react';
-import { BRAND, CONTACT } from '@/constants/brand';
+import { CONTACT } from '@/constants/brand';
 
 export default function BookingView({ preselectedService, onBack }) {
   const serviceText = typeof preselectedService === 'string' 
