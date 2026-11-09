@@ -15,7 +15,6 @@ import {
   ContactView,
   FaqView,
   LegalView,
-  KkNagarInviteView,
 } from '@/views';
 
 /**
@@ -26,18 +25,6 @@ const getViewFromLocation = () => {
   const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
   const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
 
-  if (
-    path === 'kknagarinvite' || 
-    path === 'kknagarinvite/index.html' ||
-    path.startsWith('kknagarinvite') ||
-    path === 'kknagar-invite' || 
-    path === 'kknagar' ||
-    hash === 'kknagarinvite' || 
-    hash === 'kknagar-invite' || 
-    hash === 'kknagar'
-  ) {
-    return VIEWS.KKNAGAR_INVITE;
-  }
   if (path === 'booking' || hash === 'booking') return VIEWS.BOOKING;
   if (path === 'services' || hash === 'services') return VIEWS.SERVICES;
   if (path === 'offers' || hash === 'offers') return VIEWS.OFFERS;
@@ -96,7 +83,6 @@ function MainLayout() {
         [VIEWS.FAQ]: '/faq',
         [VIEWS.PRIVACY]: '/privacy',
         [VIEWS.TERMS]: '/terms',
-        [VIEWS.KKNAGAR_INVITE]: '/kknagarinvite',
         [VIEWS.BOOKING]: '/booking',
       };
       const targetUrl = urlMap[nextView] || '/';
@@ -203,13 +189,6 @@ function MainLayout() {
         return <LegalView initialTab="privacy" />;
       case VIEWS.TERMS:
         return <LegalView initialTab="terms" />;
-      case VIEWS.KKNAGAR_INVITE:
-        return (
-          <KkNagarInviteView
-            openBooking={handleOpenBooking}
-            openRateCard={openRateCard}
-          />
-        );
       default:
         return (
           <HomeView
@@ -223,16 +202,6 @@ function MainLayout() {
         );
     }
   };
-
-  // Standalone Layout for Grand Opening Invitation (Free from Website UI Chrome)
-  if (currentView === VIEWS.KKNAGAR_INVITE) {
-    return (
-      <div className="min-h-screen flex flex-col bg-[#070F09] text-[#F5ECDE] font-sans antialiased">
-        <KkNagarInviteView setCurrentView={handleNavigate} openBooking={handleOpenBooking} />
-        <ModalRoot />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5ECDE] text-[#1F2E1E] font-sans antialiased">

@@ -13,11 +13,15 @@ load_dotenv(BASE_DIR / '.env')
 # Also check parent .env if present
 load_dotenv(BASE_DIR.parent / '.env')
 
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-zayro-salon360-key-2026-prod-9453326')
-
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'insecure-dev-key-replace-in-env' if DEBUG else None)
+if not SECRET_KEY:
+    raise RuntimeError("DJANGO_SECRET_KEY environment variable is required")
+
+ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+if DEBUG and 'testserver' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('testserver')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,28 +68,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'zayro_backend.wsgi.application'
 
-# Database Configuration (PostgreSQL with SQLite fallback)
-DB_ENGINE = os.getenv('DB_ENGINE', 'django.db.backends.postgresql')
-DB_NAME = os.getenv('DB_NAME', 'zayro_db')
-DB_USER = os.getenv('DB_USER', 'zayro_user')
-DB_PASSWORD = os.getenv('DB_PASSWORD', 'DCXServer123$')
-DB_HOST = os.getenv('DB_HOST', 'localhost')
-DB_PORT = os.getenv('DB_PORT', '5432')
-
-try:
-    import psycopg2
+# Database Configuration (PostgreSQL in production, SQLite allowed in DEBUG)
+DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3' if DEBUG else 'django.db.backends.postgresql')
+if DB_ENGINE == 'django.db.backends.postgresql':
     DATABASES = {
         'default': {
-            'ENGINE': DB_ENGINE,
-            'NAME': DB_NAME,
-            'USER': DB_USER,
-            'PASSWORD': DB_PASSWORD,
-            'HOST': DB_HOST,
-            'PORT': DB_PORT,
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', 'zayro_db'),
+            'USER': os.environ.get('DB_USER', 'zayro_user'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DB_PORT', '5432'),
             'CONN_MAX_AGE': 600,
         }
     }
-except ImportError:
+else:
+    if not DEBUG:
+        raise RuntimeError("Production environment must use PostgreSQL (DB_ENGINE=django.db.backends.postgresql)")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -111,7 +110,12 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://zayro-two.vercel.app",
+]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -134,18 +138,26 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
     ],
 }
 
 # Salon360 Online Booking API Configuration
-SALON360_STORE_ID = int(os.getenv('SALON360_STORE_ID', 868))
-SALON360_ORG_ID = int(os.getenv('SALON360_ORG_ID', 555))
-SALON360_CLIENT_KEY = os.getenv('SALON360_CLIENT_KEY', '64afb73f-ec89-4d1f-b639-914960f34f47')
-SALON360_CLIENT_SECRET = os.getenv('SALON360_CLIENT_SECRET', 'b3c52a47-845c-40af-bb43-37e52df12ce7')
-SALON360_API_KEY = os.getenv('SALON360_API_KEY', f"{SALON360_CLIENT_KEY}:{SALON360_CLIENT_SECRET}")
-SALON360_BASE_URL = os.getenv('SALON360_API_BASE', 'https://api.salon360app.com/api/online-booking/v1/booking')
-SALON360_HOSTED_BOOKING_URL = os.getenv(
-    'VITE_SALON360_BOOKING_URL',
+SALON360_STORE_ID = int(os.environ.get("SALON360_STORE_ID", "868"))
+SALON360_ORG_ID = int(os.environ.get("SALON360_ORG_ID", "555"))
+SALON360_CLIENT_KEY = os.environ.get("SALON360_CLIENT_KEY", "")
+SALON360_CLIENT_SECRET = os.environ.get("SALON360_CLIENT_SECRET", "")
+SALON360_API_KEY = (
+    f"{SALON360_CLIENT_KEY}:{SALON360_CLIENT_SECRET}"
+    if SALON360_CLIENT_KEY and SALON360_CLIENT_SECRET
+    else ""
+)
+SALON360_BASE_URL = os.environ.get(
+    "SALON360_API_BASE",
+    "https://api.salon360app.com/api/online-booking/v1/booking"
+)
+SALON360_HOSTED_BOOKING_URL = os.environ.get(
+    "VITE_SALON360_BOOKING_URL",
     f"https://api.salon360app.com/api/online-booking/v1/external/booking?storeId={SALON360_STORE_ID}&orgId={SALON360_ORG_ID}"
 )
-

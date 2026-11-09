@@ -16,11 +16,22 @@ dist-ssr
 .env
 .env.*
 !.env.example
+backend/.env
+backend/.env.*
 *.pem
 *.key
 *.cert
 *.crt
 *.pfx
+
+# Python & Django
+__pycache__/
+*.py[cod]
+*$py.class
+backend/venv/
+venv/
+*.sqlite3
+staticfiles/
 
 # Editor directories and files
 .vscode/*

@@ -228,14 +228,6 @@ server {
         proxy_pass http://127.0.0.1:8000/online-booking/;
     }
 
-    # KK Nagar Grand Opening landing page
-    location = /kknagarinvite {
-        try_files /kknagarinvite/index.html =404;
-    }
-    location /kknagarinvite/ {
-        try_files $uri /kknagarinvite/index.html =404;
-    }
-
     # Frontend SPA Fallback
     location / {
         try_files $uri $uri/ /index.html;

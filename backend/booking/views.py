@@ -1,13 +1,17 @@
 import uuid
-from datetime import datetime
-from django.db import connection
+from datetime import datetime, timedelta
+from django.db import connection, transaction, IntegrityError
 from django.conf import settings
 from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
+
 from .salon360_client import salon360
-from .models import SalonConfig, Staff, BookingRecord
+from .models import SalonConfig, Staff, BookingRecord, SalonService
+from .serializers import AvailabilitySerializer, BookingSerializer
+
 
 class Salon360StatusTestView(APIView):
     """
@@ -17,15 +21,22 @@ class Salon360StatusTestView(APIView):
     def get(self, request):
         cfg_status, cfg_data = salon360.get_config()
         staff_status, staff_data = salon360.get_staff()
-        staff_count = len(staff_data.get('response', [])) if isinstance(staff_data, dict) and isinstance(staff_data.get('response'), list) else 0
+        staff_count = (
+            len(staff_data.get('response', []))
+            if isinstance(staff_data, dict) and isinstance(staff_data.get('response'), list)
+            else 0
+        )
 
         today_str = datetime.now().strftime('%Y-%m-%d')
+        first_service = SalonService.objects.filter(is_active=True).first()
+        test_service_id = first_service.salon360_service_id if first_service else 102003
+
         avail_status, avail_data = salon360.check_availability({
             'startDate': today_str,
             'endDate': today_str,
             'slotIntervalMinutes': 30,
             'staffSelectionMode': 'ANY',
-            'services': [{'serviceId': 102003, 'durationMinutes': 30}],
+            'services': [{'serviceId': test_service_id, 'durationMinutes': 30}],
             'staffId': None,
             'serviceStaffAssignments': None,
         })
@@ -53,15 +64,20 @@ class Salon360StatusTestView(APIView):
                 "availability": {
                     "status": avail_status,
                     "ok": avail_status == 200,
-                    "calendarStatus": (avail_data.get('response', [{}])[0].get('status') if isinstance(avail_data, dict) and isinstance(avail_data.get('response'), list) and len(avail_data.get('response', [])) > 0 else None),
+                    "calendarStatus": (
+                        avail_data.get('response', [{}])[0].get('status')
+                        if isinstance(avail_data, dict) and isinstance(avail_data.get('response'), list) and len(avail_data.get('response', [])) > 0
+                        else None
+                    ),
                 }
             },
             "timestamp": datetime.now().isoformat(),
         }, status=status.HTTP_200_OK if is_connected else status.HTTP_502_BAD_GATEWAY)
 
+
 class HealthCheckView(APIView):
     """
-    Health check diagnostic verifying Django server, PostgreSQL, and Salon360 configuration.
+    Health check diagnostic verifying Django server, Database, and Salon360 configuration.
     """
     def get(self, request):
         db_ok = False
@@ -70,8 +86,8 @@ class HealthCheckView(APIView):
             connection.ensure_connection()
             db_ok = True
             db_engine = connection.vendor  # 'postgresql' or 'sqlite'
-        except Exception as e:
-            db_error = str(e)
+        except Exception:
+            pass
 
         return Response({
             "status": "UP",
@@ -89,11 +105,30 @@ class HealthCheckView(APIView):
             "timestamp": datetime.now().isoformat(),
         }, status=status.HTTP_200_OK)
 
+
+class ServiceListView(APIView):
+    """
+    GET /api/salon360/services/
+    Returns list of mapped active salon services.
+    """
+    def get(self, request):
+        services = [
+            {
+                "website_service_id": s.website_service_id,
+                "name": s.name,
+                "duration_minutes": s.duration_minutes,
+                "price": float(s.price),
+            }
+            for s in SalonService.objects.filter(is_active=True)
+        ]
+        return Response(services, status=status.HTTP_200_OK)
+
+
 class ConfigProxyView(APIView):
     """
-    GET /config or /api/salon360/config
+    GET /api/salon360/config/
     Fetches store timezone, rounding, and tax configuration from Salon360.
-    Caches the configuration in PostgreSQL.
+    Caches configuration in local database.
     """
     def get(self, request):
         status_code, data = salon360.get_config()
@@ -115,10 +150,11 @@ class ConfigProxyView(APIView):
                 pass
         return Response(data, status=status_code)
 
+
 class StaffProxyView(APIView):
     """
-    GET /staff or /api/salon360/staff
-    Fetches eligible staff from Salon360 and syncs with PostgreSQL.
+    GET /api/salon360/staff/
+    Fetches eligible staff from Salon360 and syncs with database.
     """
     def get(self, request):
         status_code, data = salon360.get_staff()
@@ -138,64 +174,181 @@ class StaffProxyView(APIView):
                         pass
         return Response(data, status=status_code)
 
+
 class AvailabilityProxyView(APIView):
     """
-    POST /availability or /api/salon360/availability
-    Checks slot feasibility across requested dates from Salon360.
+    POST /api/salon360/availability/
+    Checks slot feasibility from Salon360.
     """
     def post(self, request):
-        status_code, data = salon360.check_availability(request.data or {})
-        return Response(data, status=status_code)
+        serializer = AvailabilitySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        service = SalonService.objects.get(
+            website_service_id=data["service_id"],
+            is_active=True
+        )
+        staff_id = data.get("staff_id")
+        selected_date = data["date"].isoformat()
+
+        payload = {
+            "startDate": selected_date,
+            "endDate": selected_date,
+            "slotIntervalMinutes": 30,
+            "staffSelectionMode": (
+                "SINGLE" if staff_id is not None else "ANY"
+            ),
+            "staffId": staff_id,
+            "services": [{
+                "serviceId": service.salon360_service_id,
+                "durationMinutes": service.duration_minutes,
+            }],
+            "serviceStaffAssignments": None,
+        }
+        code, result = salon360.check_availability(payload)
+        return Response(result, status=code)
+
 
 class CreateBookingProxyView(APIView):
     """
-    POST /create or /api/salon360/create
-    Submits booking to Salon360 with Idempotency-Key and stores record in PostgreSQL.
+    POST /api/salon360/create/
+    Validates payload, creates pending booking reservation atomically with Idempotency-Key,
+    calls Salon360 create endpoint, updates record, and returns confirmation status.
     """
     def post(self, request):
-        idempotency_key = request.headers.get('Idempotency-Key') or str(uuid.uuid4())
-        status_code, data = salon360.create_booking(request.data or {}, idempotency_key=idempotency_key)
+        serializer = BookingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
 
-        # Record attempt / booking into PostgreSQL
-        payload = request.data or {}
-        cust = payload.get('customer', {})
-        app_id = None
-        cust_id = None
-        is_success = False
+        service = SalonService.objects.get(
+            website_service_id=data["service_id"],
+            is_active=True
+        )
+        date = data["date"]
+        start = data["start_time"]
+        staff_id = data.get("staff_id")
 
-        if status_code in (200, 201) and isinstance(data, dict):
-            res_payload = data.get('response') or data
-            if isinstance(res_payload, dict):
-                app_id = res_payload.get('appointmentId')
-                cust_id = res_payload.get('customerId')
-                is_success = bool(res_payload.get('success', True))
+        start_dt = datetime.combine(date, start)
+        end_dt = start_dt + timedelta(minutes=service.duration_minutes)
+        start_str = start_dt.strftime("%H:%M:%S")
+        end_str = end_dt.strftime("%H:%M:%S")
 
+        if end_dt.date() != date:
+            return Response({"error": "Service crosses midnight"}, status=status.HTTP_400_BAD_REQUEST)
+
+        mode = "SINGLE" if staff_id is not None else "ANY"
+        line_item = {
+            "id": service.salon360_service_id,
+            "price": float(service.price),
+            "taxId": service.tax_id,
+            "taxGroupId": service.tax_group_id,
+            "startTime": start_str,
+            "endTime": end_str,
+            "artistShares": (
+                [{"empId": staff_id}] if staff_id is not None else []
+            ),
+        }
+
+        payload = {
+            "date": date.isoformat(),
+            "startTime": start_str,
+            "customer": {
+                "name": data["name"],
+                "mobile": data["mobile"],
+                "email": data.get("email") or None,
+            },
+            "staffSelectionMode": mode,
+            "lineItems": [line_item],
+            "appointmentNotes": None,
+        }
+
+        # Request must include a stable attempt UUID.
+        key = request.headers.get("Idempotency-Key")
         try:
-            BookingRecord.objects.create(
-                appointment_id=app_id,
-                customer_id=cust_id,
-                customer_name=cust.get('name', 'Customer'),
-                customer_mobile=cust.get('mobile', ''),
-                customer_email=cust.get('email'),
-                booking_date=payload.get('date', datetime.today().strftime('%Y-%m-%d')),
-                start_time=payload.get('startTime', '10:00:00'),
-                staff_selection_mode=payload.get('staffSelectionMode', 'ANY'),
-                status='CONFIRMED' if is_success else ('FAILED' if status_code >= 400 else 'PENDING'),
-                line_items=payload.get('lineItems', []),
-                appointment_notes=payload.get('appointmentNotes'),
-                idempotency_key=idempotency_key,
-                raw_response=data if isinstance(data, dict) else {},
+            uuid.UUID(key or "")
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "Valid Idempotency-Key UUID header required"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        except Exception:
-            pass
 
-        return Response(data, status=status_code)
+        # Check existing booking for reconciliation or duplicate attempt
+        existing = BookingRecord.objects.filter(idempotency_key=key).first()
+        if existing:
+            if existing.status == "CONFIRMED":
+                return Response({
+                    "confirmed": True,
+                    "status": "CONFIRMED",
+                    "appointmentId": existing.appointment_id,
+                    "message": "Appointment already confirmed",
+                }, status=status.HTTP_200_OK)
+            return Response({
+                "error": "Booking attempt already exists",
+                "status": existing.status,
+                "appointmentId": existing.appointment_id,
+            }, status=status.HTTP_409_CONFLICT)
+
+        # Atomically reserve the idempotency key with a PENDING record
+        try:
+            with transaction.atomic():
+                booking_record = BookingRecord.objects.create(
+                    customer_name=data["name"],
+                    customer_mobile=data["mobile"],
+                    customer_email=data.get("email") or None,
+                    booking_date=date,
+                    start_time=start,
+                    staff_selection_mode=mode,
+                    status="PENDING",
+                    line_items=[line_item],
+                    idempotency_key=key,
+                )
+        except IntegrityError:
+            return Response({
+                "error": "Concurrent booking attempt detected",
+                "status": "PENDING",
+            }, status=status.HTTP_409_CONFLICT)
+
+        # Call upstream Salon360 API
+        code, result = salon360.create_booking(payload, idempotency_key=key)
+        body = result.get("response") or result
+        confirmed = (
+            code in (200, 201)
+            and isinstance(body, dict)
+            and body.get("success") is True
+            and body.get("appointmentId") is not None
+        )
+
+        state = (
+            "CONFIRMED" if confirmed
+            else "FAILED" if code in (400, 401, 409, 422)
+            else "PENDING"
+        )
+
+        booking_record.appointment_id = body.get("appointmentId") if confirmed else None
+        booking_record.customer_id = body.get("customerId") if confirmed else None
+        booking_record.status = state
+        booking_record.raw_response = result if isinstance(result, dict) else {}
+        booking_record.save()
+
+        return Response({
+            "confirmed": confirmed,
+            "status": state,
+            "appointmentId": booking_record.appointment_id,
+            "message": (
+                "Appointment confirmed" if confirmed
+                else (result.get("dynMsg") or result.get("responseMsg") or "Booking not confirmed")
+            ),
+        }, status=status.HTTP_201_CREATED if confirmed else (status.HTTP_409_CONFLICT if code == 409 else status.HTTP_400_BAD_REQUEST if code in (400, 422) else status.HTTP_502_BAD_GATEWAY))
+
 
 class BookingListView(APIView):
     """
     GET /api/bookings/
-    Lists bookings recorded in the PostgreSQL database.
+    Lists bookings recorded in the local database. Requires admin access.
     """
+    permission_classes = [IsAdminUser]
+
     def get(self, request):
         bookings = BookingRecord.objects.all()[:50]
         data = [
@@ -215,6 +368,7 @@ class BookingListView(APIView):
         ]
         return Response({"count": len(data), "results": data})
 
+
 class Salon360RedirectView(APIView):
     """
     Direct redirect view for online booking.
@@ -223,4 +377,3 @@ class Salon360RedirectView(APIView):
     def get(self, request):
         target_url = settings.SALON360_HOSTED_BOOKING_URL
         return redirect(target_url)
-

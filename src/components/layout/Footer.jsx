@@ -188,15 +188,6 @@ export default function Footer({ setCurrentView, openBooking, openRateCard }) {
                   All Salon Locations
                 </button>
               </li>
-              <li>
-                <button 
-                  onClick={() => handleNav(VIEWS.KKNAGAR_INVITE)} 
-                  className="hover:text-white transition-colors text-[#E6B25C] font-semibold flex items-center gap-1.5"
-                >
-                  <Sparkles className="w-3 h-3 text-[#E6B25C]" />
-                  <span>KK Nagar Grand Opening (05 Nov)</span>
-                </button>
-              </li>
             </ul>
           </div>
 

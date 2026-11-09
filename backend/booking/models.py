@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class SalonConfig(models.Model):
     store_id = models.IntegerField(default=868, unique=True)
     org_id = models.IntegerField(default=555)
@@ -13,6 +14,7 @@ class SalonConfig(models.Model):
     def __str__(self):
         return f"Store {self.store_id} / Org {self.org_id} Config"
 
+
 class Staff(models.Model):
     staff_id = models.IntegerField(unique=True, db_index=True)
     name = models.CharField(max_length=255)
@@ -25,6 +27,21 @@ class Staff(models.Model):
 
     def __str__(self):
         return f"{self.name} (ID: {self.staff_id})"
+
+
+class SalonService(models.Model):
+    website_service_id = models.CharField(max_length=100, unique=True)
+    salon360_service_id = models.PositiveIntegerField(unique=True)
+    name = models.CharField(max_length=255)
+    duration_minutes = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    tax_id = models.IntegerField(null=True, blank=True)
+    tax_group_id = models.IntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.website_service_id} -> {self.salon360_service_id})"
+
 
 class BookingRecord(models.Model):
     STATUS_CHOICES = [
@@ -42,10 +59,10 @@ class BookingRecord(models.Model):
     booking_date = models.DateField(db_index=True)
     start_time = models.TimeField()
     staff_selection_mode = models.CharField(max_length=50, default='ANY')
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='CONFIRMED')
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='PENDING')
     line_items = models.JSONField(default=list)
     appointment_notes = models.TextField(null=True, blank=True)
-    idempotency_key = models.CharField(max_length=128, db_index=True)
+    idempotency_key = models.CharField(max_length=128, unique=True, db_index=True)
     raw_response = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -53,5 +70,4 @@ class BookingRecord(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"Booking #{self.appointment_id or 'NEW'} - {self.customer_name} ({self.booking_date} {self.start_time})"
-
+        return f"Booking #{self.appointment_id or 'PENDING'} - {self.customer_name} ({self.booking_date} {self.start_time})"

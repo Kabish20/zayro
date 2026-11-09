@@ -14,5 +14,4 @@ export { default as LegalView } from './LegalView';
 export { default as LocationsView } from './LocationsView';
 export { default as OffersView } from './OffersView';
 export { default as ServicesView } from './ServicesView';
-export { default as KkNagarInviteView } from './KkNagarInviteView';
 

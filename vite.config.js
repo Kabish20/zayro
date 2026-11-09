@@ -28,7 +28,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
-          kknagarinvite: path.resolve(__dirname, 'kknagarinvite/index.html'),
         },
       },
     },

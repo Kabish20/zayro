@@ -8,6 +8,7 @@ from .views import (
     CreateBookingProxyView,
     BookingListView,
     Salon360RedirectView,
+    ServiceListView,
 )
 
 urlpatterns = [
@@ -35,16 +36,17 @@ urlpatterns = [
     path('api/salon360/config/', ConfigProxyView.as_view(), name='api-config-slash'),
     path('api/salon360/staff', StaffProxyView.as_view(), name='api-staff'),
     path('api/salon360/staff/', StaffProxyView.as_view(), name='api-staff-slash'),
+    path('api/salon360/services', ServiceListView.as_view(), name='api-services-no-slash'),
+    path('api/salon360/services/', ServiceListView.as_view(), name='api-services'),
     path('api/salon360/availability', AvailabilityProxyView.as_view(), name='api-avail'),
     path('api/salon360/availability/', AvailabilityProxyView.as_view(), name='api-avail-slash'),
     path('api/salon360/create', CreateBookingProxyView.as_view(), name='api-create'),
     path('api/salon360/create/', CreateBookingProxyView.as_view(), name='api-create-slash'),
 
-    # Stored Bookings Database
+    # Stored Bookings Database (Admin protected)
     path('api/bookings/', BookingListView.as_view(), name='api-bookings-list'),
 
     # Direct Online Booking Redirect
     path('booking/redirect/', Salon360RedirectView.as_view(), name='booking-redirect'),
     path('online-booking/', Salon360RedirectView.as_view(), name='online-booking-redirect'),
 ]
-
