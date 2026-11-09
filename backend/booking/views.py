@@ -119,7 +119,7 @@ class ServiceListView(APIView):
                 "duration_minutes": s.duration_minutes,
                 "price": float(s.price),
             }
-            for s in SalonService.objects.filter(is_active=True)
+            for s in SalonService.objects.filter(is_active=True).order_by('salon360_service_id')
         ]
         return Response(services, status=status.HTTP_200_OK)
 

@@ -3,7 +3,17 @@ import { salon360Api, generateUUID } from "@/services/salon360Api";
 import { Calendar, Clock, User, Phone, Mail, Sparkles, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export const DEFAULT_SERVICES = [
-  // ─── Combo Offers (10 Value Packages) ───────────────────────────
+  // ─── Official Rate Card (Page 1) ───────────────────────────────
+  { website_service_id: "rate-haircut", name: "Haircut", duration_minutes: 30, price: 99.0 },
+  { website_service_id: "rate-beard-trim", name: "Beard Trim", duration_minutes: 20, price: 69.0 },
+  { website_service_id: "rate-shave", name: "Shave", duration_minutes: 20, price: 49.0 },
+  { website_service_id: "rate-kids-cut", name: "Kids Cut", duration_minutes: 25, price: 69.0 },
+  { website_service_id: "rate-head-massage", name: "Head Massage", duration_minutes: 15, price: 199.0 },
+  { website_service_id: "rate-de-tan", name: "De-Tan", duration_minutes: 25, price: 199.0 },
+  { website_service_id: "rate-face-cleanup", name: "Face Cleanup", duration_minutes: 35, price: 299.0 },
+  { website_service_id: "rate-hair-colour", name: "Hair Colour", duration_minutes: 45, price: 349.0 },
+
+  // ─── 10 Official Combo Offers (Page 2) ─────────────────────────
   { website_service_id: "combo-1", name: "Combo 1: Haircut + Beard Trim + Oil Massage", duration_minutes: 45, price: 299.0 },
   { website_service_id: "combo-2", name: "Combo 2: Haircut + Beard Trim + De-Tan + Oil Massage", duration_minutes: 60, price: 399.0 },
   { website_service_id: "combo-3", name: "Combo 3: Haircut + Beard Trim + Any Cleanup", duration_minutes: 60, price: 499.0 },
@@ -14,29 +24,6 @@ export const DEFAULT_SERVICES = [
   { website_service_id: "combo-8", name: "Combo 8: Haircut + Beard + Glo Vite Facial + 15-Min Oil Massage", duration_minutes: 100, price: 999.0 },
   { website_service_id: "combo-9", name: "Combo 9: Haircut + Beard + Face-Neck De-Tan + Detox Hair Spa", duration_minutes: 110, price: 1199.0 },
   { website_service_id: "combo-10", name: "Combo 10: Haircut + Beard + Hair Spa (Dry/Repair) + Oxy Radiance Facial", duration_minutes: 120, price: 1499.0 },
-
-  // ─── Massages & Scalp Therapies ────────────────────────────────
-  { website_service_id: "rate-head-massage", name: "Relaxing Head Massage & Hair Wash (15 mins)", duration_minutes: 20, price: 199.0 },
-  { website_service_id: "botanical-scalp-spa", name: "Ayurvedic Botanical Scalp Spa & Head Massage", duration_minutes: 60, price: 500.0 },
-  { website_service_id: "intensive-anti-hairfall", name: "Intensive Follicular Anti-Hairfall Therapy", duration_minutes: 50, price: 600.0 },
-
-  // ─── Haircuts & Beard Grooming ─────────────────────────────────
-  { website_service_id: "rate-haircut", name: "Precision Haircut", duration_minutes: 30, price: 99.0 },
-  { website_service_id: "rate-beard-trim", name: "Beard Trim (Zero)", duration_minutes: 20, price: 69.0 },
-  { website_service_id: "rate-shave", name: "Traditional Barber Shave", duration_minutes: 20, price: 49.0 },
-  { website_service_id: "rate-kids-cut", name: "Kids Haircut", duration_minutes: 25, price: 69.0 },
-  { website_service_id: "asian-couture-cut", name: "ZAYRO Signature Couture Cut", duration_minutes: 45, price: 400.0 },
-  { website_service_id: "master-skin-fade", name: "Master Low/Mid Skin Fade & Crop", duration_minutes: 50, price: 500.0 },
-  { website_service_id: "royal-beard-sculpt", name: "Royal Hot Towel Beard Sculpt & Shave", duration_minutes: 40, price: 300.0 },
-  { website_service_id: "rate-hair-colour", name: "Global Hair Colour", duration_minutes: 45, price: 349.0 },
-
-  // ─── Facials, Cleanup & De-Tan ─────────────────────────────────
-  { website_service_id: "rate-face-cleanup", name: "Deep Pore Face Cleanup", duration_minutes: 35, price: 299.0 },
-  { website_service_id: "rate-de-tan", name: "Face & Neck De-Tan", duration_minutes: 25, price: 199.0 },
-  { website_service_id: "luxury-hydra-facial", name: "Gentleman's Charcoal Detox & Hydra-Facial", duration_minutes: 60, price: 700.0 },
-
-  // ─── Royal Groom Lounge ────────────────────────────────────────
-  { website_service_id: "royal-groom-experience", name: "The Royal Indian Groom's Wedding Lounge Ritual", duration_minutes: 180, price: 1200.0 },
 ];
 
 export const DEFAULT_STAFF = [
