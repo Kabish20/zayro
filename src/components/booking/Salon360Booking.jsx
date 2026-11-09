@@ -47,6 +47,21 @@ export const DEFAULT_STAFF = [
   { staffId: 11879, name: "Suhail" },
 ];
 
+export const APPOINTMENT_TIMES = [
+  { label: "10:00 AM", value: "10:00:00" },
+  { label: "11:00 AM", value: "11:00:00" },
+  { label: "12:00 PM", value: "12:00:00" },
+  { label: "01:00 PM", value: "13:00:00" },
+  { label: "02:00 PM", value: "14:00:00" },
+  { label: "03:00 PM", value: "15:00:00" },
+  { label: "04:00 PM", value: "16:00:00" },
+  { label: "05:00 PM", value: "17:00:00" },
+  { label: "06:00 PM", value: "18:00:00" },
+  { label: "07:00 PM", value: "19:00:00" },
+  { label: "08:00 PM", value: "20:00:00" },
+  { label: "09:00 PM", value: "21:00:00" },
+];
+
 export default function Salon360Booking({ preselectedService }) {
   const [services, setServices] = useState(DEFAULT_SERVICES);
   const [staff, setStaff] = useState(DEFAULT_STAFF);
@@ -418,30 +433,35 @@ export default function Salon360Booking({ preselectedService }) {
 
           {/* Step 4: Time Slot */}
           <div>
-            <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider mb-1.5">
-              4. Appointment Time (HH:MM:SS) *
-            </label>
-            <input
-              required
-              placeholder="e.g. 10:30:00 or 15:00:00"
-              pattern="^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$"
-              title="Time in HH:MM or HH:MM:SS 24-hour format (e.g. 10:30:00)"
-              className="w-full rounded-xl bg-black/40 border border-white/20 p-3.5 text-sm text-white font-mono placeholder:text-stone-500 focus:outline-none focus:border-[#E6B25C]"
-              value={form.start_time}
-              onChange={(e) => update("start_time", e.target.value)}
-            />
-            {/* Quick time chip suggestions */}
-            <div className="flex flex-wrap gap-1.5 pt-2">
-              {['10:00:00', '11:30:00', '14:00:00', '16:00:00', '18:00:00', '19:30:00'].map((slot) => (
-                <button
-                  key={slot}
-                  type="button"
-                  onClick={() => update("start_time", slot)}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 hover:bg-[#E6B25C]/20 text-stone-300 hover:text-[#E6B25C] border border-white/10"
-                >
-                  {slot.slice(0, 5)}
-                </button>
-              ))}
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-semibold text-stone-300 uppercase tracking-wider">
+                4. Appointment Time *
+              </label>
+              {form.start_time && (
+                <span className="text-xs font-mono font-bold text-[#E6B25C]">
+                  Selected: {APPOINTMENT_TIMES.find((t) => t.value === form.start_time)?.label || form.start_time}
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+              {APPOINTMENT_TIMES.map((slot) => {
+                const isSelected = form.start_time === slot.value;
+                return (
+                  <button
+                    key={slot.value}
+                    type="button"
+                    onClick={() => update("start_time", slot.value)}
+                    className={`py-3 px-2 rounded-xl text-xs font-bold font-mono tracking-wider transition-all border text-center ${
+                      isSelected
+                        ? "bg-[#E6B25C] text-black border-[#E6B25C] shadow-lg shadow-[#E6B25C]/25 font-black scale-[1.02]"
+                        : "bg-black/40 text-stone-300 hover:text-white border-white/15 hover:border-[#E6B25C]/50 hover:bg-white/5"
+                    }`}
+                  >
+                    {slot.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
