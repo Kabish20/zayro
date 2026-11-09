@@ -14,11 +14,11 @@ export const DEFAULT_SERVICES = [
 ];
 
 export const DEFAULT_STAFF = [
-  { staffId: 11881, name: "Asif", designation: "Hair & Grooming Specialist" },
-  { staffId: 11877, name: "Rashid Ali", designation: "Senior Stylist" },
-  { staffId: 11878, name: "Sahid", designation: "Stylist" },
-  { staffId: 11880, name: "Sharuk", designation: "Beard Specialist" },
-  { staffId: 11879, name: "Suhail", designation: "Stylist" },
+  { staffId: 11881, name: "Asif" },
+  { staffId: 11877, name: "Rashid Ali" },
+  { staffId: 11878, name: "Sahid" },
+  { staffId: 11880, name: "Sharuk" },
+  { staffId: 11879, name: "Suhail" },
 ];
 
 export default function Salon360Booking({ preselectedService }) {
@@ -75,7 +75,10 @@ export default function Salon360Booking({ preselectedService }) {
     salon360Api.getStaff()
       .then((data) => {
         if (!mounted) return;
-        const staffList = Array.isArray(data?.response) ? data.response : [];
+        const rawList = Array.isArray(data?.response) ? data.response : [];
+        const staffList = rawList
+          .filter((p) => p && p.name && !p.name.toLowerCase().includes("manager"))
+          .map((p) => ({ staffId: p.staffId, name: p.name }));
         if (staffList.length > 0) {
           setStaff(staffList);
         }
@@ -288,7 +291,7 @@ export default function Salon360Booking({ preselectedService }) {
                   value={person.staffId}
                   className="bg-[#182f20] text-white"
                 >
-                  {person.name} {person.designation ? `(${person.designation})` : ""}
+                  {person.name}
                 </option>
               ))}
             </select>
