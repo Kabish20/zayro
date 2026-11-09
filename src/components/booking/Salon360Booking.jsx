@@ -3,14 +3,40 @@ import { salon360Api, generateUUID } from "@/services/salon360Api";
 import { Calendar, Clock, User, Phone, Mail, Sparkles, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export const DEFAULT_SERVICES = [
+  // ─── Combo Offers (10 Value Packages) ───────────────────────────
+  { website_service_id: "combo-1", name: "Combo 1: Haircut + Beard Trim + Oil Massage", duration_minutes: 45, price: 299.0 },
+  { website_service_id: "combo-2", name: "Combo 2: Haircut + Beard Trim + De-Tan + Oil Massage", duration_minutes: 60, price: 399.0 },
+  { website_service_id: "combo-3", name: "Combo 3: Haircut + Beard Trim + Any Cleanup", duration_minutes: 60, price: 499.0 },
+  { website_service_id: "combo-4", name: "Combo 4: Haircut + Beard + Global Color + Face-Neck De-Tan", duration_minutes: 75, price: 599.0 },
+  { website_service_id: "combo-5", name: "Combo 5: Haircut + Beard Trim + Gold/Diamond Facial", duration_minutes: 75, price: 699.0 },
+  { website_service_id: "combo-6", name: "Combo 6: Haircut + Beard + Dandruff/Hairfall Therapy + Full Arms De-Tan", duration_minutes: 90, price: 799.0 },
+  { website_service_id: "combo-7", name: "Combo 7: Haircut + Beard + Nourishing Protein Treatment + Face-Neck De-Tan", duration_minutes: 90, price: 899.0 },
+  { website_service_id: "combo-8", name: "Combo 8: Haircut + Beard + Glo Vite Facial + 15-Min Oil Massage", duration_minutes: 100, price: 999.0 },
+  { website_service_id: "combo-9", name: "Combo 9: Haircut + Beard + Face-Neck De-Tan + Detox Hair Spa", duration_minutes: 110, price: 1199.0 },
+  { website_service_id: "combo-10", name: "Combo 10: Haircut + Beard + Hair Spa (Dry/Repair) + Oxy Radiance Facial", duration_minutes: 120, price: 1499.0 },
+
+  // ─── Massages & Scalp Therapies ────────────────────────────────
+  { website_service_id: "rate-head-massage", name: "Relaxing Head Massage & Hair Wash (15 mins)", duration_minutes: 20, price: 199.0 },
+  { website_service_id: "botanical-scalp-spa", name: "Ayurvedic Botanical Scalp Spa & Head Massage", duration_minutes: 60, price: 500.0 },
+  { website_service_id: "intensive-anti-hairfall", name: "Intensive Follicular Anti-Hairfall Therapy", duration_minutes: 50, price: 600.0 },
+
+  // ─── Haircuts & Beard Grooming ─────────────────────────────────
   { website_service_id: "rate-haircut", name: "Precision Haircut", duration_minutes: 30, price: 99.0 },
   { website_service_id: "rate-beard-trim", name: "Beard Trim (Zero)", duration_minutes: 20, price: 69.0 },
-  { website_service_id: "rate-shave", name: "Traditional Shave", duration_minutes: 20, price: 49.0 },
-  { website_service_id: "rate-kids-cut", name: "Kids Haircut", duration_minutes: 25, price: 89.0 },
-  { website_service_id: "rate-head-massage", name: "Relaxing Head Massage", duration_minutes: 20, price: 99.0 },
-  { website_service_id: "rate-face-cleanup", name: "Express Face Cleanup", duration_minutes: 30, price: 199.0 },
-  { website_service_id: "rate-de-tan", name: "Skin Brightening De-Tan", duration_minutes: 30, price: 249.0 },
-  { website_service_id: "rate-hair-colour", name: "Natural Black Hair Colour", duration_minutes: 35, price: 149.0 },
+  { website_service_id: "rate-shave", name: "Traditional Barber Shave", duration_minutes: 20, price: 49.0 },
+  { website_service_id: "rate-kids-cut", name: "Kids Haircut", duration_minutes: 25, price: 69.0 },
+  { website_service_id: "asian-couture-cut", name: "ZAYRO Signature Couture Cut", duration_minutes: 45, price: 400.0 },
+  { website_service_id: "master-skin-fade", name: "Master Low/Mid Skin Fade & Crop", duration_minutes: 50, price: 500.0 },
+  { website_service_id: "royal-beard-sculpt", name: "Royal Hot Towel Beard Sculpt & Shave", duration_minutes: 40, price: 300.0 },
+  { website_service_id: "rate-hair-colour", name: "Global Hair Colour", duration_minutes: 45, price: 349.0 },
+
+  // ─── Facials, Cleanup & De-Tan ─────────────────────────────────
+  { website_service_id: "rate-face-cleanup", name: "Deep Pore Face Cleanup", duration_minutes: 35, price: 299.0 },
+  { website_service_id: "rate-de-tan", name: "Face & Neck De-Tan", duration_minutes: 25, price: 199.0 },
+  { website_service_id: "luxury-hydra-facial", name: "Gentleman's Charcoal Detox & Hydra-Facial", duration_minutes: 60, price: 700.0 },
+
+  // ─── Royal Groom Lounge ────────────────────────────────────────
+  { website_service_id: "royal-groom-experience", name: "The Royal Indian Groom's Wedding Lounge Ritual", duration_minutes: 180, price: 1200.0 },
 ];
 
 export const DEFAULT_STAFF = [
@@ -92,14 +118,44 @@ export default function Salon360Booking({ preselectedService }) {
     };
   }, []);
 
-  // Preselect service if passed from parent
+  // Preselect service if passed from parent (Supports combo offers, massages, and standard services)
   useEffect(() => {
     if (preselectedService && services.length > 0) {
-      const preId = typeof preselectedService === 'string' ? preselectedService : preselectedService.id;
-      const preName = typeof preselectedService === 'object' ? preselectedService.name : null;
-      const matched = services.find(
-        (s) => s.website_service_id === preId || (preName && s.name.toLowerCase().includes(preName.toLowerCase()))
-      );
+      const raw = typeof preselectedService === 'string' ? preselectedService : (preselectedService.id || preselectedService.name || '');
+      const rawLower = raw.toLowerCase();
+
+      // 1. Check combo pattern (e.g. "Combo 1", "combo-1", "Combo 2")
+      const comboMatch = rawLower.match(/combo\s*[-_:]?\s*(\d+)/i);
+      if (comboMatch) {
+        const comboNum = comboMatch[1];
+        const found = services.find((s) => s.website_service_id === `combo-${comboNum}`);
+        if (found) {
+          setForm((old) => ({ ...old, service_id: found.website_service_id }));
+          return;
+        }
+      }
+
+      // 2. Exact website_service_id match
+      let matched = services.find((s) => s.website_service_id === raw || s.website_service_id === preselectedService?.id);
+
+      // 3. Name or substring match
+      if (!matched) {
+        matched = services.find((s) =>
+          rawLower.includes(s.name.toLowerCase()) || s.name.toLowerCase().includes(rawLower)
+        );
+      }
+
+      // 4. Massage / Scalp keyword matching
+      if (!matched) {
+        if (rawLower.includes("ayurvedic") || rawLower.includes("scalp spa")) {
+          matched = services.find((s) => s.website_service_id === "botanical-scalp-spa");
+        } else if (rawLower.includes("head massage") || rawLower.includes("oil massage")) {
+          matched = services.find((s) => s.website_service_id === "rate-head-massage");
+        } else if (rawLower.includes("hairfall")) {
+          matched = services.find((s) => s.website_service_id === "intensive-anti-hairfall");
+        }
+      }
+
       if (matched) {
         setForm((old) => ({ ...old, service_id: matched.website_service_id }));
       }
@@ -189,6 +245,41 @@ export default function Salon360Booking({ preselectedService }) {
     }
   }
 
+  // Categorize services into structured groups for clean dropdown navigation
+  const comboServices = services.filter((s) => s.website_service_id.startsWith("combo-"));
+  const massageServices = services.filter((s) =>
+    s.website_service_id.includes("massage") ||
+    s.website_service_id.includes("spa") ||
+    s.website_service_id.includes("hairfall")
+  );
+  const groomingServices = services.filter((s) =>
+    (s.website_service_id.includes("haircut") ||
+     s.website_service_id.includes("beard") ||
+     s.website_service_id.includes("shave") ||
+     s.website_service_id.includes("fade") ||
+     s.website_service_id.includes("couture") ||
+     s.website_service_id.includes("colour")) &&
+    !s.website_service_id.startsWith("combo-")
+  );
+  const skinServices = services.filter((s) =>
+    (s.website_service_id.includes("cleanup") ||
+     s.website_service_id.includes("facial") ||
+     s.website_service_id.includes("tan")) &&
+    !s.website_service_id.startsWith("combo-") &&
+    !s.website_service_id.includes("groom")
+  );
+  const royalGroomServices = services.filter((s) =>
+    s.website_service_id.includes("groom-experience") ||
+    s.website_service_id.includes("royal-groom")
+  );
+  const otherServices = services.filter((s) =>
+    !comboServices.includes(s) &&
+    !massageServices.includes(s) &&
+    !groomingServices.includes(s) &&
+    !skinServices.includes(s) &&
+    !royalGroomServices.includes(s)
+  );
+
   return (
     <div className="w-full rounded-3xl bg-[#182f20] border-2 border-[#E6B25C]/40 p-6 sm:p-8 text-white shadow-2xl space-y-6">
       {/* Header */}
@@ -262,15 +353,66 @@ export default function Salon360Booking({ preselectedService }) {
               onChange={(e) => update("service_id", e.target.value)}
             >
               <option value="" className="bg-[#182f20] text-stone-300">Choose a Salon Service</option>
-              {services.map((service) => (
-                <option
-                  key={service.website_service_id}
-                  value={service.website_service_id}
-                  className="bg-[#182f20] text-white"
-                >
-                  {service.name} • {service.duration_minutes} mins (₹{service.price})
-                </option>
-              ))}
+
+              {comboServices.length > 0 && (
+                <optgroup label="✨ Special Combo Offers (Combos 1 - 10)" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
+                  {comboServices.map((service) => (
+                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
+                      {service.name} • {service.duration_minutes} mins (₹{service.price})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
+
+              {massageServices.length > 0 && (
+                <optgroup label="💆 Therapeutic Massages & Scalp Therapy" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
+                  {massageServices.map((service) => (
+                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
+                      {service.name} • {service.duration_minutes} mins (₹{service.price})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
+
+              {groomingServices.length > 0 && (
+                <optgroup label="✂️ Haircuts & Beard Grooming" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
+                  {groomingServices.map((service) => (
+                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
+                      {service.name} • {service.duration_minutes} mins (₹{service.price})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
+
+              {skinServices.length > 0 && (
+                <optgroup label="🧖 Facials, Cleanup & De-Tan" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
+                  {skinServices.map((service) => (
+                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
+                      {service.name} • {service.duration_minutes} mins (₹{service.price})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
+
+              {royalGroomServices.length > 0 && (
+                <optgroup label="👑 Royal Groom Experience" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
+                  {royalGroomServices.map((service) => (
+                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
+                      {service.name} • {service.duration_minutes} mins (₹{service.price})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
+
+              {otherServices.length > 0 && (
+                <optgroup label="All Other Salon Services" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
+                  {otherServices.map((service) => (
+                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
+                      {service.name} • {service.duration_minutes} mins (₹{service.price})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
             </select>
           </div>
 
