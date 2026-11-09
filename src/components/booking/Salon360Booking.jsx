@@ -288,7 +288,17 @@ export default function Salon360Booking({ preselectedService }) {
             </p>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href={`https://wa.me/917904242311?text=${encodeURIComponent(
+                `Hi ZAYRO Grooming Lounge, I just booked an appointment on zayrosalon.com!\n\nBooking ID: #${appointmentId}\nDate: ${form.date}\nTime: ${form.start_time}\nCustomer: ${form.name} (${form.mobile})`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1ebd5b] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md"
+            >
+              <span>Confirm on WhatsApp</span>
+            </a>
             <button
               onClick={() => {
                 setAppointmentId(null);
@@ -303,7 +313,7 @@ export default function Salon360Booking({ preselectedService }) {
                 });
                 setMessage("");
               }}
-              className="text-xs text-[#E6B25C] hover:underline uppercase font-bold tracking-wider"
+              className="text-xs text-[#E6B25C] hover:underline uppercase font-bold tracking-wider px-4 py-2.5"
             >
               Book Another Appointment
             </button>
