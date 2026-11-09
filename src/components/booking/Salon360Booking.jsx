@@ -245,41 +245,6 @@ export default function Salon360Booking({ preselectedService }) {
     }
   }
 
-  // Categorize services into structured groups for clean dropdown navigation
-  const comboServices = services.filter((s) => s.website_service_id.startsWith("combo-"));
-  const massageServices = services.filter((s) =>
-    s.website_service_id.includes("massage") ||
-    s.website_service_id.includes("spa") ||
-    s.website_service_id.includes("hairfall")
-  );
-  const groomingServices = services.filter((s) =>
-    (s.website_service_id.includes("haircut") ||
-     s.website_service_id.includes("beard") ||
-     s.website_service_id.includes("shave") ||
-     s.website_service_id.includes("fade") ||
-     s.website_service_id.includes("couture") ||
-     s.website_service_id.includes("colour")) &&
-    !s.website_service_id.startsWith("combo-")
-  );
-  const skinServices = services.filter((s) =>
-    (s.website_service_id.includes("cleanup") ||
-     s.website_service_id.includes("facial") ||
-     s.website_service_id.includes("tan")) &&
-    !s.website_service_id.startsWith("combo-") &&
-    !s.website_service_id.includes("groom")
-  );
-  const royalGroomServices = services.filter((s) =>
-    s.website_service_id.includes("groom-experience") ||
-    s.website_service_id.includes("royal-groom")
-  );
-  const otherServices = services.filter((s) =>
-    !comboServices.includes(s) &&
-    !massageServices.includes(s) &&
-    !groomingServices.includes(s) &&
-    !skinServices.includes(s) &&
-    !royalGroomServices.includes(s)
-  );
-
   return (
     <div className="w-full rounded-3xl bg-[#182f20] border-2 border-[#E6B25C]/40 p-6 sm:p-8 text-white shadow-2xl space-y-6">
       {/* Header */}
@@ -353,66 +318,15 @@ export default function Salon360Booking({ preselectedService }) {
               onChange={(e) => update("service_id", e.target.value)}
             >
               <option value="" className="bg-[#182f20] text-stone-300">Choose a Salon Service</option>
-
-              {comboServices.length > 0 && (
-                <optgroup label="✨ Special Combo Offers (Combos 1 - 10)" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
-                  {comboServices.map((service) => (
-                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
-                      {service.name} • {service.duration_minutes} mins (₹{service.price})
-                    </option>
-                  ))}
-                </optgroup>
-              )}
-
-              {massageServices.length > 0 && (
-                <optgroup label="💆 Therapeutic Massages & Scalp Therapy" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
-                  {massageServices.map((service) => (
-                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
-                      {service.name} • {service.duration_minutes} mins (₹{service.price})
-                    </option>
-                  ))}
-                </optgroup>
-              )}
-
-              {groomingServices.length > 0 && (
-                <optgroup label="✂️ Haircuts & Beard Grooming" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
-                  {groomingServices.map((service) => (
-                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
-                      {service.name} • {service.duration_minutes} mins (₹{service.price})
-                    </option>
-                  ))}
-                </optgroup>
-              )}
-
-              {skinServices.length > 0 && (
-                <optgroup label="🧖 Facials, Cleanup & De-Tan" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
-                  {skinServices.map((service) => (
-                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
-                      {service.name} • {service.duration_minutes} mins (₹{service.price})
-                    </option>
-                  ))}
-                </optgroup>
-              )}
-
-              {royalGroomServices.length > 0 && (
-                <optgroup label="👑 Royal Groom Experience" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
-                  {royalGroomServices.map((service) => (
-                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
-                      {service.name} • {service.duration_minutes} mins (₹{service.price})
-                    </option>
-                  ))}
-                </optgroup>
-              )}
-
-              {otherServices.length > 0 && (
-                <optgroup label="All Other Salon Services" className="bg-[#0f2416] text-[#E6B25C] font-semibold">
-                  {otherServices.map((service) => (
-                    <option key={service.website_service_id} value={service.website_service_id} className="bg-[#182f20] text-white">
-                      {service.name} • {service.duration_minutes} mins (₹{service.price})
-                    </option>
-                  ))}
-                </optgroup>
-              )}
+              {services.map((service) => (
+                <option
+                  key={service.website_service_id}
+                  value={service.website_service_id}
+                  className="bg-[#182f20] text-white"
+                >
+                  {service.name} • {service.duration_minutes} mins (₹{service.price})
+                </option>
+              ))}
             </select>
           </div>
 
