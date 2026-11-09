@@ -40,6 +40,10 @@ export default defineConfig(({ mode }) => {
         'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), payment=()',
       },
       proxy: {
+        '/api': {
+          target: 'http://127.0.0.1:8000',
+          changeOrigin: true,
+        },
         /**
          * Salon360 API Proxy (development & preview)
          * ------------------------------------------------------------------

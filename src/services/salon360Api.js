@@ -3,7 +3,7 @@
  * All client requests route through the secure Django backend.
  */
 
-const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) || 'http://127.0.0.1:8000';
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) || '';
 
 async function request(path, options = {}) {
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;

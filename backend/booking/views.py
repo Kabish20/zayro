@@ -155,6 +155,7 @@ class StaffProxyView(APIView):
     """
     GET /api/salon360/staff/
     Fetches eligible staff from Salon360 and syncs with database.
+    Falls back to cached Staff table if upstream is temporarily unavailable.
     """
     def get(self, request):
         status_code, data = salon360.get_staff()
@@ -172,6 +173,25 @@ class StaffProxyView(APIView):
                         )
                     except Exception:
                         pass
+            return Response(data, status=status_code)
+
+        # Fallback to locally cached Staff records
+        db_staff = Staff.objects.all()
+        if db_staff.exists():
+            return Response({
+                "responseCode": 200,
+                "responseMsg": "SUCCESS",
+                "response": [
+                    {
+                        "staffId": s.staff_id,
+                        "name": s.name,
+                        "designation": s.designation,
+                        "profileImage": s.profile_image
+                    }
+                    for s in db_staff
+                ]
+            }, status=status.HTTP_200_OK)
+
         return Response(data, status=status_code)
 
 

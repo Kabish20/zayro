@@ -2,15 +2,41 @@ import React, { useEffect, useState } from "react";
 import { salon360Api, generateUUID } from "@/services/salon360Api";
 import { Calendar, Clock, User, Phone, Mail, Sparkles, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
+export const DEFAULT_SERVICES = [
+  { website_service_id: "rate-haircut", name: "Precision Haircut", duration_minutes: 30, price: 99.0 },
+  { website_service_id: "rate-beard-trim", name: "Beard Trim (Zero)", duration_minutes: 20, price: 69.0 },
+  { website_service_id: "rate-shave", name: "Traditional Shave", duration_minutes: 20, price: 49.0 },
+  { website_service_id: "rate-kids-cut", name: "Kids Haircut", duration_minutes: 25, price: 89.0 },
+  { website_service_id: "rate-head-massage", name: "Relaxing Head Massage", duration_minutes: 20, price: 99.0 },
+  { website_service_id: "rate-face-cleanup", name: "Express Face Cleanup", duration_minutes: 30, price: 199.0 },
+  { website_service_id: "rate-de-tan", name: "Skin Brightening De-Tan", duration_minutes: 30, price: 249.0 },
+  { website_service_id: "rate-hair-colour", name: "Natural Black Hair Colour", duration_minutes: 35, price: 149.0 },
+];
+
+export const DEFAULT_STAFF = [
+  { staffId: 11881, name: "Asif", designation: "Hair & Grooming Specialist" },
+  { staffId: 11877, name: "Rashid Ali", designation: "Senior Stylist" },
+  { staffId: 11878, name: "Sahid", designation: "Stylist" },
+  { staffId: 11880, name: "Sharuk", designation: "Beard Specialist" },
+  { staffId: 11879, name: "Suhail", designation: "Stylist" },
+];
+
 export default function Salon360Booking({ preselectedService }) {
-  const [services, setServices] = useState([]);
-  const [staff, setStaff] = useState([]);
+  const [services, setServices] = useState(DEFAULT_SERVICES);
+  const [staff, setStaff] = useState(DEFAULT_STAFF);
   const [windows, setWindows] = useState([]);
+
+  // Today in YYYY-MM-DD
+  const todayStr = new Date().toISOString().split("T")[0];
+  const maxDate = new Date();
+  maxDate.setDate(maxDate.getDate() + 365);
+  const maxDateStr = maxDate.toISOString().split("T")[0];
+
   const [form, setForm] = useState({
     service_id: "",
     staff_id: "",
-    date: "",
-    start_time: "",
+    date: todayStr,
+    start_time: "10:00:00",
     name: "",
     mobile: "",
     email: "",
@@ -38,41 +64,44 @@ export default function Salon360Booking({ preselectedService }) {
       .then((data) => {
         if (!mounted) return;
         const list = Array.isArray(data) ? data : (data?.response || []);
-        setServices(list);
-
-        // Preselect service if passed from parent
-        if (preselectedService && list.length > 0) {
-          const preId = typeof preselectedService === 'string' ? preselectedService : preselectedService.id;
-          const matched = list.find((s) => s.website_service_id === preId);
-          if (matched) {
-            setForm((old) => ({ ...old, service_id: matched.website_service_id }));
-          }
+        if (list.length > 0) {
+          setServices(list);
         }
       })
-      .catch(() => {
-        if (mounted) setMessage("Notice: Loading offline service catalogue.");
+      .catch((err) => {
+        console.warn("Using offline services catalog:", err);
       });
 
     salon360Api.getStaff()
       .then((data) => {
         if (!mounted) return;
         const staffList = Array.isArray(data?.response) ? data.response : [];
-        setStaff(staffList);
+        if (staffList.length > 0) {
+          setStaff(staffList);
+        }
       })
-      .catch(() => {
-        // Staff endpoint might be offline or empty
+      .catch((err) => {
+        console.warn("Using offline staff catalog:", err);
       });
 
     return () => {
       mounted = false;
     };
-  }, [preselectedService]);
+  }, []);
 
-  // Today in YYYY-MM-DD
-  const todayStr = new Date().toISOString().split("T")[0];
-  const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate() + 365);
-  const maxDateStr = maxDate.toISOString().split("T")[0];
+  // Preselect service if passed from parent
+  useEffect(() => {
+    if (preselectedService && services.length > 0) {
+      const preId = typeof preselectedService === 'string' ? preselectedService : preselectedService.id;
+      const preName = typeof preselectedService === 'object' ? preselectedService.name : null;
+      const matched = services.find(
+        (s) => s.website_service_id === preId || (preName && s.name.toLowerCase().includes(preName.toLowerCase()))
+      );
+      if (matched) {
+        setForm((old) => ({ ...old, service_id: matched.website_service_id }));
+      }
+    }
+  }, [preselectedService, services]);
 
   async function checkSlots() {
     setCheckingSlots(true);
@@ -381,10 +410,14 @@ export default function Salon360Booking({ preselectedService }) {
                   placeholder="10-digit Mobile (6-9) *"
                   pattern="^[6-9]\d{9}$"
                   title="10-digit Indian mobile number starting with 6, 7, 8, or 9"
+                  maxLength={10}
                   className="w-full rounded-xl bg-black/40 border border-white/20 p-3.5 text-sm text-white font-mono placeholder:text-stone-500 focus:outline-none focus:border-[#E6B25C]"
                   value={form.mobile}
-                  onChange={(e) => update("mobile", e.target.value)}
+                  onChange={(e) => update("mobile", e.target.value.replace(/\D/g, '').slice(0, 10))}
                 />
+                {form.mobile && form.mobile.length < 10 && (
+                  <p className="text-[11px] text-amber-300 mt-1">Please enter 10 digits ({form.mobile.length}/10)</p>
+                )}
               </div>
             </div>
 
