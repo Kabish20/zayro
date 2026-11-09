@@ -239,9 +239,12 @@ export default function Salon360Booking({ preselectedService }) {
       }
     } catch (error) {
       setIsError(true);
-      setMessage(
-        `${error.message}. If this was submitted already, do not submit a duplicate request with a new attempt ID.`
-      );
+      const errMsg = error.message || "Unable to complete booking";
+      if (errMsg.includes("Failed to fetch")) {
+        setMessage("Network connection error. Please refresh the page and try again.");
+      } else {
+        setMessage(errMsg);
+      }
     } finally {
       setLoading(false);
     }

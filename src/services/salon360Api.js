@@ -3,7 +3,10 @@
  * All client requests route through the secure Django backend.
  */
 
-const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) || '';
+// In browser environments on production, always use same-origin relative URLs (/api/...)
+// to prevent mixed-content blocks, localhost connection refusals, and CORS errors.
+const envApiUrl = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_API_URL : '';
+const API_BASE = (envApiUrl && !envApiUrl.includes('127.0.0.1') && !envApiUrl.includes('localhost')) ? envApiUrl : '';
 
 async function request(path, options = {}) {
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
