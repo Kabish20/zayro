@@ -21,7 +21,11 @@ async function request(path, options = {}) {
   const data = await response.json().catch(() => null);
   if (!response.ok) {
     throw new Error(
-      data?.dynMsg || data?.error || data?.message || data?.responseMsg || `Booking request failed (${response.status})`
+      data?.dynMsg || data?.error || data?.message || data?.responseMsg || (
+        response.status === 502
+          ? "Backend service connection error (502). Please ensure the backend server is running."
+          : `Booking request failed (${response.status})`
+      )
     );
   }
   return data;

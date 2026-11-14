@@ -73,13 +73,13 @@ export default function Salon360Booking({ preselectedService }) {
   const [checkingSlots, setCheckingSlots] = useState(false);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
-  const [appointmentId, setAppointmentId] = useState(null);
+  const [bookingResult, setBookingResult] = useState(null);
   const [attemptId, setAttemptId] = useState(null);
 
   const update = (field, value) => {
     setForm((old) => ({ ...old, [field]: value }));
     setAttemptId(null);
-    setAppointmentId(null);
+    setBookingResult(null);
     setMessage("");
     setIsError(false);
   };
@@ -184,10 +184,14 @@ export default function Salon360Booking({ preselectedService }) {
       if (firstDay?.status === "AVAILABLE") {
         const foundWindows = firstDay.feasibleWindows || [];
         setWindows(foundWindows);
-        setMessage("Available windows found. Select or specify your preferred time below.");
+        setMessage("Available windows found directly from Salon360. Select your preferred slot below.");
+        setIsError(false);
+      } else if (firstDay?.status === "CLOSED") {
+        setWindows([]);
+        setMessage("Salon360 Calendar Status: Store calendar is currently marked as CLOSED for this date (staff shifts/roster are not yet published in Salon360 dashboard). You can still select your preferred time below to submit a priority salon reservation.");
         setIsError(false);
       } else {
-        setMessage(data?.dynMsg || "No availability returned for this date. You may specify a desired time or select another date.");
+        setMessage(data?.dynMsg || "No live availability returned for this date. You may specify your desired time below.");
         setIsError(false);
       }
     } catch (error) {
@@ -229,14 +233,20 @@ export default function Salon360Booking({ preselectedService }) {
 
       const data = await salon360Api.createBooking(payload, key);
 
-      if (data.confirmed) {
-        setAppointmentId(data.appointmentId);
-        setMessage("Appointment confirmed with Salon360!");
-        setIsError(false);
+      setBookingResult({
+        confirmed: Boolean(data.confirmed),
+        isSalon360Synced: Boolean(data.isSalon360Synced),
+        appointmentId: data.appointmentId || null,
+        bookingReference: data.bookingReference || `ZAYRO-${Date.now().toString().slice(-4)}`,
+        message: data.message || "",
+      });
+
+      if (data.isSalon360Synced) {
+        setMessage("Appointment confirmed and synced directly to your Salon360 Dashboard!");
       } else {
-        setMessage(data.message || "Booking is pending confirmation. Your booking reference was preserved.");
-        setIsError(data.status === "FAILED");
+        setMessage(data.message || "Reservation request received and saved with ZAYRO.");
       }
+      setIsError(false);
     } catch (error) {
       setIsError(true);
       const errMsg = error.message || "Unable to complete booking";
@@ -265,33 +275,57 @@ export default function Salon360Booking({ preselectedService }) {
         </div>
       </div>
 
-      {appointmentId ? (
-        <div className="rounded-2xl bg-gradient-to-br from-[#1b432a] to-[#0f2818] border-2 border-emerald-400/50 p-6 text-center space-y-4 animate-in fade-in zoom-in-95 duration-300">
-          <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+      {bookingResult ? (
+        <div className={`rounded-2xl p-6 text-center space-y-4 animate-in fade-in zoom-in-95 duration-300 border-2 ${
+          bookingResult.isSalon360Synced
+            ? "bg-gradient-to-br from-[#1b432a] to-[#0f2818] border-emerald-400/50"
+            : "bg-gradient-to-br from-[#2b2512] to-[#16130a] border-[#E6B25C]/50"
+        }`}>
+          {bookingResult.isSalon360Synced ? (
+            <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+          ) : (
+            <Sparkles className="w-12 h-12 text-[#E6B25C] mx-auto" />
+          )}
+
           <div className="space-y-1">
             <h3 className="text-2xl font-serif font-bold text-white">
-              Appointment Confirmed!
+              {bookingResult.isSalon360Synced
+                ? "Appointment Confirmed in Salon360!"
+                : "Appointment Request Reserved!"}
             </h3>
-            <p className="text-xs sm:text-sm text-emerald-200">
-              Your appointment is recorded directly in the Salon360 calendar.
+            <p className={`text-xs sm:text-sm ${bookingResult.isSalon360Synced ? "text-emerald-200" : "text-amber-200"}`}>
+              {bookingResult.isSalon360Synced
+                ? "Your appointment is recorded directly in your Salon360 calendar & dashboard."
+                : "Your appointment request has been reserved with ZAYRO. Because online scheduling in Salon360 is currently awaiting staff roster publication, please tap below to confirm instantly on WhatsApp."}
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-black/40 border border-emerald-500/30 inline-block text-left space-y-1 min-w-[240px]">
-            <p className="text-xs text-stone-400">Salon360 Appointment ID</p>
-            <p className="text-2xl font-mono font-black text-[#E6B25C]">#{appointmentId}</p>
+          <div className="p-4 rounded-xl bg-black/40 border border-white/10 inline-block text-left space-y-1 min-w-[260px]">
+            <p className="text-xs text-stone-400">
+              {bookingResult.isSalon360Synced ? "Salon360 Appointment ID" : "ZAYRO Reservation Reference"}
+            </p>
+            <p className="text-2xl font-mono font-black text-[#E6B25C]">
+              {bookingResult.isSalon360Synced
+                ? `#${bookingResult.appointmentId}`
+                : `#${bookingResult.bookingReference || 'PENDING'}`}
+            </p>
             <p className="text-xs text-stone-300 pt-1">
               Date: <span className="text-white font-semibold">{form.date}</span> at <span className="text-white font-semibold">{form.start_time}</span>
             </p>
             <p className="text-xs text-stone-300">
               Customer: <span className="text-white font-semibold">{form.name}</span> ({form.mobile})
             </p>
+            <p className="text-xs text-stone-300">
+              Treatment: <span className="text-white font-semibold">
+                {services.find((s) => s.website_service_id === form.service_id)?.name || form.service_id}
+              </span>
+            </p>
           </div>
 
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href={`https://wa.me/917904242311?text=${encodeURIComponent(
-                `Hi ZAYRO Grooming Lounge, I just booked an appointment on zayrosalon.com!\n\nBooking ID: #${appointmentId}\nDate: ${form.date}\nTime: ${form.start_time}\nCustomer: ${form.name} (${form.mobile})`
+                `Hi ZAYRO Grooming Lounge, I just booked an appointment on zayrosalon.com!\n\nReference: #${bookingResult.appointmentId || bookingResult.bookingReference}\nDate: ${form.date}\nTime: ${form.start_time}\nCustomer: ${form.name} (${form.mobile})\nService: ${services.find((s) => s.website_service_id === form.service_id)?.name || form.service_id}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -301,12 +335,12 @@ export default function Salon360Booking({ preselectedService }) {
             </a>
             <button
               onClick={() => {
-                setAppointmentId(null);
+                setBookingResult(null);
                 setForm({
                   service_id: "",
                   staff_id: "",
-                  date: "",
-                  start_time: "",
+                  date: todayStr,
+                  start_time: "10:00:00",
                   name: "",
                   mobile: "",
                   email: "",

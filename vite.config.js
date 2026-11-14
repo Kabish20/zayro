@@ -41,8 +41,21 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api': {
-          target: 'http://127.0.0.1:8000',
+          target: env.VITE_BACKEND_URL || 'http://127.0.0.1:8000',
           changeOrigin: true,
+          configure: (proxy) => {
+            proxy.on('error', (err, req, res) => {
+              if (res && !res.headersSent) {
+                res.writeHead(502, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                  responseCode: 502,
+                  responseMsg: 'BACKEND_NOT_RUNNING',
+                  dynMsg: 'Local Django backend server is not running on port 8000. Start it with: python backend/manage.py runserver 127.0.0.1:8000',
+                  response: null,
+                }));
+              }
+            });
+          },
         },
         /**
          * Salon360 API Proxy (development & preview)

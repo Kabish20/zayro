@@ -299,15 +299,20 @@ class CreateBookingProxyView(APIView):
             if existing.status == "CONFIRMED":
                 return Response({
                     "confirmed": True,
+                    "isSalon360Synced": True,
                     "status": "CONFIRMED",
                     "appointmentId": existing.appointment_id,
-                    "message": "Appointment already confirmed",
+                    "bookingReference": f"ZAYRO-{existing.id}",
+                    "message": "Appointment already confirmed with Salon360",
                 }, status=status.HTTP_200_OK)
             return Response({
-                "error": "Booking attempt already exists",
+                "confirmed": False,
+                "isSalon360Synced": False,
                 "status": existing.status,
                 "appointmentId": existing.appointment_id,
-            }, status=status.HTTP_409_CONFLICT)
+                "bookingReference": f"ZAYRO-{existing.id}",
+                "message": "Booking attempt already registered",
+            }, status=status.HTTP_200_OK if existing.status == "PENDING" else status.HTTP_409_CONFLICT)
 
         # Atomically reserve the idempotency key with a PENDING record
         try:
@@ -348,26 +353,33 @@ class CreateBookingProxyView(APIView):
 
             return Response({
                 "confirmed": True,
+                "isSalon360Synced": True,
                 "status": "CONFIRMED",
                 "appointmentId": booking_record.appointment_id,
-                "message": "Appointment confirmed directly with Salon360!",
+                "bookingReference": f"ZAYRO-{booking_record.id}",
+                "message": "Appointment confirmed and synced directly to your Salon360 Dashboard!",
             }, status=status.HTTP_201_CREATED)
 
         if code == 409 or (isinstance(result, dict) and result.get("responseMsg") == "BOOKING_SLOT_UNAVAILABLE"):
-            # Resilient reservation: When Salon360 upstream shifts/roster are not yet published on calendar,
-            # reserve the slot in PostgreSQL database and issue a confirmed reference number.
-            resilience_ref = 868000 + booking_record.id
-            booking_record.appointment_id = resilience_ref
-            booking_record.status = "CONFIRMED"
+            # When Salon360 upstream shifts/roster are not yet published on calendar,
+            # save reservation locally in database with a clear reference and pending status.
+            booking_record.appointment_id = None
+            booking_record.status = "PENDING"
             booking_record.raw_response = result if isinstance(result, dict) else {}
             booking_record.save()
 
             return Response({
-                "confirmed": True,
-                "status": "CONFIRMED",
-                "appointmentId": resilience_ref,
-                "message": "Appointment confirmed and reserved for Salon360!",
-            }, status=status.HTTP_201_CREATED)
+                "confirmed": False,
+                "isSalon360Synced": False,
+                "status": "PENDING",
+                "appointmentId": None,
+                "bookingReference": f"ZAYRO-{booking_record.id}",
+                "message": (
+                    "Salon360 store calendar is currently marked as CLOSED or awaiting staff shift schedule "
+                    "in your Salon360 dashboard. Your reservation is registered (#ZAYRO-"
+                    f"{booking_record.id}). Please confirm on WhatsApp to lock your chair."
+                ),
+            }, status=status.HTTP_200_OK)
 
         state = "FAILED" if code in (400, 401, 422) else "PENDING"
         booking_record.status = state
@@ -376,8 +388,10 @@ class CreateBookingProxyView(APIView):
 
         return Response({
             "confirmed": False,
+            "isSalon360Synced": False,
             "status": state,
             "appointmentId": None,
+            "bookingReference": f"ZAYRO-{booking_record.id}",
             "message": (result.get("dynMsg") or result.get("responseMsg") or "Booking not confirmed"),
         }, status=status.HTTP_400_BAD_REQUEST if code in (400, 422) else status.HTTP_502_BAD_GATEWAY)
 
@@ -385,16 +399,26 @@ class CreateBookingProxyView(APIView):
 class BookingListView(APIView):
     """
     GET /api/bookings/
-    Lists bookings recorded in the local database. Requires admin access.
+    Lists bookings recorded in the local database.
+    Allows access to staff users OR callers with store client key (x-api-key or ?api_key=).
     """
-    permission_classes = [IsAdminUser]
-
     def get(self, request):
-        bookings = BookingRecord.objects.all()[:50]
+        auth_key = request.headers.get("x-api-key") or request.query_params.get("api_key")
+        is_key_valid = auth_key and (
+            auth_key == settings.SALON360_CLIENT_KEY
+            or auth_key == settings.SALON360_API_KEY
+            or auth_key == settings.SALON360_CLIENT_SECRET
+        )
+        if not (request.user.is_staff or is_key_valid):
+            return Response({"error": "Admin authentication or valid API key required"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        bookings = BookingRecord.objects.all()[:100]
         data = [
             {
                 "id": b.id,
+                "bookingReference": f"ZAYRO-{b.id}",
                 "appointmentId": b.appointment_id,
+                "isSalon360Synced": b.appointment_id is not None,
                 "customerId": b.customer_id,
                 "customerName": b.customer_name,
                 "customerMobile": b.customer_mobile,

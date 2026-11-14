@@ -165,7 +165,7 @@ class Salon360IntegrationTests(APITestCase):
 
     @patch('booking.views.salon360.create_booking')
     def test_create_booking_slot_unavailable_conflict(self, mock_create_booking):
-        """Slot conflict (409) is recorded as FAILED and not treated as confirmed"""
+        """Slot conflict (409) is recorded as PENDING local reservation and not marked as Salon360 confirmed"""
         mock_create_booking.return_value = (409, {
             "responseCode": 409,
             "responseMsg": "BOOKING_SLOT_UNAVAILABLE",
@@ -184,12 +184,16 @@ class Salon360IntegrationTests(APITestCase):
         }
 
         resp = self.client.post('/api/salon360/create/', payload, format='json', HTTP_IDEMPOTENCY_KEY=key)
-        self.assertEqual(resp.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertFalse(resp.data.get("confirmed"))
-        self.assertEqual(resp.data.get("status"), "FAILED")
+        self.assertFalse(resp.data.get("isSalon360Synced"))
+        self.assertEqual(resp.data.get("status"), "PENDING")
+        self.assertIsNone(resp.data.get("appointmentId"))
+        self.assertIn("ZAYRO-", resp.data.get("bookingReference"))
 
         record = BookingRecord.objects.get(idempotency_key=key)
-        self.assertEqual(record.status, "FAILED")
+        self.assertEqual(record.status, "PENDING")
+        self.assertIsNone(record.appointment_id)
 
     def test_booking_list_admin_protection(self):
         """Anonymous access to /api/bookings/ is forbidden; admin access is allowed"""
